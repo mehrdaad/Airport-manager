@@ -1,4 +1,4 @@
-package jtc.app;
+package cz.fi.muni.pa165;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
