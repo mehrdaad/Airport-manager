@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = PersistenceConfig.class)
 public class SampleTest extends AbstractTestNGSpringContextTests {
 
-    @PersistenceUnit(name = "entityManagerFactory")
+    @PersistenceUnit
     private EntityManagerFactory emf;
 
     @Test
