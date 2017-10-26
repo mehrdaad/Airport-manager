@@ -7,10 +7,10 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
+ * Implementation of the {@link DestinationDao} layer.
+ *
  * @author Robert Duriancik
  */
-
-// CrudRepository<Destination, Long>
 
 @Repository
 public class DestinationDaoImpl implements DestinationDao {

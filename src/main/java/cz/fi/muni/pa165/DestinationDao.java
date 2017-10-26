@@ -3,6 +3,8 @@ package cz.fi.muni.pa165;
 import java.util.List;
 
 /**
+ * Data Access Object layer for the {@link Destination} entity.
+ *
  * @author Robert Duriancik
  */
 

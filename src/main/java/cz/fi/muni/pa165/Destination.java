@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
+ * The entity representing a destination.
+ *
  * @author Robert Duriancik
  */
 
@@ -67,7 +69,7 @@ public class Destination {
     @Override
     public int hashCode() {
         int result = country.hashCode();
-        result = 31 * result + country.hashCode();
+        result = 31 * result + city.hashCode();
         return result;
     }
 }
