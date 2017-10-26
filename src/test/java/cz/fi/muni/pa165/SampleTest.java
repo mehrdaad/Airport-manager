@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -16,6 +17,8 @@ public class SampleTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void sampleTest() throws Exception {
+        EntityManager em = emf.createEntityManager();
         // Test
+        em.close();
     }
 }
