@@ -10,6 +10,8 @@ import java.util.List;
  * @author Robert Duriancik
  */
 
+// CrudRepository<Destination, Long>
+
 @Repository
 public class DestinationDaoImpl implements DestinationDao {
 
