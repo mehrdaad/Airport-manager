@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -9,19 +10,26 @@ import java.io.Serializable;
  * @author Ondrej Prikryl
  */
 @Entity
-@Table(name="Steward")
 @NamedQuery(
         name="findAll",
         query="SELECT c FROM Steward c")
 public class Steward implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Column(nullable = false)
     private String surname;
+
+    @NotNull
+    @Column(nullable = false)
     private String firstName;
-    private String address;
+
+    public Long getId() {
+        return id;
+    }
 
     public String getSurname() {
         return surname;
@@ -39,26 +47,29 @@ public class Steward implements Serializable {
         this.firstName = firstName;
     }
 
-    public String getAddress() {
-        return address;
-    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Steward)) return false;
 
-    public void setAddress(String address) {
-        this.address = address;
+        Steward steward = (Steward) o;
+
+        if (!getSurname().equals(steward.getSurname())) return false;
+        return getFirstName().equals(steward.getFirstName());
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+        int result = getSurname().hashCode();
+        result = 31 * result + getFirstName().hashCode();
+        return result;
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Steward{" +
+                "first name='" + firstName + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
     }
 }
