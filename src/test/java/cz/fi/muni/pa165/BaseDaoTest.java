@@ -1,11 +1,11 @@
 package cz.fi.muni.pa165;
 
-import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 @ContextConfiguration(classes = PersistenceConfig.class)
-@RunWith(SpringJUnit4ClassRunner.class)
-public class BaseDaoTest {
-
+@TestExecutionListeners(TransactionalTestExecutionListener.class)
+public class BaseDaoTest extends AbstractTestNGSpringContextTests {
 }
