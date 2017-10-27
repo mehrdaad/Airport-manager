@@ -1,9 +1,9 @@
 package cz.fi.muni.pa165;
 
-import org.junit.Assert;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
