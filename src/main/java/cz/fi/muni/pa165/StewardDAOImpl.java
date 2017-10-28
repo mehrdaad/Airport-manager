@@ -49,8 +49,4 @@ public class StewardDaoImpl implements StewardDao {
         List<Steward> stewards = em.createQuery("SELECT c FROM Steward c", Steward.class).getResultList();
         return stewards;
     }
-
-    public List<Flight> listOfStewardFlights(Steward steward) {
-        return null;
-    }
 }

@@ -45,12 +45,4 @@ public interface StewardDao {
      * @return List of all stewards currently stored in database.
      */
     public List<Steward> listAllStewards();
-
-    /**
-     * Method returns list of all flights, which was assigned to the given steward.
-     *
-     * @param steward
-     * @return List of flights (may be empty)
-     */
-    public List<Flight> listOfStewardFlights(Steward steward);
 }
