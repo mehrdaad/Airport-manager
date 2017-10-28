@@ -10,9 +10,6 @@ import java.io.Serializable;
  * @author Ondrej Prikryl
  */
 @Entity
-@NamedQuery(
-        name="findAll",
-        query="SELECT c FROM Steward c")
 public class Steward implements Serializable {
 
     @Id

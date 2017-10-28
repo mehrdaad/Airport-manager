@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author Ondřej Přikryl
  */
-public interface StewardDAO {
+public interface StewardDao {
 
     /**
      * Method which adds steward to database.

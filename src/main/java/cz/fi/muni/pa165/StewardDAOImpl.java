@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class StewardDAOImpl implements StewardDAO{
+public class StewardDaoImpl implements StewardDao {
 
     @PersistenceContext
     private EntityManager em;
@@ -46,7 +46,7 @@ public class StewardDAOImpl implements StewardDAO{
     }
 
     public List<Steward> listAllStewards() {
-        List<Steward> stewards = em.createNamedQuery("Steward.findAll", Steward.class).getResultList();
+        List<Steward> stewards = em.createQuery("SELECT c FROM Steward c", Steward.class).getResultList();
         return stewards;
     }
 
