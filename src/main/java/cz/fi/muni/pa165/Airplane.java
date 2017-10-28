@@ -80,18 +80,17 @@ public class Airplane implements Serializable {
             return true;
         if (obj == null)
             return false;
-	if (getClass() != obj.getClass())
-            return false;
+	if (!(obj instanceof Airplane)) return false;
         
         Airplane other = (Airplane) obj;
         
-        if (capacity != other.capacity)
+        if (capacity != other.getCapacity())
             return false;
         
-	if (!name.equals(other.name))
+	if (!name.equals(other.getName()))
             return false;
         
-        return type.equals(other.type);      
+        return type.equals(other.getType());      
     }
     
     
@@ -99,10 +98,10 @@ public class Airplane implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + Objects.hashCode(this.id);
-        result = prime * result + this.capacity;
-        result = prime * result + Objects.hashCode(this.name);
-        result = prime * result + Objects.hashCode(this.type);
+        result += prime * result + Objects.hashCode(this.id);
+        result += prime * result + this.capacity;
+        result += prime * result + Objects.hashCode(this.name);
+        result += prime * result + Objects.hashCode(this.type);
         return result;
     }
 }
