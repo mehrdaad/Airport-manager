@@ -6,6 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+/**
+ * Implementation of StewardDao interface.
+ *
+ * @author Ondrej Prikryl
+ */
 @Repository
 public class StewardDaoImpl implements StewardDao {
 
@@ -13,40 +18,28 @@ public class StewardDaoImpl implements StewardDao {
     private EntityManager em;
 
     public void createSteward(Steward steward) {
-
-        if(steward == null) {
-            throw new IllegalArgumentException("Steward is null");
-        }
-
-
         em.persist(steward);
     }
 
     public void deleteSteward(Steward steward) {
-
-        if(steward == null) {
-            throw new IllegalArgumentException("Steward is null");
-        }
-
         em.remove(steward);
     }
 
     public void updateSteward(Steward steward) {
+        Steward stewardFromDb = em.find(Steward.class, steward.getId());
 
-        if(steward == null) {
-            throw new IllegalArgumentException("Steward is null");
+        if (stewardFromDb != null) {
+            em.merge(steward);
+        } else {
+            throw new IllegalArgumentException("Steward: " + steward + " not in the persistence storage.");
         }
-
-        em.merge(steward);
     }
 
     public Steward getSteward(Long id) {
-
         return em.find(Steward.class, id);
     }
 
     public List<Steward> listAllStewards() {
-        List<Steward> stewards = em.createQuery("SELECT c FROM Steward c", Steward.class).getResultList();
-        return stewards;
+        return em.createQuery("SELECT c FROM Steward c", Steward.class).getResultList();
     }
 }
