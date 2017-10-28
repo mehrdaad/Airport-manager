@@ -42,11 +42,11 @@ public interface AirplaneDao {
     List<Airplane> findAll();
 
     /**
-     * Find a {@link Destination} entity instance with specified <b>id</b>.
+     * Find a {@link Airplane} entity instance with specified <b>id</b>.
      * If the entity instance is contained in the persistence storage, it is returned from there.
      *
-     * @param id the id of the {@link Destination} entity
-     * @return the found {@link Destination} instance or null if the entity does not exist
+     * @param id the id of the {@link Airplane} entity
+     * @return the found {@link Airplane} instance or null if the entity does not exist
      */
     Airplane findById(Long id);
     
