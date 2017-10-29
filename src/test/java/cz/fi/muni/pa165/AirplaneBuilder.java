@@ -1,6 +1,6 @@
 package cz.fi.muni.pa165;
 
-import cz.fi.muni.pa165.Entity.Airplane;
+import cz.fi.muni.pa165.entities.Airplane;
 
 class AirplaneBuilder {
 
