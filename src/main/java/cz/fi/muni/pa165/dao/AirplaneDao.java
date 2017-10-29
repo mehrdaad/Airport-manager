@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fi.muni.pa165.Dao;
+package cz.fi.muni.pa165.dao;
 
-import cz.fi.muni.pa165.Entity.Airplane;
+import cz.fi.muni.pa165.entities.Airplane;
 
 import java.util.List;
 

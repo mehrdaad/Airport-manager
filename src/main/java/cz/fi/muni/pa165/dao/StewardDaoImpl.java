@@ -1,7 +1,6 @@
-package cz.fi.muni.pa165.Dao;
+package cz.fi.muni.pa165.dao;
 
-import cz.fi.muni.pa165.Dao.StewardDao;
-import cz.fi.muni.pa165.Steward;
+import cz.fi.muni.pa165.entities.Steward;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

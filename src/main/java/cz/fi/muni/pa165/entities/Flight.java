@@ -1,4 +1,4 @@
-package cz.fi.muni.pa165.Entity;
+package cz.fi.muni.pa165.entities;
 
 
 import com.sun.istack.internal.NotNull;
@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The entity representing a destination.
+ * The entity representing a flight.
+ *
  * @author Karel Jiranek
  */
 @Entity
@@ -19,11 +20,11 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch= FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @NotNull
     private Destination departureLocation;
 
-    @OneToOne(fetch= FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @NotNull
     private Destination arrivalLocation;
 
@@ -31,31 +32,35 @@ public class Flight {
     private LocalDateTime arrivalTime;
 
     @Nullable
-    private LocalDateTime departueTime;
+    private LocalDateTime departureTime;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Nullable
-    private List<Steward> stawards;
+    private List<Steward> stewards;
 
     @Nullable
-    @OneToOne(fetch= FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Airplane airPlane;
+
+    public Flight() {
+    }
 
     public Flight(Destination departureLocation,
                   Destination arrivalLocation,
                   LocalDateTime arrivalTime,
-                  LocalDateTime departueTime,
-                  List<Steward> stawards, Airplane airPlane) {
+                  LocalDateTime departureTime,
+                  List<Steward> stewards, Airplane airPlane) {
         this.departureLocation = departureLocation;
         this.arrivalLocation = arrivalLocation;
         this.arrivalTime = arrivalTime;
-        this.departueTime = departueTime;
-        this.stawards = stawards;
+        this.departureTime = departureTime;
+        this.stewards = stewards;
         this.airPlane = airPlane;
     }
 
     /**
      * Return entity id
+     *
      * @return Id of entity
      */
     public Long getId() {
@@ -64,6 +69,7 @@ public class Flight {
 
     /**
      * Set entity's id
+     *
      * @param id Id to set to the entity
      */
     public void setId(Long id) {
@@ -94,20 +100,20 @@ public class Flight {
         this.arrivalTime = arrivalTime;
     }
 
-    public LocalDateTime getDepartueTime() {
-        return departueTime;
+    public LocalDateTime getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDepartueTime(LocalDateTime departueTime) {
-        this.departueTime = departueTime;
+    public void setDepartureTime(LocalDateTime departueTime) {
+        this.departureTime = departueTime;
     }
 
-    public List<Steward> getStawards() {
-        return stawards;
+    public List<Steward> getStewards() {
+        return stewards;
     }
 
-    public void setStawards(List<Steward> stawards) {
-        this.stawards = stawards;
+    public void setStewards(List<Steward> stawards) {
+        this.stewards = stawards;
     }
 
     public Airplane getAirPlane() {
@@ -124,12 +130,12 @@ public class Flight {
         StringBuilder strBuilder = new StringBuilder();
         strBuilder.append("Flight:\n")
                 .append("Departure location: ").append(departureLocation).append("\n")
-                .append("Departure time: ").append(departueTime).append("\n")
+                .append("Departure time: ").append(departureTime).append("\n")
                 .append("Arrival location: ").append(arrivalLocation).append("\n")
                 .append("Arrival time: ").append(arrivalTime).append("\n")
                 .append("Airplane: ").append(airPlane);
-                //.append("Stewards: ").append(stawards);
-        return  strBuilder.toString();
+        //.append("Stewards: ").append(stawards);
+        return strBuilder.toString();
     }
 
     @Override
@@ -139,50 +145,46 @@ public class Flight {
 
         Flight that = (Flight) o;
 
-        if (departueTime == null){
-            if (that.getDepartueTime() != null){
+        if (departureTime == null) {
+            if (that.getDepartureTime() != null) {
                 return false;
             }
-        }
-        else{
-            if (!departueTime.equals(that.getDepartueTime()))
+        } else {
+            if (!departureTime.equals(that.getDepartureTime()))
                 return false;
         }
 
-        if (arrivalTime == null){
-            if (that.getArrivalTime() != null){
+        if (arrivalTime == null) {
+            if (that.getArrivalTime() != null) {
                 return false;
             }
-        }
-        else{
+        } else {
             if (!arrivalTime.equals(that.getArrivalTime()))
                 return false;
         }
 
-        if (stawards == null){
-            if (that.getStawards() != null){
+        if (stewards == null) {
+            if (that.getStewards() != null) {
                 return false;
             }
-        }
-        else{
-            if (!stawards.equals(that.getStawards()))
+        } else {
+            if (!stewards.equals(that.getStewards()))
                 return false;
         }
 
-        if (airPlane == null){
-            if (that.getAirPlane() != null){
+        if (airPlane == null) {
+            if (that.getAirPlane() != null) {
                 return false;
             }
-        }
-        else{
+        } else {
             if (!airPlane.equals(that.getAirPlane()))
                 return false;
         }
 
 
-        if(!departureLocation.equals(that.getDepartureLocation()) ||
+        if (!departureLocation.equals(that.getDepartureLocation()) ||
                 !arrivalLocation.equals(that.getArrivalLocation())
-                ){
+                ) {
             return false;
         }
         return true;
@@ -193,12 +195,12 @@ public class Flight {
         final int prime = 31;
         int result = 1;
         result += prime * result + Objects.hashCode(this.id);
-        result += prime * result + Objects.hashCode(departueTime);
+        result += prime * result + Objects.hashCode(departureTime);
         result += prime * result + Objects.hashCode(departureLocation);
         result += prime * result + Objects.hashCode(arrivalTime);
         result += prime * result + Objects.hashCode(arrivalLocation);
         result += prime * result + Objects.hashCode(airPlane);
-        result += prime * result + Objects.hashCode(stawards);
+        result += prime * result + Objects.hashCode(stewards);
         return result;
     }
 }
