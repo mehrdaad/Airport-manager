@@ -1,8 +1,8 @@
-package cz.fi.muni.pa165.Dao;
+package cz.fi.muni.pa165.dao;
 
 
-import cz.fi.muni.pa165.Entity.Destination;
-import cz.fi.muni.pa165.Entity.Flight;
+import cz.fi.muni.pa165.entities.Destination;
+import cz.fi.muni.pa165.entities.Flight;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public interface FlightDao {
 
     /**
      * Update data of the {@link Destination} entity instance in the persistence storage
-     * @param destination the {@link Destination} entity instance
+     * @param flight the {@link Destination} entity instance
      */
     void update(Flight flight);
 

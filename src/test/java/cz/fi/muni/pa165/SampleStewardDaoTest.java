@@ -1,7 +1,7 @@
 package cz.fi.muni.pa165;
 
-import cz.fi.muni.pa165.Dao.StewardDao;
-import cz.fi.muni.pa165.Entity.Steward;
+import cz.fi.muni.pa165.dao.StewardDao;
+import cz.fi.muni.pa165.entities.Steward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;

@@ -1,6 +1,6 @@
-package cz.fi.muni.pa165.Dao;
+package cz.fi.muni.pa165.dao;
 
-import cz.fi.muni.pa165.Entity.Flight;
+import cz.fi.muni.pa165.entities.Flight;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -30,7 +30,7 @@ public class FlightImpl implements FlightDao  {
         if (flightFromDb != null) {
             em.merge(flightFromDb);
         } else {
-            throw new IllegalArgumentException("Destination: " + flightFromDb + " not in the persistence storage.");
+            throw new IllegalArgumentException("Destination: " + flight + " not in the persistence storage.");
         }
     }
 
