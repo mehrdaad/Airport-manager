@@ -1,6 +1,6 @@
-package cz.fi.muni.pa165.Dao;
+package cz.fi.muni.pa165.dao;
 
-import cz.fi.muni.pa165.Entity.Destination;
+import cz.fi.muni.pa165.entities.Destination;
 
 import java.util.List;
 

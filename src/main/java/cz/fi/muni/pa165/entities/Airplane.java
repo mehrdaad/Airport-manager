@@ -1,10 +1,10 @@
 
-package cz.fi.muni.pa165.Entity;
+package cz.fi.muni.pa165.entities;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.*;
 
 /**
  * The entity representing an Airplane.

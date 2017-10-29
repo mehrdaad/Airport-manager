@@ -1,9 +1,9 @@
 package cz.fi.muni.pa165;
 
-import cz.fi.muni.pa165.Dao.FlightDao;
-import cz.fi.muni.pa165.Entity.Airplane;
-import cz.fi.muni.pa165.Entity.Destination;
-import cz.fi.muni.pa165.Entity.Flight;
+import cz.fi.muni.pa165.dao.FlightDao;
+import cz.fi.muni.pa165.entities.Airplane;
+import cz.fi.muni.pa165.entities.Destination;
+import cz.fi.muni.pa165.entities.Flight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
@@ -52,7 +52,7 @@ public class SampleFlightTest extends BaseDaoTest {
         selectedFlightList =  em.createQuery("select f from Flight f", Flight.class).getResultList();
         selectedFlight = selectedFlightList.get(0);
 
-        selectedFlight.setDepartueTime(departureTime);
+        selectedFlight.setDepartureTime(departureTime);
         selectedFlight.setArrivalTime(arrivalTime);
         selectedFlight.getDepartureLocation().setCity("Bratislava");
         selectedFlight.getDepartureLocation().setCountry("Slovakia");
