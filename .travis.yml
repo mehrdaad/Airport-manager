@@ -1,0 +1,10 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+script: mvn clean install test
+
+notifications:
+    slack: pa165-airportmanager:k75AYUUWQKuCOcJDRJuc39Yf
+    
