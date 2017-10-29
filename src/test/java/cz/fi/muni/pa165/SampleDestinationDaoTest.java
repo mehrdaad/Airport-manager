@@ -1,5 +1,7 @@
 package cz.fi.muni.pa165;
 
+import cz.fi.muni.pa165.Dao.DestinationDao;
+import cz.fi.muni.pa165.Entity.Destination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;

@@ -1,4 +1,4 @@
-package cz.fi.muni.pa165;
+package cz.fi.muni.pa165.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,13 +23,7 @@ public class Destination {
     @Column(nullable = false)
     private String city;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getCountry() {
         return country;
@@ -71,5 +65,13 @@ public class Destination {
         int result = country.hashCode();
         result = 31 * result + city.hashCode();
         return result;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

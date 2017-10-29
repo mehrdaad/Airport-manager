@@ -1,5 +1,6 @@
-package cz.fi.muni.pa165;
+package cz.fi.muni.pa165.Dao;
 
+import cz.fi.muni.pa165.Entity.Destination;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

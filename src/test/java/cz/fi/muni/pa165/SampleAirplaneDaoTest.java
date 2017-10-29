@@ -1,5 +1,7 @@
 package cz.fi.muni.pa165;
 
+import cz.fi.muni.pa165.Dao.AirplaneDao;
+import cz.fi.muni.pa165.Entity.Airplane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
