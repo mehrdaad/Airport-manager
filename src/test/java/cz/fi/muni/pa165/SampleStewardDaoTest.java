@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165;
 
+import cz.fi.muni.pa165.Dao.StewardDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;

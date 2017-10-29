@@ -1,5 +1,7 @@
-package cz.fi.muni.pa165;
+package cz.fi.muni.pa165.Dao;
 
+
+import cz.fi.muni.pa165.Steward;
 
 import java.util.List;
 
