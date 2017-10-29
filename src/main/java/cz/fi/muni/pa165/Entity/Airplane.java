@@ -1,6 +1,8 @@
 
 package cz.fi.muni.pa165.Entity;
 
+import org.springframework.data.annotation.Id;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,7 +1,6 @@
 package cz.fi.muni.pa165.Dao;
 
-
-import cz.fi.muni.pa165.Steward;
+import cz.fi.muni.pa165.Entity.Steward;
 
 import java.util.List;
 

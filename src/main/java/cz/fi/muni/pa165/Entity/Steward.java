@@ -1,4 +1,4 @@
-package cz.fi.muni.pa165;
+package cz.fi.muni.pa165.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
