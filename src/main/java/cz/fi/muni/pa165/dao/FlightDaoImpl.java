@@ -1,6 +1,5 @@
 package cz.fi.muni.pa165.dao;
 
-import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Flight;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +13,7 @@ import java.util.List;
  * @author Karel Jiranek
  */
 @Repository
-public class FlightImpl implements FlightDao {
+public class FlightDaoImpl implements FlightDao  {
 
     @PersistenceContext
     private EntityManager em;
