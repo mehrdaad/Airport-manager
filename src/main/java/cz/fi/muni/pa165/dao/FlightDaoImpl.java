@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class FlightImpl implements FlightDao  {
+public class FlightDaoImpl implements FlightDao  {
 
     @PersistenceContext
     private EntityManager em;
