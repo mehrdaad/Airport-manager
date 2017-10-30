@@ -1,10 +1,10 @@
 package cz.fi.muni.pa165.entities;
 
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -28,23 +28,28 @@ public class Flight {
     @NotNull
     private Destination arrivalLocation;
 
-    @Nullable
     private LocalDateTime arrivalTime;
 
-    @Nullable
     private LocalDateTime departureTime;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Nullable
     private List<Steward> stewards;
 
-    @Nullable
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Airplane airPlane;
 
     public Flight() {
     }
 
+    /**
+     * Instantiate flight with parameters
+     * @param departureLocation Place from which flight flies
+     * @param arrivalLocation Place which flight flies to
+     * @param arrivalTime Time when flight land
+     * @param departureTime Time when flight take off
+     * @param stewards Flight crew
+     * @param airPlane Physical aircraft the flight use
+     */
     public Flight(Destination departureLocation,
                   Destination arrivalLocation,
                   LocalDateTime arrivalTime,
@@ -76,55 +81,107 @@ public class Flight {
         this.id = id;
     }
 
+    /**
+     * Get departure location
+     * @return Departure location
+     */
     public Destination getDepartureLocation() {
         return departureLocation;
     }
 
+    /**
+     * Set departure location
+     * @param departureLocation Location to set
+     */
     public void setDepartureLocation(Destination departureLocation) {
         this.departureLocation = departureLocation;
     }
 
+    /**
+     * Get arrival location
+     * @return Arrival location
+     */
     public Destination getArrivalLocation() {
         return arrivalLocation;
     }
 
+    /**
+     * Set arrival location
+     * @param arrivalLocation Location to set
+     */
     public void setArrivalLocation(Destination arrivalLocation) {
         this.arrivalLocation = arrivalLocation;
     }
 
+    /**
+     * Get arrival time
+     * @return Arrival time
+     */
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
 
+    /**
+     * Set arrival time
+     * @param arrivalTime Flight arrival time to set
+     */
     public void setArrivalTime(LocalDateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
+    /**
+     * Get flight departure time
+     * @return Flight departure time
+     */
     public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(LocalDateTime departueTime) {
-        this.departureTime = departueTime;
+    /**
+     * Set flight departure time
+     * @param departureTime Flight departure to set
+     */
+    public void setDepartureTime(LocalDateTime departureTime) {
+        this.departureTime = departureTime;
     }
 
+    /**
+     * Get flight stewards
+     * @return Flight stewards
+     */
     public List<Steward> getStewards() {
         return stewards;
     }
 
-    public void setStewards(List<Steward> stawards) {
-        this.stewards = stawards;
+    /**
+     * Set stewards for flight
+     * @param stewards Stewards to set for flight
+     */
+    public void setStewards(List<Steward> stewards) {
+        this.stewards = stewards;
     }
 
+    /**
+     * Get flight airplane
+     * @return Flight airplane
+     */
     public Airplane getAirPlane() {
         return airPlane;
     }
 
+    /**
+     * Set flight airplane
+     * @param airPlane Flight airplane
+     */
     public void setAirPlane(Airplane airPlane) {
         this.airPlane = airPlane;
     }
 
 
+    /**
+     * Convert flight to string format
+     * @return Flight as string
+     */
     @Override
     public String toString() {
         StringBuilder strBuilder = new StringBuilder();
@@ -138,6 +195,11 @@ public class Flight {
         return strBuilder.toString();
     }
 
+    /**
+     * Check if objects are equal
+     * @param o Object to check
+     * @return True if equal
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -190,6 +252,10 @@ public class Flight {
         return true;
     }
 
+    /**
+     * Count flight hash code
+     * @return
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
