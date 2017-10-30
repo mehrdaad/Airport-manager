@@ -1,4 +1,4 @@
-package cz.fi.muni.pa165.dao;
+package cz.fi.muni.pa165.dao.impl;
 
 import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.entities.Destination;
