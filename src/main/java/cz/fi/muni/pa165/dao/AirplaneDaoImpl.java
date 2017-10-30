@@ -4,20 +4,19 @@
  * and open the template in the editor.
  */
 package cz.fi.muni.pa165.dao;
-
 import cz.fi.muni.pa165.entities.Airplane;
-import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Jan Cakl
  */
 @Repository
-public class AirplaneDaoImpl implements AirplaneDao {
+public class AirplaneDaoImpl implements AirplaneDao{
     
     @PersistenceContext
     private EntityManager em;
