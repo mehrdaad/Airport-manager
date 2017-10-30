@@ -1,4 +1,7 @@
 # Airport-manager project developed by JCT
+
+[![Build Status](https://travis-ci.org/karel947/Airport-manager.svg?branch=master)](https://travis-ci.org/karel947/Airport-manager)
+
 Repozitář vytvořený v rámci projektu PB165
 
 Info:
