@@ -1,10 +1,9 @@
-
 package cz.fi.muni.pa165.entities;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.*;
 
 /**
  * The entity representing an Airplane.
@@ -13,6 +12,7 @@ import java.util.Objects;
  */
 
 @Entity
+
 public class Airplane implements Serializable {
     
     
@@ -30,6 +30,7 @@ public class Airplane implements Serializable {
     
     @NotNull
     @Column(nullable = false)
+    
     private int capacity;
     
     public Long getId() {
@@ -60,7 +61,11 @@ public class Airplane implements Serializable {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(int capacity) throws IllegalArgumentException{
+        
+        if (capacity <= 0)
+            throw new IllegalArgumentException("Capacity cannot be zero or less.");
+        
         this.capacity = capacity;
     }
     
@@ -98,10 +103,10 @@ public class Airplane implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result += prime * result + Objects.hashCode(this.id);
-        result += prime * result + this.capacity;
-        result += prime * result + Objects.hashCode(this.name);
-        result += prime * result + Objects.hashCode(this.type);
+        result = prime * result + Objects.hashCode(this.id);
+        result = prime * result + this.capacity;
+        result = prime * result + Objects.hashCode(this.name);
+        result = prime * result + Objects.hashCode(this.type);
         return result;
     }
 }
