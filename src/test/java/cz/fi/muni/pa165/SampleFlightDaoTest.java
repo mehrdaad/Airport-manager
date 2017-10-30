@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.entities.Steward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
@@ -13,13 +14,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The entity representing a destination.
+ * Test flight entity features
+ *
  * @author Karel Jiranek
  */
-public class SampleFlightTest extends BaseDaoTest {
+public class SampleFlightDaoTest extends BaseDaoTest {
     @Autowired
     private FlightDao flightDao;
 
@@ -31,7 +35,7 @@ public class SampleFlightTest extends BaseDaoTest {
     public void createTest() throws Exception {
         Flight flight = createFlight("USA", "Czech Republic");
         flightDao.create(flight);
-        List<Flight> flights =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        List<Flight> flights = em.createQuery("select f from Flight f", Flight.class).getResultList();
         Assert.assertEquals(1, flights.size());
         Assert.assertEquals(flight, flights.get(0));
     }
@@ -49,7 +53,7 @@ public class SampleFlightTest extends BaseDaoTest {
         flightDao.create(createdFlight);
 
         // Update flight
-        selectedFlightList =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
         selectedFlight = selectedFlightList.get(0);
 
         selectedFlight.setDepartureTime(departureTime);
@@ -61,10 +65,12 @@ public class SampleFlightTest extends BaseDaoTest {
         selectedFlight.getAirPlane().setType("Huge");
         selectedFlight.getAirPlane().setName("My little airoplane");
         selectedFlight.getAirPlane().setCapacity(777);
+        selectedFlight.getStewards().get(0).setSurname("Novicky");
+        selectedFlight.getStewards().get(0).setFirstName("Mike");
         flightDao.update(selectedFlight);
 
         // Test flight
-        selectedFlightList =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
         selectedFlight = selectedFlightList.get(0);
         Assert.assertEquals(1, selectedFlightList.size());
         Assert.assertEquals("Bratislava", selectedFlight.getDepartureLocation().getCity());
@@ -74,7 +80,9 @@ public class SampleFlightTest extends BaseDaoTest {
         Assert.assertEquals(arrivalTime, selectedFlight.getArrivalTime());
         Assert.assertEquals(777, selectedFlight.getAirPlane().getCapacity());
         Assert.assertEquals("My little airoplane", selectedFlight.getAirPlane().getName());
-        Assert.assertEquals("Huge", selectedFlight.getAirPlane().getType());
+        Assert.assertEquals("Mike", selectedFlight.getStewards().get(0).getFirstName());
+        Assert.assertEquals("Novicky", selectedFlight.getStewards().get(0).getSurname());
+
     }
 
     @Test
@@ -91,7 +99,7 @@ public class SampleFlightTest extends BaseDaoTest {
         flightDao.delete(createdFlight);
 
         // Test flight
-        selectedFlightList =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
         Assert.assertEquals(0, selectedFlightList.size());
     }
 
@@ -131,7 +139,7 @@ public class SampleFlightTest extends BaseDaoTest {
     }
 
     @Test
-    public void toStringTest(){
+    public void toStringTest() {
         String expectedOutput = "Flight:\n" +
                 "Departure location: Destination{country='USA', city='UNKOWN'}\n" +
                 "Departure time: 2017-12-24T08:30\n" +
@@ -144,14 +152,14 @@ public class SampleFlightTest extends BaseDaoTest {
     }
 
     @Test
-    public void testHashCode(){
+    public void testHashCode() {
         Flight createdFlight1 = createFlight("USA", "Czech Republic");
         Flight createdFlight2 = createFlight("USA", "Czech Republic");
         Assert.assertEquals(createdFlight1.hashCode(), createdFlight2.hashCode());
     }
 
     @Test
-    public void testEquals(){
+    public void testEquals() {
         Flight createdFlight1 = createFlight("USA", "Czech Republic");
         Flight createdFlight2 = createFlight("USA", "Czech Republic");
         Flight createdFlight3 = createFlight("China", "Czech Republic");
@@ -159,7 +167,7 @@ public class SampleFlightTest extends BaseDaoTest {
         Assert.assertTrue(createdFlight1.equals(createdFlight2));
     }
 
-    private Flight createFlight(String arrivalState, String departureState){
+    private Flight createFlight(String arrivalState, String departureState) {
         // Create destinations
         String arrivalCityName = "UNKOWN";
         String departureCtiyName = "UNKOWN";
@@ -172,6 +180,13 @@ public class SampleFlightTest extends BaseDaoTest {
         departueDestination.setCity(departureCtiyName);
         departueDestination.setCountry(departureState);
 
+        // Create stewards
+        Steward steward = new Steward();
+        steward.setFirstName("John");
+        steward.setSurname("Dail");
+        List<Steward> stewards = new LinkedList<>();
+        stewards.add(steward);
+
         // Create times
         LocalDateTime departureTime = LocalDateTime.of(2017, Month.DECEMBER, 24, 8, 30);
         LocalDateTime arrivalTime = LocalDateTime.of(2017, Month.DECEMBER, 24, 20, 30);
@@ -182,7 +197,7 @@ public class SampleFlightTest extends BaseDaoTest {
         airPlane.setName("Boeing 737");
         airPlane.setType("Basic");
 
-        return new Flight(arrivalDestination, departueDestination, arrivalTime, departureTime, null, airPlane);
+        return new Flight(arrivalDestination, departueDestination, arrivalTime, departureTime, stewards, airPlane);
     }
 
 }

@@ -16,8 +16,7 @@ import javax.persistence.*;
 @Entity
 @Check(constraints = "capacity > 0")
 public class Airplane implements Serializable {
-    
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
