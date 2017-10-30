@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.dao;
 
+import cz.fi.muni.pa165.dao.StewardDao;
 import cz.fi.muni.pa165.entities.Steward;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
- * Implementation of StewardDao interface.
+ * Implementation of {@link StewardDao} interface.
  *
  * @author Ondrej Prikryl
  */

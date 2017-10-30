@@ -1,26 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.fi.muni.pa165.dao;
-import cz.fi.muni.pa165.entities.Airplane;
 
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import cz.fi.muni.pa165.entities.Airplane;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
+
 /**
+ * Implementation of the {@link AirplaneDao} interface.
  *
  * @author Jan Cakl
  */
 @Repository
-public class AirplaneDaoImpl implements AirplaneDao{
-    
+public class AirplaneDaoImpl implements AirplaneDao {
+
     @PersistenceContext
     private EntityManager em;
-    
+
     @Override
     public void addAirplane(Airplane airplane) {
         em.persist(airplane);
@@ -51,5 +48,5 @@ public class AirplaneDaoImpl implements AirplaneDao{
     public Airplane findById(Long id) {
         return em.find(Airplane.class, id);
     }
-    
+
 }

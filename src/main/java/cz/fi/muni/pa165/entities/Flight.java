@@ -1,8 +1,6 @@
 package cz.fi.muni.pa165.entities;
 
 
-
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -43,12 +41,13 @@ public class Flight {
 
     /**
      * Instantiate flight with parameters
+     *
      * @param departureLocation Place from which flight flies
-     * @param arrivalLocation Place which flight flies to
-     * @param arrivalTime Time when flight land
-     * @param departureTime Time when flight take off
-     * @param stewards Flight crew
-     * @param airPlane Physical aircraft the flight use
+     * @param arrivalLocation   Place which flight flies to
+     * @param arrivalTime       Time when flight land
+     * @param departureTime     Time when flight take off
+     * @param stewards          Flight crew
+     * @param airPlane          Physical aircraft the flight use
      */
     public Flight(Destination departureLocation,
                   Destination arrivalLocation,
@@ -83,6 +82,7 @@ public class Flight {
 
     /**
      * Get departure location
+     *
      * @return Departure location
      */
     public Destination getDepartureLocation() {
@@ -91,6 +91,7 @@ public class Flight {
 
     /**
      * Set departure location
+     *
      * @param departureLocation Location to set
      */
     public void setDepartureLocation(Destination departureLocation) {
@@ -99,6 +100,7 @@ public class Flight {
 
     /**
      * Get arrival location
+     *
      * @return Arrival location
      */
     public Destination getArrivalLocation() {
@@ -107,6 +109,7 @@ public class Flight {
 
     /**
      * Set arrival location
+     *
      * @param arrivalLocation Location to set
      */
     public void setArrivalLocation(Destination arrivalLocation) {
@@ -115,6 +118,7 @@ public class Flight {
 
     /**
      * Get arrival time
+     *
      * @return Arrival time
      */
     public LocalDateTime getArrivalTime() {
@@ -123,6 +127,7 @@ public class Flight {
 
     /**
      * Set arrival time
+     *
      * @param arrivalTime Flight arrival time to set
      */
     public void setArrivalTime(LocalDateTime arrivalTime) {
@@ -131,6 +136,7 @@ public class Flight {
 
     /**
      * Get flight departure time
+     *
      * @return Flight departure time
      */
     public LocalDateTime getDepartureTime() {
@@ -139,6 +145,7 @@ public class Flight {
 
     /**
      * Set flight departure time
+     *
      * @param departureTime Flight departure to set
      */
     public void setDepartureTime(LocalDateTime departureTime) {
@@ -147,6 +154,7 @@ public class Flight {
 
     /**
      * Get flight stewards
+     *
      * @return Flight stewards
      */
     public List<Steward> getStewards() {
@@ -155,6 +163,7 @@ public class Flight {
 
     /**
      * Set stewards for flight
+     *
      * @param stewards Stewards to set for flight
      */
     public void setStewards(List<Steward> stewards) {
@@ -163,6 +172,7 @@ public class Flight {
 
     /**
      * Get flight airplane
+     *
      * @return Flight airplane
      */
     public Airplane getAirPlane() {
@@ -171,6 +181,7 @@ public class Flight {
 
     /**
      * Set flight airplane
+     *
      * @param airPlane Flight airplane
      */
     public void setAirPlane(Airplane airPlane) {
@@ -180,6 +191,7 @@ public class Flight {
 
     /**
      * Convert flight to string format
+     *
      * @return Flight as string
      */
     @Override
@@ -197,6 +209,7 @@ public class Flight {
 
     /**
      * Check if objects are equal
+     *
      * @param o Object to check
      * @return True if equal
      */
@@ -254,19 +267,20 @@ public class Flight {
 
     /**
      * Count flight hash code
+     *
      * @return Flight hash code
      */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result += prime * result + Objects.hashCode(this.id);
-        result += prime * result + Objects.hashCode(departureTime);
-        result += prime * result + Objects.hashCode(departureLocation);
-        result += prime * result + Objects.hashCode(arrivalTime);
-        result += prime * result + Objects.hashCode(arrivalLocation);
-        result += prime * result + Objects.hashCode(airPlane);
-        result += prime * result + Objects.hashCode(stewards);
+        result = prime * result + Objects.hashCode(this.id);
+        result = prime * result + Objects.hashCode(departureTime);
+        result = prime * result + Objects.hashCode(departureLocation);
+        result = prime * result + Objects.hashCode(arrivalTime);
+        result = prime * result + Objects.hashCode(arrivalLocation);
+        result = prime * result + Objects.hashCode(airPlane);
+        result = prime * result + Objects.hashCode(stewards);
         return result;
     }
 }

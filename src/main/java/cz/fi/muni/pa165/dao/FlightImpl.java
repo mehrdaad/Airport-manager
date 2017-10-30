@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.dao;
 
+import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Flight;
 import org.springframework.stereotype.Repository;
 
@@ -7,8 +8,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+/**
+ * Implementation of the {@link FlightDao} interface.
+ *
+ * @author Karel Jiranek
+ */
 @Repository
-public class FlightImpl implements FlightDao  {
+public class FlightImpl implements FlightDao {
 
     @PersistenceContext
     private EntityManager em;

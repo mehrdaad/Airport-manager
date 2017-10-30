@@ -23,8 +23,6 @@ public class Destination {
     @Column(nullable = false)
     private String city;
 
-
-
     public String getCountry() {
         return country;
     }

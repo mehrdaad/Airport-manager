@@ -13,6 +13,8 @@ import javax.persistence.PersistenceException;
 import java.util.List;
 
 /**
+ * Class testing StewardDao implementation.
+ *
  * @author Robert Duriancik
  */
 public class SampleStewardDaoTest extends BaseDaoTest {

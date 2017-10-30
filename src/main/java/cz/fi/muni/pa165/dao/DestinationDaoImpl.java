@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.dao;
 
+import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.entities.Destination;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
- * Implementation of the {@link DestinationDao} layer.
+ * Implementation of the {@link DestinationDao} interface.
  *
  * @author Robert Duriancik
  */
