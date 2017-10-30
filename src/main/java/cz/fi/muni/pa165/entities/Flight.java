@@ -254,7 +254,7 @@ public class Flight {
 
     /**
      * Count flight hash code
-     * @return
+     * @return Flight hash code
      */
     @Override
     public int hashCode() {
