@@ -56,7 +56,7 @@ public class AirplaneDaoImplTest extends BaseDaoTest {
                 .build();
 
         // add airplane with negative capacity
-        //Assert.assertThrows(org.hibernate.exception.ConstraintViolationException.class, () -> airplaneDao.addAirplane(negativeCapacityAirplane));
+        Assert.assertThrows(PersistenceException.class, () -> airplaneDao.addAirplane(negativeCapacityAirplane));
 
         Airplane notNullIdAirplane = new AirplaneBuilder()
                 .setId(20L)
