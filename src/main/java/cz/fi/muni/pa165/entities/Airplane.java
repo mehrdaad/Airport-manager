@@ -1,5 +1,7 @@
 package cz.fi.muni.pa165.entities;
 
+import org.hibernate.annotations.Check;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
@@ -12,7 +14,7 @@ import javax.persistence.*;
  */
 
 @Entity
-
+@Check(constraints = "capacity > 0")
 public class Airplane implements Serializable {
     
     
@@ -30,7 +32,6 @@ public class Airplane implements Serializable {
     
     @NotNull
     @Column(nullable = false)
-    
     private int capacity;
     
     public Long getId() {
@@ -62,10 +63,6 @@ public class Airplane implements Serializable {
     }
 
     public void setCapacity(int capacity) throws IllegalArgumentException{
-        
-        if (capacity <= 0)
-            throw new IllegalArgumentException("Capacity cannot be zero or less.");
-        
         this.capacity = capacity;
     }
     
