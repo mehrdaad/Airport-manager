@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The entity representing a destination.
+ * Test flight entity features
  * @author Karel Jiranek
  */
 public class SampleFlightDaoTest extends BaseDaoTest {
