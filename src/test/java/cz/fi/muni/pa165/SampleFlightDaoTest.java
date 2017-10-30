@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.entities.Steward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
@@ -13,13 +14,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * The entity representing a destination.
  * @author Karel Jiranek
  */
-public class SampleFlightTest extends BaseDaoTest {
+public class SampleFlightDaoTest extends BaseDaoTest {
     @Autowired
     private FlightDao flightDao;
 
@@ -61,6 +64,8 @@ public class SampleFlightTest extends BaseDaoTest {
         selectedFlight.getAirPlane().setType("Huge");
         selectedFlight.getAirPlane().setName("My little airoplane");
         selectedFlight.getAirPlane().setCapacity(777);
+        selectedFlight.getStewards().get(0).setSurname("Novicky");
+        selectedFlight.getStewards().get(0).setFirstName("Mike");
         flightDao.update(selectedFlight);
 
         // Test flight
@@ -74,7 +79,9 @@ public class SampleFlightTest extends BaseDaoTest {
         Assert.assertEquals(arrivalTime, selectedFlight.getArrivalTime());
         Assert.assertEquals(777, selectedFlight.getAirPlane().getCapacity());
         Assert.assertEquals("My little airoplane", selectedFlight.getAirPlane().getName());
-        Assert.assertEquals("Huge", selectedFlight.getAirPlane().getType());
+        Assert.assertEquals("Mike", selectedFlight.getStewards().get(0).getFirstName());
+        Assert.assertEquals("Novicky", selectedFlight.getStewards().get(0).getSurname());
+
     }
 
     @Test
@@ -172,6 +179,13 @@ public class SampleFlightTest extends BaseDaoTest {
         departueDestination.setCity(departureCtiyName);
         departueDestination.setCountry(departureState);
 
+        // Create stewards
+        Steward steward = new Steward();
+        steward.setFirstName("John");
+        steward.setSurname("Dail");
+        List<Steward> stewards = new LinkedList<>();
+        stewards.add(steward);
+
         // Create times
         LocalDateTime departureTime = LocalDateTime.of(2017, Month.DECEMBER, 24, 8, 30);
         LocalDateTime arrivalTime = LocalDateTime.of(2017, Month.DECEMBER, 24, 20, 30);
@@ -182,7 +196,7 @@ public class SampleFlightTest extends BaseDaoTest {
         airPlane.setName("Boeing 737");
         airPlane.setType("Basic");
 
-        return new Flight(arrivalDestination, departueDestination, arrivalTime, departureTime, null, airPlane);
+        return new Flight(arrivalDestination, departueDestination, arrivalTime, departureTime, stewards, airPlane);
     }
 
 }

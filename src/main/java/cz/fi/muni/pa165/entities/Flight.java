@@ -1,10 +1,10 @@
 package cz.fi.muni.pa165.entities;
 
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -28,17 +28,13 @@ public class Flight {
     @NotNull
     private Destination arrivalLocation;
 
-    @Nullable
     private LocalDateTime arrivalTime;
 
-    @Nullable
     private LocalDateTime departureTime;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Nullable
     private List<Steward> stewards;
 
-    @Nullable
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Airplane airPlane;
 
