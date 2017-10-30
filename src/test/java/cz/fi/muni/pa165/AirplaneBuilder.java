@@ -2,6 +2,11 @@ package cz.fi.muni.pa165;
 
 import cz.fi.muni.pa165.entities.Airplane;
 
+/**
+ * Builder class for the {@link Airplane} entity
+ *
+ * @author Ondrej Prikryl
+ */
 class AirplaneBuilder {
 
     private Airplane airplane;

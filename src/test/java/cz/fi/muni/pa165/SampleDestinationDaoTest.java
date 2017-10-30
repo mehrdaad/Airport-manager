@@ -2,19 +2,22 @@ package cz.fi.muni.pa165;
 
 import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.entities.Destination;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
+ * Class testing DestinationDao implementation.
  *
  * @author Jan Cakl
  */
-public class SampleDestinationDaoTest extends BaseDaoTest{
+public class SampleDestinationDaoTest extends BaseDaoTest {
 
     @Autowired
     private DestinationDao destinationDao;
@@ -27,10 +30,10 @@ public class SampleDestinationDaoTest extends BaseDaoTest{
      */
     @Test
     @Transactional
-    public void findAll(){
+    public void findAll() {
 
-        Destination  dest1 = new Destination();
-        Destination  dest2 = new Destination();
+        Destination dest1 = new Destination();
+        Destination dest2 = new Destination();
 
         dest1.setCountry("country1");
         dest1.setCity("city1");
@@ -61,14 +64,14 @@ public class SampleDestinationDaoTest extends BaseDaoTest{
      */
     @Test
     @Transactional
-    public void create(){
-        Destination  dest = new Destination();
+    public void create() {
+        Destination dest = new Destination();
 
         dest.setCountry("country1");
         dest.setCity("city1");
         destinationDao.create(dest);
 
-        List<Destination> destinations =  em.createQuery("select d from Destination d", Destination.class).getResultList();
+        List<Destination> destinations = em.createQuery("select d from Destination d", Destination.class).getResultList();
         Assert.assertEquals(1, destinations.size());
         Assert.assertEquals(dest, destinations.get(0));
 
@@ -79,9 +82,9 @@ public class SampleDestinationDaoTest extends BaseDaoTest{
      */
     @Test
     @Transactional
-    public void update(){
+    public void update() {
 
-        Destination  dest = new Destination();
+        Destination dest = new Destination();
 
         dest.setCountry("country1");
         dest.setCity("city1");
@@ -105,9 +108,9 @@ public class SampleDestinationDaoTest extends BaseDaoTest{
      */
     @Test
     @Transactional
-    public void delete(){
+    public void delete() {
 
-        Destination  dest = new Destination();
+        Destination dest = new Destination();
 
         dest.setCountry("country1");
         dest.setCity("city1");

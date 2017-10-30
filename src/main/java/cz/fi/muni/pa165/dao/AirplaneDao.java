@@ -10,11 +10,12 @@ import cz.fi.muni.pa165.entities.Airplane;
 import java.util.List;
 
 /**
+ * Data Access Object layer for the {@link Airplane} entity.
  *
  * @author Honza
  */
 public interface AirplaneDao {
-    
+
     /**
      * Save a {@link Airplane} entity instance in the persistence storage.
      *
@@ -51,5 +52,5 @@ public interface AirplaneDao {
      * @return the found {@link Airplane} instance or null if the entity does not exist
      */
     Airplane findById(Long id);
-    
+
 }

@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * Test flight entity features
+ *
  * @author Karel Jiranek
  */
 public class SampleFlightDaoTest extends BaseDaoTest {
@@ -34,7 +35,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
     public void createTest() throws Exception {
         Flight flight = createFlight("USA", "Czech Republic");
         flightDao.create(flight);
-        List<Flight> flights =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        List<Flight> flights = em.createQuery("select f from Flight f", Flight.class).getResultList();
         Assert.assertEquals(1, flights.size());
         Assert.assertEquals(flight, flights.get(0));
     }
@@ -52,7 +53,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         flightDao.create(createdFlight);
 
         // Update flight
-        selectedFlightList =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
         selectedFlight = selectedFlightList.get(0);
 
         selectedFlight.setDepartureTime(departureTime);
@@ -69,7 +70,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         flightDao.update(selectedFlight);
 
         // Test flight
-        selectedFlightList =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
         selectedFlight = selectedFlightList.get(0);
         Assert.assertEquals(1, selectedFlightList.size());
         Assert.assertEquals("Bratislava", selectedFlight.getDepartureLocation().getCity());
@@ -98,7 +99,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         flightDao.delete(createdFlight);
 
         // Test flight
-        selectedFlightList =  em.createQuery("select f from Flight f", Flight.class).getResultList();
+        selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
         Assert.assertEquals(0, selectedFlightList.size());
     }
 
@@ -138,7 +139,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
     }
 
     @Test
-    public void toStringTest(){
+    public void toStringTest() {
         String expectedOutput = "Flight:\n" +
                 "Departure location: Destination{country='USA', city='UNKOWN'}\n" +
                 "Departure time: 2017-12-24T08:30\n" +
@@ -151,14 +152,14 @@ public class SampleFlightDaoTest extends BaseDaoTest {
     }
 
     @Test
-    public void testHashCode(){
+    public void testHashCode() {
         Flight createdFlight1 = createFlight("USA", "Czech Republic");
         Flight createdFlight2 = createFlight("USA", "Czech Republic");
         Assert.assertEquals(createdFlight1.hashCode(), createdFlight2.hashCode());
     }
 
     @Test
-    public void testEquals(){
+    public void testEquals() {
         Flight createdFlight1 = createFlight("USA", "Czech Republic");
         Flight createdFlight2 = createFlight("USA", "Czech Republic");
         Flight createdFlight3 = createFlight("China", "Czech Republic");
@@ -166,7 +167,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         Assert.assertTrue(createdFlight1.equals(createdFlight2));
     }
 
-    private Flight createFlight(String arrivalState, String departureState){
+    private Flight createFlight(String arrivalState, String departureState) {
         // Create destinations
         String arrivalCityName = "UNKOWN";
         String departureCtiyName = "UNKOWN";
