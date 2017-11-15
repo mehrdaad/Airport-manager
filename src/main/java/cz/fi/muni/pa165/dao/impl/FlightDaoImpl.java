@@ -20,17 +20,26 @@ public class FlightDaoImpl implements FlightDao {
     private EntityManager em;
 
     @Override
-    public void create(Flight flight) {
+    public void createFlight(Flight flight) {
+        if (flight == null){
+            throw new IllegalArgumentException("Cannot create null flight");
+        }
         em.persist(flight);
     }
 
     @Override
-    public void delete(Flight flight) {
+    public void deleteFlight(Flight flight) {
+        if (flight == null){
+            throw new IllegalArgumentException("Cannot delete null flight");
+        }
         em.remove(flight);
     }
 
     @Override
-    public void update(Flight flight) {
+    public void updateFlight(Flight flight) {
+        if (flight == null){
+            throw new IllegalArgumentException("Cannot update null flight");
+        }
         Flight flightFromDb = em.find(Flight.class, flight.getId());
 
         if (flightFromDb != null) {
@@ -41,12 +50,12 @@ public class FlightDaoImpl implements FlightDao {
     }
 
     @Override
-    public List<Flight> findAll() {
+    public List<Flight> getAllFlight() {
         return em.createQuery("select f from Flight f", Flight.class).getResultList();
     }
 
     @Override
-    public Flight findById(Long id) {
+    public Flight getFlight(Long id) {
         return em.find(Flight.class, id);
     }
 

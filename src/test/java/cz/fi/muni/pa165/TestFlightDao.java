@@ -5,25 +5,30 @@ import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+
 
 /**
  * Test flight entity features
  *
  * @author Karel Jiranek
  */
-public class SampleFlightDaoTest extends BaseDaoTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class TestFlightDao extends BaseDaoTest {
     @Autowired
     private FlightDao flightDao;
 
@@ -32,9 +37,9 @@ public class SampleFlightDaoTest extends BaseDaoTest {
 
     @Test
     @Transactional
-    public void createTest() throws Exception {
+    public void testCreate() throws Exception {
         Flight flight = createFlight("USA", "Czech Republic");
-        flightDao.create(flight);
+        flightDao.createFlight(flight);
         List<Flight> flights = em.createQuery("select f from Flight f", Flight.class).getResultList();
         Assert.assertEquals(1, flights.size());
         Assert.assertEquals(flight, flights.get(0));
@@ -42,7 +47,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
 
     @Test
     @Transactional
-    public void updateTest() throws Exception {
+    public void testUpdate() throws Exception {
         List<Flight> selectedFlightList;
         Flight selectedFlight;
         LocalDateTime departureTime = LocalDateTime.of(2018, Month.DECEMBER, 24, 8, 30);
@@ -50,7 +55,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
 
         // Create and persist flight
         Flight createdFlight = createFlight("USA", "Czech Republic");
-        flightDao.create(createdFlight);
+        flightDao.createFlight(createdFlight);
 
         // Update flight
         selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
@@ -67,7 +72,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         selectedFlight.getAirPlane().setCapacity(777);
         selectedFlight.getStewards().get(0).setSurname("Novicky");
         selectedFlight.getStewards().get(0).setFirstName("Mike");
-        flightDao.update(selectedFlight);
+        flightDao.updateFlight(selectedFlight);
 
         // Test flight
         selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
@@ -87,16 +92,16 @@ public class SampleFlightDaoTest extends BaseDaoTest {
 
     @Test
     @Transactional
-    public void deleteTest() throws Exception {
+    public void testDelete() throws Exception {
         List<Flight> selectedFlightList;
         Flight selectedFlight;
 
         // Create and persist flight
         Flight createdFlight = createFlight("USA", "Czech Republic");
-        flightDao.create(createdFlight);
+        flightDao.createFlight(createdFlight);
 
         // Delete flight
-        flightDao.delete(createdFlight);
+        flightDao.deleteFlight(createdFlight);
 
         // Test flight
         selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
@@ -105,14 +110,14 @@ public class SampleFlightDaoTest extends BaseDaoTest {
 
     @Test
     @Transactional
-    public void findByIdTest() throws Exception {
+    public void testFindById() throws Exception {
         // Create and persist flight
         Flight createdFlight = createFlight("USA", "Czech Republic");
-        flightDao.create(createdFlight);
+        flightDao.createFlight(createdFlight);
         Long id = createdFlight.getId();
 
         // Find by id
-        Flight selectedFlight = flightDao.findById(id);
+        Flight selectedFlight = flightDao.getFlight(id);
 
         // Test ids
         Assert.assertEquals(selectedFlight.getId(), createdFlight.getId());
@@ -125,11 +130,11 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         Flight flight2 = createFlight("USA", "Zimbabwe");
         Flight flight3 = createFlight("China", "Czech Republic");
 
-        flightDao.create(flight1);
-        flightDao.create(flight2);
-        flightDao.create(flight3);
+        flightDao.createFlight(flight1);
+        flightDao.createFlight(flight2);
+        flightDao.createFlight(flight3);
 
-        List<Flight> allFlights = flightDao.findAll();
+        List<Flight> allFlights = flightDao.getAllFlight();
 
         Assert.assertEquals(3, allFlights.size());
         Assert.assertTrue(allFlights.contains(flight1)
@@ -139,7 +144,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
     }
 
     @Test
-    public void toStringTest() {
+    public void testToString() {
         String expectedOutput = "Flight:\n" +
                 "Departure location: Destination{country='USA', city='UNKOWN'}\n" +
                 "Departure time: 2017-12-24T08:30\n" +
@@ -147,7 +152,7 @@ public class SampleFlightDaoTest extends BaseDaoTest {
                 "Arrival time: 2017-12-24T20:30\n" +
                 "Airplane: Airplane{name='Boeing 737', type='Basic', capacity='100'}";
 
-        Flight createdFlight = createFlight("USA", "Czech Republic");
+        Flight createdFlight = createFlight("Czech Republic", "USA");
         Assert.assertEquals(expectedOutput, createdFlight.toString());
     }
 
@@ -167,18 +172,33 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         Assert.assertTrue(createdFlight1.equals(createdFlight2));
     }
 
-    private Flight createFlight(String arrivalState, String departureState) {
+    @Test(expected=IllegalArgumentException.class)
+    public void testCreateNullFlight(){
+        flightDao.createFlight(null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUpdateNullFlight(){
+        flightDao.updateFlight(null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testDeleteNullFlight(){
+        flightDao.deleteFlight(null);
+    }
+
+    private static Flight createFlight(String arrivalState, String departureState) {
         // Create destinations
         String arrivalCityName = "UNKOWN";
-        String departureCtiyName = "UNKOWN";
+        String departureCityName = "UNKOWN";
 
         Destination arrivalDestination = new Destination();
         arrivalDestination.setCity(arrivalCityName);
         arrivalDestination.setCountry(arrivalState);
 
-        Destination departueDestination = new Destination();
-        departueDestination.setCity(departureCtiyName);
-        departueDestination.setCountry(departureState);
+        Destination departureDestination = new Destination();
+        departureDestination.setCity(departureCityName);
+        departureDestination.setCountry(departureState);
 
         // Create stewards
         Steward steward = new Steward();
@@ -197,7 +217,14 @@ public class SampleFlightDaoTest extends BaseDaoTest {
         airPlane.setName("Boeing 737");
         airPlane.setType("Basic");
 
-        return new Flight(arrivalDestination, departueDestination, arrivalTime, departureTime, stewards, airPlane);
+        Flight flight = new Flight();
+        flight.setArrivalLocation(arrivalDestination);
+        flight.setDepartureLocation(departureDestination);
+        flight.setDepartureTime(departureTime);
+        flight.setArrivalTime(arrivalTime);
+        flight.setStewards(stewards);
+        flight.setAirPlane(airPlane);
+        return flight;
     }
 
 }
