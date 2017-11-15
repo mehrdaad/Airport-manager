@@ -101,7 +101,7 @@ public class SampleAirplaneDaoTest extends BaseDaoTest {
     @Transactional
     public void updateAirplaneTest() {
 
-        // update airplane happy scenario
+        // updateDestination airplane happy scenario
         Airplane defaultAirplane = new AirplaneBuilder()
                 .setId(null)
                 .setCapacity(20)
@@ -125,7 +125,7 @@ public class SampleAirplaneDaoTest extends BaseDaoTest {
         Assert.assertNotNull(airplane);
         Assert.assertEquals(newAirplane, airplane);
 
-        // update airplane null id
+        // updateDestination airplane null id
         Airplane nullIdAirplane = new AirplaneBuilder()
                 .setId(null)
                 .setCapacity(20)

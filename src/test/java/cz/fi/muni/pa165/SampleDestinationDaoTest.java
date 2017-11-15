@@ -2,15 +2,14 @@ package cz.fi.muni.pa165;
 
 import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.entities.Destination;
-
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * Class testing DestinationDao implementation.
@@ -26,7 +25,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
     private EntityManager em;
 
     /**
-     * Checks that findAll operation works fine.
+     * Checks that getAllDestinations operation works fine.
      */
     @Test
     @Transactional
@@ -40,10 +39,10 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
         dest2.setCountry("country2");
         dest2.setCity("city2");
 
-        destinationDao.create(dest1);
-        destinationDao.create(dest2);
+        destinationDao.addDestination(dest1);
+        destinationDao.addDestination(dest2);
 
-        List<Destination> destinations = destinationDao.findAll();
+        List<Destination> destinations = destinationDao.getAllDestinations();
 
         Assert.assertEquals(destinations.size(), 2);
 
@@ -60,7 +59,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
     }
 
     /**
-     * Checks that create operation works fine.
+     * Checks that addDestination operation works fine.
      */
     @Test
     @Transactional
@@ -69,7 +68,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
 
         dest.setCountry("country1");
         dest.setCity("city1");
-        destinationDao.create(dest);
+        destinationDao.addDestination(dest);
 
         List<Destination> destinations = em.createQuery("select d from Destination d", Destination.class).getResultList();
         Assert.assertEquals(1, destinations.size());
@@ -78,7 +77,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
     }
 
     /**
-     * Checks that update operation works fine.
+     * Checks that updateDestination operation works fine.
      */
     @Test
     @Transactional
@@ -88,7 +87,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
 
         dest.setCountry("country1");
         dest.setCity("city1");
-        destinationDao.create(dest);
+        destinationDao.addDestination(dest);
 
         List<Destination> destinations = em.createQuery("select f from Destination f", Destination.class).getResultList();
 
@@ -96,7 +95,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
         Assert.assertEquals("country1", destinations.get(0).getCountry());
 
         dest.setCountry("updateCountry");
-        destinationDao.update(dest);
+        destinationDao.updateDestination(dest);
 
         Assert.assertEquals("city1", destinations.get(0).getCity());
         Assert.assertEquals("updateCountry", destinations.get(0).getCountry());
@@ -104,7 +103,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
     }
 
     /**
-     * Checks that null DAO object will return null for non existent ID and also that delete operation works fine + getId operation works.
+     * Checks that null DAO object will return null for non existent ID and also that removeDestination operation works fine + getId operation works.
      */
     @Test
     @Transactional
@@ -114,11 +113,11 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
 
         dest.setCountry("country1");
         dest.setCity("city1");
-        destinationDao.create(dest);
+        destinationDao.addDestination(dest);
 
-        Assert.assertNotNull(destinationDao.findById(dest.getId()));
-        destinationDao.delete(dest);
-        Assert.assertNull(destinationDao.findById(dest.getId()));
+        Assert.assertNotNull(destinationDao.getDestination(dest.getId()));
+        destinationDao.removeDestination(dest);
+        Assert.assertNull(destinationDao.getDestination(dest.getId()));
     }
 
 }

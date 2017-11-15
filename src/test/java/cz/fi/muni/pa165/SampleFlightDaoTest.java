@@ -14,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -170,14 +169,14 @@ public class SampleFlightDaoTest extends BaseDaoTest {
     private Flight createFlight(String arrivalState, String departureState) {
         // Create destinations
         String arrivalCityName = "UNKOWN";
-        String departureCtiyName = "UNKOWN";
+        String departureCityName = "UNKOWN";
 
         Destination arrivalDestination = new Destination();
         arrivalDestination.setCity(arrivalCityName);
         arrivalDestination.setCountry(arrivalState);
 
         Destination departueDestination = new Destination();
-        departueDestination.setCity(departureCtiyName);
+        departueDestination.setCity(departureCityName);
         departueDestination.setCountry(departureState);
 
         // Create stewards

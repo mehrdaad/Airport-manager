@@ -17,28 +17,28 @@ public interface DestinationDao {
      *
      * @param destination the {@link Destination} entity instance
      */
-    void create(Destination destination);
+    void addDestination(Destination destination);
 
     /**
      * Remove the {@link Destination} entity instance from the persistence storage.
      *
      * @param destination the {@link Destination} entity instance
      */
-    void delete(Destination destination);
+    void removeDestination(Destination destination);
 
     /**
      * Update data of the {@link Destination} entity instance in the persistence storage
      *
      * @param destination the {@link Destination} entity instance
      */
-    void update(Destination destination);
+    void updateDestination(Destination destination);
 
     /**
      * Find all instances of the {@link Destination} entity in the persistence storage.
      *
      * @return a list of {@link Destination} entities
      */
-    List<Destination> findAll();
+    List<Destination> getAllDestinations();
 
     /**
      * Find a {@link Destination} entity instance with specified <b>id</b>.
@@ -47,6 +47,6 @@ public interface DestinationDao {
      * @param id the id of the {@link Destination} entity
      * @return the found {@link Destination} instance or null if the entity does not exist
      */
-    Destination findById(Long id);
+    Destination getDestination(Long id);
 
 }
