@@ -23,6 +23,14 @@ public class Destination {
     @Column(nullable = false)
     private String city;
 
+    public Destination() {
+    }
+
+    public Destination(String country, String city) {
+        this.country = country;
+        this.city = city;
+    }
+
     public String getCountry() {
         return country;
     }
@@ -54,14 +62,14 @@ public class Destination {
 
         Destination that = (Destination) o;
 
-        if (!country.equals(that.getCountry())) return false;
-        return city.equals(that.getCity());
+        if (country != null && !country.equals(that.getCountry())) return false;
+        return city != null && city.equals(that.getCity());
     }
 
     @Override
     public int hashCode() {
-        int result = country.hashCode();
-        result = 31 * result + city.hashCode();
+        int result = country != null ? country.hashCode() : 1;
+        result = 31 * result + (city != null ? city.hashCode() : 1);
         return result;
     }
 

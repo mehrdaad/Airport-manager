@@ -20,15 +20,18 @@ public class DestinationDaoImpl implements DestinationDao {
     @PersistenceContext
     private EntityManager em;
 
-    public void create(Destination destination) {
+    @Override
+    public void addDestination(Destination destination) {
         em.persist(destination);
     }
 
-    public void delete(Destination destination) {
+    @Override
+    public void removeDestination(Destination destination) {
         em.remove(destination);
     }
 
-    public void update(Destination destination) {
+    @Override
+    public void updateDestination(Destination destination) {
         Destination destFromDb = em.find(Destination.class, destination.getId());
 
         if (destFromDb != null) {
@@ -38,11 +41,13 @@ public class DestinationDaoImpl implements DestinationDao {
         }
     }
 
-    public List<Destination> findAll() {
+    @Override
+    public List<Destination> getAllDestinations() {
         return em.createQuery("select d from Destination d", Destination.class).getResultList();
     }
 
-    public Destination findById(Long id) {
+    @Override
+    public Destination getDestination(Long id) {
         return em.find(Destination.class, id);
     }
 }
