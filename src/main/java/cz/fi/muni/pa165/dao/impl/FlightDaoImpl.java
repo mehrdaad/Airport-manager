@@ -20,7 +20,7 @@ public class FlightDaoImpl implements FlightDao {
     private EntityManager em;
 
     @Override
-    public void createFlight(Flight flight) {
+    public void addFlight(Flight flight) {
         if (flight == null){
             throw new IllegalArgumentException("Cannot create null flight");
         }

@@ -17,7 +17,7 @@ public interface FlightDao {
      * Save a {@link Flight} entity instance in the persistence storage.
      * @param flight the {@link Flight} entity instance
      */
-    void createFlight(Flight flight);
+    void addFlight(Flight flight);
 
     /**
      * Remove a {@link Flight} entity instance from the persistence storage.

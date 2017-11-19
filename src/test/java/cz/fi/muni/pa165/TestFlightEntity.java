@@ -33,8 +33,6 @@ public class TestFlightEntity extends BaseDaoTest {
     @Autowired
     private FlightDao flightDao;
 
-    @PersistenceContext
-    private EntityManager em;
 
     private Flight flight = new Flight();
 

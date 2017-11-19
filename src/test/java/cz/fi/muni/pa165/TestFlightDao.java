@@ -39,7 +39,7 @@ public class TestFlightDao extends BaseDaoTest {
     @Transactional
     public void testCreate() throws Exception {
         Flight flight = createFlight("USA", "Czech Republic");
-        flightDao.createFlight(flight);
+        flightDao.addFlight(flight);
         List<Flight> flights = em.createQuery("select f from Flight f", Flight.class).getResultList();
         Assert.assertEquals(1, flights.size());
         Assert.assertEquals(flight, flights.get(0));
@@ -55,7 +55,7 @@ public class TestFlightDao extends BaseDaoTest {
 
         // Create and persist flight
         Flight createdFlight = createFlight("USA", "Czech Republic");
-        flightDao.createFlight(createdFlight);
+        flightDao.addFlight(createdFlight);
 
         // Update flight
         selectedFlightList = em.createQuery("select f from Flight f", Flight.class).getResultList();
@@ -98,7 +98,7 @@ public class TestFlightDao extends BaseDaoTest {
 
         // Create and persist flight
         Flight createdFlight = createFlight("USA", "Czech Republic");
-        flightDao.createFlight(createdFlight);
+        flightDao.addFlight(createdFlight);
 
         // Delete flight
         flightDao.deleteFlight(createdFlight);
@@ -113,7 +113,7 @@ public class TestFlightDao extends BaseDaoTest {
     public void testFindById() throws Exception {
         // Create and persist flight
         Flight createdFlight = createFlight("USA", "Czech Republic");
-        flightDao.createFlight(createdFlight);
+        flightDao.addFlight(createdFlight);
         Long id = createdFlight.getId();
 
         // Find by id
@@ -130,9 +130,9 @@ public class TestFlightDao extends BaseDaoTest {
         Flight flight2 = createFlight("USA", "Zimbabwe");
         Flight flight3 = createFlight("China", "Czech Republic");
 
-        flightDao.createFlight(flight1);
-        flightDao.createFlight(flight2);
-        flightDao.createFlight(flight3);
+        flightDao.addFlight(flight1);
+        flightDao.addFlight(flight2);
+        flightDao.addFlight(flight3);
 
         List<Flight> allFlights = flightDao.getAllFlight();
 
@@ -174,7 +174,7 @@ public class TestFlightDao extends BaseDaoTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testCreateNullFlight(){
-        flightDao.createFlight(null);
+        flightDao.addFlight(null);
     }
 
     @Test(expected=IllegalArgumentException.class)
