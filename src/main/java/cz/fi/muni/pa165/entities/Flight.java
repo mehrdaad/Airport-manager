@@ -36,32 +36,6 @@ public class Flight {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Airplane airPlane;
 
-    public Flight() {
-    }
-
-    /**
-     * Instantiate flight with parameters
-     *
-     * @param departureLocation Place from which flight flies
-     * @param arrivalLocation   Place which flight flies to
-     * @param arrivalTime       Time when flight land
-     * @param departureTime     Time when flight take off
-     * @param stewards          Flight crew
-     * @param airPlane          Physical aircraft the flight use
-     */
-    public Flight(Destination departureLocation,
-                  Destination arrivalLocation,
-                  LocalDateTime arrivalTime,
-                  LocalDateTime departureTime,
-                  List<Steward> stewards, Airplane airPlane) {
-        this.departureLocation = departureLocation;
-        this.arrivalLocation = arrivalLocation;
-        this.arrivalTime = arrivalTime;
-        this.departureTime = departureTime;
-        this.stewards = stewards;
-        this.airPlane = airPlane;
-    }
-
     /**
      * Return entity id
      *
@@ -95,6 +69,9 @@ public class Flight {
      * @param departureLocation Location to set
      */
     public void setDepartureLocation(Destination departureLocation) {
+        if (departureLocation == null){
+            throw new IllegalArgumentException("DepartureLocation set DepartureTime to null.");
+        }
         this.departureLocation = departureLocation;
     }
 
@@ -113,6 +90,9 @@ public class Flight {
      * @param arrivalLocation Location to set
      */
     public void setArrivalLocation(Destination arrivalLocation) {
+        if (arrivalLocation == null){
+            throw new IllegalArgumentException("ArrivalLocation set DepartureTime to null.");
+        }
         this.arrivalLocation = arrivalLocation;
     }
 
@@ -131,6 +111,9 @@ public class Flight {
      * @param arrivalTime Flight arrival time to set
      */
     public void setArrivalTime(LocalDateTime arrivalTime) {
+        if (arrivalTime == null){
+            throw new IllegalArgumentException("ArrivalTime set DepartureTime to null.");
+        }
         this.arrivalTime = arrivalTime;
     }
 
@@ -149,6 +132,9 @@ public class Flight {
      * @param departureTime Flight departure to set
      */
     public void setDepartureTime(LocalDateTime departureTime) {
+        if (departureTime == null){
+            throw new IllegalArgumentException("Cannot set DepartureTime to null.");
+        }
         this.departureTime = departureTime;
     }
 
@@ -167,6 +153,12 @@ public class Flight {
      * @param stewards Stewards to set for flight
      */
     public void setStewards(List<Steward> stewards) {
+        if (stewards == null){
+            throw new IllegalArgumentException("Cannot set stewards to null.");
+        }
+        if (stewards.contains(null)){
+            throw new IllegalArgumentException("Cannot set stewards with null values");
+        }
         this.stewards = stewards;
     }
 
@@ -185,6 +177,9 @@ public class Flight {
      * @param airPlane Flight airplane
      */
     public void setAirPlane(Airplane airPlane) {
+        if (airPlane == null){
+            throw new IllegalArgumentException("Cannot set airplane to null.");
+        }
         this.airPlane = airPlane;
     }
 
@@ -216,53 +211,19 @@ public class Flight {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Flight)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        Flight that = (Flight) o;
+        Flight flight = (Flight) o;
 
-        if (departureTime == null) {
-            if (that.getDepartureTime() != null) {
-                return false;
-            }
-        } else {
-            if (!departureTime.equals(that.getDepartureTime()))
-                return false;
-        }
-
-        if (arrivalTime == null) {
-            if (that.getArrivalTime() != null) {
-                return false;
-            }
-        } else {
-            if (!arrivalTime.equals(that.getArrivalTime()))
-                return false;
-        }
-
-        if (stewards == null) {
-            if (that.getStewards() != null) {
-                return false;
-            }
-        } else {
-            if (!stewards.equals(that.getStewards()))
-                return false;
-        }
-
-        if (airPlane == null) {
-            if (that.getAirPlane() != null) {
-                return false;
-            }
-        } else {
-            if (!airPlane.equals(that.getAirPlane()))
-                return false;
-        }
-
-
-        if (!departureLocation.equals(that.getDepartureLocation()) ||
-                !arrivalLocation.equals(that.getArrivalLocation())
-                ) {
+        if (departureLocation != null ? !departureLocation.equals(flight.departureLocation) : flight.departureLocation != null)
             return false;
-        }
-        return true;
+        if (arrivalLocation != null ? !arrivalLocation.equals(flight.arrivalLocation) : flight.arrivalLocation != null)
+            return false;
+        if (arrivalTime != null ? !arrivalTime.equals(flight.arrivalTime) : flight.arrivalTime != null) return false;
+        if (departureTime != null ? !departureTime.equals(flight.departureTime) : flight.departureTime != null)
+            return false;
+        if (stewards != null ? !stewards.equals(flight.stewards) : flight.stewards != null) return false;
+        return airPlane != null ? airPlane.equals(flight.airPlane) : flight.airPlane == null;
     }
 
     /**
@@ -272,15 +233,14 @@ public class Flight {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Objects.hashCode(this.id);
-        result = prime * result + Objects.hashCode(departureTime);
-        result = prime * result + Objects.hashCode(departureLocation);
-        result = prime * result + Objects.hashCode(arrivalTime);
-        result = prime * result + Objects.hashCode(arrivalLocation);
-        result = prime * result + Objects.hashCode(airPlane);
-        result = prime * result + Objects.hashCode(stewards);
+        int result = departureLocation != null ? departureLocation.hashCode() : 0;
+        result = 31 * result + (arrivalLocation != null ? arrivalLocation.hashCode() : 0);
+        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
+        result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
+        result = 31 * result + (stewards != null ? stewards.hashCode() : 0);
+        result = 31 * result + (airPlane != null ? airPlane.hashCode() : 0);
         return result;
     }
+
+
 }
