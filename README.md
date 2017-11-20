@@ -1,12 +1,5 @@
-# Airport-manager project developed by JCT
+[![Build Status](https://travis-ci.org/fi-muni/PA165.svg?branch=master)](https://travis-ci.org/fi-muni/PA165)
 
-[![Build Status](https://travis-ci.org/karel947/Airport-manager.svg?branch=master)](https://travis-ci.org/karel947/Airport-manager)
+An open-sourced Java EE project created for teaching purposes of a subject PA165 at Faculty of Informatics, Masaryk University.
 
-Repozitář vytvořený v rámci projektu PB165
-
-Info:
-* Branch master je natavena jako protected, což znamená, že do ní lze přidávat jen pomocí pull requestu (nelze pushovat). Vývoj je veden v ostatních brančích.
-* Každý pull request musí být schválen alespoň jedním dalším spolupracovníkem (můžeme změnit, kdyby nám to nebude vyhovovat).
-* Pull request musí mít řádně vyplněný komentář!
-* Kód v branch master musí být za každých okolností zkopilovatelný a spustilený - zodpovídá autor kódu. 
-* Do repozitáře nepatří žádné spustitelné nebo znovu vygenerovatelné soubory, např.: .jar. Pozor na soubory a složky vytvářené prostředími jako jsou NetBeans nebo IDEA!
+Folder tasks contains tasks that should be carried out in each of the seminars. 
