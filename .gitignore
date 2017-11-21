@@ -19,12 +19,14 @@
 *.zip
 *.tar.gz
 *.rar
+*.iml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
 /Airport-manager.iml
 /Airport-manager-persistence/Airport-manager-persistence.iml
+/Airport-manager-service/Airport-manager-service.iml
 /.idea/
 /target/
 

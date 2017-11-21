@@ -50,6 +50,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
                         <compilerArgument>-Xlint:unchecked,deprecation</compilerArgument>
                     </configuration>
                 </plugin>
@@ -59,5 +61,7 @@
 
     <modules>
         <module>Airport-manager-persistence</module>
+        <module>Airport-manager-api</module>
+        <module>Airport-manager-service</module>
     </modules>
 </project>
