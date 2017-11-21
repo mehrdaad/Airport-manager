@@ -26,6 +26,7 @@ hs_err_pid*
 
 /Airport-manager.iml
 /Airport-manager-persistence/Airport-manager-persistence.iml
+/Airport-manager-service/Airport-manager-service.iml
 /.idea/
 /target/
 
