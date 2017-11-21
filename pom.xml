@@ -59,5 +59,7 @@
 
     <modules>
         <module>Airport-manager-persistence</module>
+        <module>Airport-manager-api</module>
+        <module>Airport-manager-service</module>
     </modules>
 </project>
