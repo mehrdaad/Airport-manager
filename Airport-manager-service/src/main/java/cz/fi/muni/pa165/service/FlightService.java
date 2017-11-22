@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.service;
 import cz.fi.muni.pa165.entities.Flight;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -23,4 +24,7 @@ public interface FlightService {
 
     List<Flight> getAllFlights();
 
+    Duration getFlightTime(Flight flight);
+
+    List<Flight> getFlightsLastMonth();
 }
