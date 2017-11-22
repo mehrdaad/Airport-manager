@@ -5,13 +5,10 @@ import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,7 +24,6 @@ import java.util.List;
  *
  * @author Karel Jiranek
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 public class TestFlightDao extends BaseDaoTest {
     @Autowired
     private FlightDao flightDao;
@@ -172,17 +168,17 @@ public class TestFlightDao extends BaseDaoTest {
         Assert.assertTrue(createdFlight1.equals(createdFlight2));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testCreateNullFlight(){
         flightDao.addFlight(null);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testUpdateNullFlight(){
         flightDao.updateFlight(null);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testDeleteNullFlight(){
         flightDao.deleteFlight(null);
     }

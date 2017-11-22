@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.dto;
+package cz.fi.muni.pa165.dto;
 
 public class placeholder {
 }
