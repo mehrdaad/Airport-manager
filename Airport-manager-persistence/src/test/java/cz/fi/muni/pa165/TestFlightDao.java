@@ -130,7 +130,7 @@ public class TestFlightDao extends BaseDaoTest {
         flightDao.addFlight(flight2);
         flightDao.addFlight(flight3);
 
-        List<Flight> allFlights = flightDao.getAllFlight();
+        List<Flight> allFlights = flightDao.getAllFlights();
 
         Assert.assertEquals(3, allFlights.size());
         Assert.assertTrue(allFlights.contains(flight1)

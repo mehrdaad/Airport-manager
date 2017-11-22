@@ -35,7 +35,7 @@ public interface FlightDao {
      * Find all instances of the {@link Flight} entity in the persistence storage.
      * @return List of {@link Flight} entities
      */
-    List<Flight> getAllFlight();
+    List<Flight> getAllFlights();
 
     /**
      * Find a {@link Flight} entity instance with specified <b>id</b>.

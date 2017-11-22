@@ -50,7 +50,7 @@ public class FlightDaoImpl implements FlightDao {
     }
 
     @Override
-    public List<Flight> getAllFlight() {
+    public List<Flight> getAllFlights() {
         return em.createQuery("select f from Flight f", Flight.class).getResultList();
     }
 
