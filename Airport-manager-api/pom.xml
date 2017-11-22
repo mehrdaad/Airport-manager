@@ -4,9 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cz.muni.fi.pa165</groupId>
-    <artifactId>Airport-manager-api</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
+    <parent>
+        <groupId>cz.muni.fi.pa165</groupId>
+        <artifactId>Airport-manager</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Airport-manager-api</artifactId>
+    <packaging>jar</packaging>
+    <name>Airport-manager-api</name>
+
+    <dependencies>
+        <!-- validation annotations for bean properties -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+
+    </dependencies>
     
 </project>
