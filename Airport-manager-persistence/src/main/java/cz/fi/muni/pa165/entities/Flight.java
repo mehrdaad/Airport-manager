@@ -5,7 +5,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The entity representing a flight.
@@ -211,7 +210,7 @@ public class Flight {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof Flight)) return false;
 
         Flight flight = (Flight) o;
 
