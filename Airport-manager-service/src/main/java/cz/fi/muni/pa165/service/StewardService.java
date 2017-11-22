@@ -1,20 +1,16 @@
 package cz.fi.muni.pa165.service;
 
-import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * An interface that defines a service access to the {@link Steward} entity.
  *
  * @author Karel Jiranek
  */
-
 public interface StewardService {
     /**
      * Get steward by id.
