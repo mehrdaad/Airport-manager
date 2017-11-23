@@ -16,6 +16,8 @@ public interface DestinationDao {
      * Save a {@link Destination} entity instance in the persistence storage.
      *
      * @param destination the {@link Destination} entity instance
+     * @throws NullPointerException     if destination is null
+     * @throws IllegalArgumentException if destination is not valid
      */
     void addDestination(Destination destination);
 
@@ -23,6 +25,8 @@ public interface DestinationDao {
      * Remove the {@link Destination} entity instance from the persistence storage.
      *
      * @param destination the {@link Destination} entity instance
+     * @throws NullPointerException     if destination is null
+     * @throws IllegalArgumentException if destination is not in persistence storage
      */
     void removeDestination(Destination destination);
 
@@ -30,6 +34,8 @@ public interface DestinationDao {
      * Update data of the {@link Destination} entity instance in the persistence storage
      *
      * @param destination the {@link Destination} entity instance
+     * @throws NullPointerException     if destination is null
+     * @throws IllegalArgumentException if destination is not in persistence storage
      */
     void updateDestination(Destination destination);
 
