@@ -130,7 +130,7 @@ public class StewardServiceImpl implements StewardService{
      */
     @Override
     public List<Flight> getAllStewardsFlights(long id){
-        return getAllStewardsFlightsAfter(id, LocalDateTime.MIN);
+        return getAllStewardsFlightsInTimeRange(id, LocalDateTime.MIN, LocalDateTime.MAX);
     }
 
     /**
@@ -142,33 +142,9 @@ public class StewardServiceImpl implements StewardService{
      */
     @Override
     public List<Flight> getAllStewardsFutureFlights(long id){
-        return getAllStewardsFlightsAfter(id, LocalDateTime.now());
+        return getAllStewardsFlightsInTimeRange(id, LocalDateTime.now(), LocalDateTime.MAX);
     }
 
-    /**
-     * Get all stewards departured flights after given time.
-     *
-     * @param id Steward id.
-     * @param startTime Time to start searching from.
-     * @return All stewards flights after given time (date). Empty list if not any.
-     */
-    @Override
-    public List<Flight> getAllStewardsFlightsAfter(long id, LocalDateTime startTime){
-        return getAllStewardsFlightsInTimeRange(id, startTime, LocalDateTime.MAX);
-    }
-
-    /**
-     * Get all stewards departured flights before given time. Flight in the air is
-     * included if departured before give time.
-     *
-     * @param id Steward id.
-     * @param stopTime Time to stop searching.
-     * @return All stewards flights before given time (date). Empty list if not any.
-     */
-    @Override
-    public List<Flight> getAllStewardsFlightsBefore(long id, LocalDateTime stopTime) {
-        return getAllStewardsFlightsInTimeRange(id, LocalDateTime.MIN, stopTime);
-    }
 
     /**
      * Get all stewards flights in given time range. All departured flights in range are

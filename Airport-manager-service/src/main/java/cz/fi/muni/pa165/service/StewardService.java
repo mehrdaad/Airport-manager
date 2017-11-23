@@ -76,25 +76,6 @@ public interface StewardService {
     List<Flight> getAllStewardsFutureFlights(long id);
 
     /**
-     * Get all stewards departured flights after given time.
-     *
-     * @param id Steward id.
-     * @param startTime Time to start searching from.
-     * @return All stewards flights after given time (date). Empty list if not any.
-     */
-    List<Flight> getAllStewardsFlightsAfter(long id, LocalDateTime startTime);
-
-    /**
-     * Get all stewards departured flights before given time. Flight in the air is
-     * included if departured before give time.
-     *
-     * @param id Steward id.
-     * @param stopTime Time to stop searching.
-     * @return All stewards flights before given time (date). Empty list if not any.
-     */
-    List<Flight> getAllStewardsFlightsBefore(long id, LocalDateTime stopTime);
-
-    /**
      * Get all stewards flights in given time range. All departured flights in range are
      * included in result.
      *
