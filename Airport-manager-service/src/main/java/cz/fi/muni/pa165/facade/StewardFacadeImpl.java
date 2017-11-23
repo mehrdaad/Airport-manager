@@ -29,7 +29,7 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Override
     public void deleteSteward(long id){
-        stewardService.deleteSteward(stewardService.findStewardById(id));
+        stewardService.deleteSteward(stewardService.getStewardById(id));
     }
 
     @Override

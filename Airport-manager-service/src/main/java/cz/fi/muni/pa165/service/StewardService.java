@@ -17,7 +17,7 @@ public interface StewardService {
      * @param id Id identifying steward.
      * @return Steward with given id.
      */
-    Steward findStewardById(Long id);
+    Steward getStewardById(Long id);
 
     /**
      * Delete steward
