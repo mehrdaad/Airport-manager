@@ -17,7 +17,7 @@ public interface StewardService {
      * @param id Id identifying steward.
      * @return Steward with given id.
      */
-    Steward getStewardById(Long id);
+    Steward getSteward(Long id);
 
     /**
      * Delete steward
@@ -49,7 +49,7 @@ public interface StewardService {
      * @param firstName New first name.
      * @param surName New surname.
      */
-    void updateStewardName(long id, String firstName, String surName);
+    void updateSteward(Steward steward);
 
     /**
      * Get all flights that given steward served, serving and going to serve.

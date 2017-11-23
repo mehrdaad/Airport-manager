@@ -16,7 +16,7 @@ public interface StewardFacade {
 
     void deleteSteward(long id);
 
-    void updateStewardName(long id, String firstName, String surName);
+    void updateSteward(StewardDTO steward);
 
     void createSteward(String firstName, String surName);
 

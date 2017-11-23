@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.facade;
 
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.dto.StewardDTO;
+import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.service.MappingService;
 import cz.fi.muni.pa165.service.StewardService;
 import org.apache.commons.collections.list.FixedSizeList;
@@ -29,12 +30,12 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Override
     public void deleteSteward(long id){
-        stewardService.deleteSteward(stewardService.getStewardById(id));
+        stewardService.deleteSteward(stewardService.getSteward(id));
     }
 
     @Override
-    public void updateStewardName(long id, String firstName, String surName){
-        stewardService.updateStewardName(id, firstName, surName);
+    public void updateSteward(StewardDTO stewardDTO){
+        stewardService.updateSteward(mappingService.mapTo(stewardDTO.getId(), Steward.class));
     }
 
     @Override

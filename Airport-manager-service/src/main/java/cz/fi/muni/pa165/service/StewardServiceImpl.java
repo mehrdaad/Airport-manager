@@ -39,7 +39,7 @@ public class StewardServiceImpl implements StewardService{
      * @return Steward with given id.
      */
     @Override
-    public Steward getStewardById(Long id) {
+    public Steward getSteward(Long id) {
         return stewardDao.getSteward(id);
     }
 
@@ -94,11 +94,7 @@ public class StewardServiceImpl implements StewardService{
      * @param surName New surname.
      */
     @Override
-    public void updateStewardName(long id, String firstName, String surName){
-        Steward steward = stewardDao.getSteward(id);
-
-        steward.setFirstName(firstName);
-        steward.setSurname(surName);
+    public void updateSteward(Steward steward){
         stewardDao.updateSteward(steward);
     }
 
