@@ -20,13 +20,6 @@ public interface StewardService {
     Steward findStewardById(Long id);
 
     /**
-     * This method returns all stewards stored in the database.
-     *
-     * @return List of all stewards currently stored in database.
-     */
-    List<Steward> listAllStewards();
-
-    /**
      * Delete steward
      *
      * @param steward Steward to delete.
@@ -39,7 +32,7 @@ public interface StewardService {
      *
      * @return Ordered list of stewards full names.
      */
-    List<String> getAllStewardsNameOrdered();
+    List<Steward> getAllStewardsNameOrdered();
 
     /**
      * Create steward with name and surname.
@@ -64,16 +57,7 @@ public interface StewardService {
      * @param id Steward id.
      * @return All flights that given steward served. Empty list if not any.
      */
-    List<Flight> getAllStewardsFlights(long id);
-
-    /**
-     * Get all flights that given steward going to serve in future. Only not departured flights are
-     * included in result.
-     *
-     * @param id Steward id.
-     * @return All flights that given steward going to serve in future. Empty list if not any.
-     */
-    List<Flight> getAllStewardsFutureFlights(long id);
+    List<Flight> getAllStewardFlights(long id);
 
     /**
      * Get all stewards flights in given time range. All departured flights in range are
@@ -84,7 +68,7 @@ public interface StewardService {
      * @param stopTime Time to stop searching.
      * @return All stewards flights in given time range. Empty list if not any.
      */
-    List<Flight> getAllStewardsFlightsInTimeRange(long id, LocalDateTime startTime, LocalDateTime stopTime);
+    List<Flight> getAllStewardFlightsInTimeRange(long id, LocalDateTime startTime, LocalDateTime stopTime);
 
     /**
      * Get the last stewards flight. If the steward is in the air that flight is considered as the last flight.
@@ -92,7 +76,7 @@ public interface StewardService {
      * @param id Steward id.
      * @return Last stewards flight. Null if no flight found.
      */
-    Flight getStewardsLastFlight(long id);
+    Flight getStewardLastFlight(long id);
 
     /**
      * Get flight the steward is currently serving. Steward is in the air.
@@ -100,15 +84,16 @@ public interface StewardService {
      * @param id Steward id.
      * @return Flight the steward is currently serving. Null if stewards is not in the air.
      */
-    Flight getCurrentStewardFlight(long id);
+    Flight getStewardCurrentFlight(long id);
 
     /**
-     * Check if stewards is in the air. If stewards is departured flight and
-     * airplane is still or already on the land it is considered as in the air.
+     * Get all flights that given steward going to serve in future. Only not departured flights are
+     * included in result.
      *
      * @param id Steward id.
-     * @return True if stewards is in the air (serving flight).
+     * @return All flights that given steward going to serve in future. Empty list if not any.
      */
-    boolean isStewardInTheAir(long id);
+    Flight getStewardFutureFlight(long id);
+
 
 }

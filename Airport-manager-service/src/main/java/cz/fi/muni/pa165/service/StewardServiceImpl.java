@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link StewardService}. This class is part of the service
@@ -44,16 +44,6 @@ public class StewardServiceImpl implements StewardService{
     }
 
     /**
-     * This method returns all stewards stored in the database.
-     *
-     * @return List of all stewards currently stored in database.
-     */
-    @Override
-    public List<Steward> listAllStewards(){
-        return stewardDao.listAllStewards();
-    }
-
-    /**
      * Delete steward
      *
      * @param steward Steward to delete.
@@ -70,14 +60,16 @@ public class StewardServiceImpl implements StewardService{
      * @return Ordered list of stewards full names.
      */
     @Override
-    public List<String> getAllStewardsNameOrdered(){
-        List<String> stewardsFullNames = stewardDao.listAllStewards()
-                .stream()
-                .map(steward -> steward.getSurname() + " " + steward.getFirstName())
-                .sorted()
-                .collect(Collectors.toList());
-
-        return stewardsFullNames;
+    public List<Steward> getAllStewardsNameOrdered(){
+        List<Steward> stewards = stewardDao.listAllStewards();
+        Collections.sort(stewards, (s1, s2) -> {
+            int surNameEquality = s1.getSurname().compareTo(s2.getSurname());
+            if(surNameEquality == 0){
+                return s1.getFirstName().compareTo(s2.getFirstName());
+            }
+            return surNameEquality;
+        });
+        return stewards;
     }
 
     /**
@@ -111,40 +103,47 @@ public class StewardServiceImpl implements StewardService{
     }
 
     /**
-     * Check if stewards is in the air. If stewards is departured flight and
-     * airplane is still or already on the land it is considered as in the air.
-     *
-     * @param id Steward id.
-     * @return True if stewards is in the air (serving flight).
-     */
-    @Override
-    public boolean isStewardInTheAir(long id){
-        return getCurrentStewardFlight(id) == null ? false : true;
-    }
-
-    /**
      * Get all flights that given steward served, serving and going to serve.
      *
      * @param id Steward id.
      * @return All flights that given steward served. Empty list if not any.
      */
     @Override
-    public List<Flight> getAllStewardsFlights(long id){
-        return getAllStewardsFlightsInTimeRange(id, LocalDateTime.MIN, LocalDateTime.MAX);
+    public List<Flight> getAllStewardFlights(long id){
+        return getAllStewardFlightsInTimeRange(id, LocalDateTime.MIN, LocalDateTime.MAX);
     }
 
     /**
-     * Get all flights that given steward going to serve in future. Only not departured flights are
-     * included in result.
+     * Get first future flight that given steward going to serve in future.
      *
      * @param id Steward id.
-     * @return All flights that given steward going to serve in future. Empty list if not any.
+     * @return First future flight that given steward going to serve in future.
      */
     @Override
-    public List<Flight> getAllStewardsFutureFlights(long id){
-        return getAllStewardsFlightsInTimeRange(id, LocalDateTime.now(), LocalDateTime.MAX);
-    }
+    public Flight getStewardFutureFlight(long id){
+        Steward steward = stewardDao.getSteward(id);
+        List<Flight> allFlights = flightDao.getAllFlight();
 
+        // No flights found
+        if (allFlights == null){
+            return null;
+        }
+
+        // Init last flight
+        Flight firstFutureFlight = allFlights.get(0);
+
+        // Find first future flight
+        for (Flight flight: allFlights){
+            List<Steward> flightStewards = flight.getStewards();
+            LocalDateTime flightDepartureTime = flight.getDepartureTime();
+            if (flightStewards.contains(steward) &&
+                    flightDepartureTime.isBefore(firstFutureFlight.getDepartureTime()) &&
+                    flightDepartureTime.isAfter(LocalDateTime.now())){
+                firstFutureFlight = flight;
+            }
+        }
+        return firstFutureFlight;
+    }
 
     /**
      * Get all stewards flights in given time range. All departured flights in range are
@@ -156,7 +155,7 @@ public class StewardServiceImpl implements StewardService{
      * @return All stewards flights in given time range. Empty list if not any.
      */
     @Override
-    public List<Flight> getAllStewardsFlightsInTimeRange(long id, LocalDateTime startTime, LocalDateTime stopTime){
+    public List<Flight> getAllStewardFlightsInTimeRange(long id, LocalDateTime startTime, LocalDateTime stopTime){
         Steward steward = stewardDao.getSteward(id);
         List<Flight> allStewardFlightsAfter = new ArrayList<>();
 
@@ -179,7 +178,7 @@ public class StewardServiceImpl implements StewardService{
      * @return Last stewards flight. Null if no flight found.
      */
     @Override
-    public Flight getStewardsLastFlight(long id){
+    public Flight getStewardLastFlight(long id){
         Steward steward = stewardDao.getSteward(id);
         List<Flight> allFlights = flightDao.getAllFlight();
 
@@ -211,7 +210,7 @@ public class StewardServiceImpl implements StewardService{
      * @return Flight the steward is currently serving. Null if stewards is not in the air.
      */
     @Override
-    public Flight getCurrentStewardFlight(long id){
+    public Flight getStewardCurrentFlight(long id){
         Steward steward = stewardDao.getSteward(id);
 
         for (Flight flight: flightDao.getAllFlight()){
@@ -224,9 +223,5 @@ public class StewardServiceImpl implements StewardService{
         }
         return null;
     }
-
-
-
-
 
 }
