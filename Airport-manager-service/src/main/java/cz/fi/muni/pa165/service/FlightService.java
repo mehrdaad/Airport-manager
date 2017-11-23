@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.entities.Flight;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -26,5 +27,5 @@ public interface FlightService {
 
     Duration getFlightTime(Flight flight);
 
-    List<Flight> getFlightsLastMonth();
+    List<Flight> getFlightsSince(LocalDateTime sinceDateTime);
 }

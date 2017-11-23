@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.service.impl;
 
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.exceptions.FlightDataAccessException;
 import cz.fi.muni.pa165.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,17 +26,29 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public void addFlight(Flight flight) {
-        flightDao.addFlight(flight);
+        try {
+            flightDao.addFlight(flight);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while adding flight: " + flight, e);
+        }
     }
 
     @Override
     public void deleteFlight(Flight flight) {
-        flightDao.deleteFlight(flight);
+        try {
+            flightDao.deleteFlight(flight);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while deleting flight: " + flight, e);
+        }
     }
 
     @Override
     public void updateFlight(Flight flight) {
-        flightDao.updateFlight(flight);
+        try {
+            flightDao.updateFlight(flight);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while updating flight: " + flight, e);
+        }
     }
 
     @Override
@@ -51,33 +64,30 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public Duration getFlightTime(Flight flight) {
         if (flightDao.getFlight(flight.getId()) == null) {
-            throw new IllegalArgumentException(); // TODO change exception
+            throw new IllegalArgumentException("Flight id has to be set.");
         }
 
         return Duration.between(flight.getDepartureTime(), flight.getArrivalTime());
     }
 
     @Override
-    public List<Flight> getFlightsLastMonth() {
-        LocalDateTime lastMonthDateTime = LocalDateTime.now().minusMonths(1);
+    public List<Flight> getFlightsSince(LocalDateTime sinceDateTime) {
+        if (sinceDateTime == null) {
+            throw new NullPointerException("sinceDateTime cannot be null.");
+        }
 
         List<Flight> flights = getAllFlights();
-        List<Flight> lastMonthFlights = flights.stream()
+        List<Flight> flightsSinceDateTime = flights.stream()
                 .filter(flight -> {
-
                     LocalDateTime arrivalTime = flight.getArrivalTime();
                     LocalDateTime departureTime = flight.getDepartureTime();
-                    if (arrivalTime.isAfter(lastMonthDateTime) ||
-                            departureTime.isAfter(lastMonthDateTime)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return arrivalTime.isAfter(sinceDateTime) ||
+                            departureTime.isAfter(sinceDateTime);
 
                 })
                 .collect(Collectors.toList());
 
-        return lastMonthFlights;
+        return flightsSinceDateTime;
     }
 
 }
