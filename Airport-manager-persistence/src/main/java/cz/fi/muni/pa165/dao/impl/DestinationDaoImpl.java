@@ -43,7 +43,7 @@ public class DestinationDaoImpl implements DestinationDao {
         Destination destFromDb = em.find(Destination.class, destination.getId());
 
         if (destFromDb != null) {
-            em.remove(em.find(Destination.class, destination.getId()));
+            em.remove(getDestination(destination.getId()));
         } else {
             throw new IllegalArgumentException("Destination: " + destination + " not in the persistence storage.");
         }

@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.service.impl;
 
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.exceptions.FlightDataAccessException;
 import cz.fi.muni.pa165.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,4 +91,13 @@ public class FlightServiceImpl implements FlightService {
         return flightsSinceDateTime;
     }
 
+    @Override
+    public void addSteward(Flight flight, Steward steward) {
+        if (flight.getStewards().contains(steward)) {
+            throw new IllegalArgumentException("Steward: " + steward +
+                    " already on the flight: " + flight);
+        }
+
+        flight.addSteward(steward);
+    }
 }

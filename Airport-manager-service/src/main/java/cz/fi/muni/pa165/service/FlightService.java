@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165.service;
 
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.entities.Steward;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -28,4 +29,6 @@ public interface FlightService {
     Duration getFlightTime(Flight flight);
 
     List<Flight> getFlightsSince(LocalDateTime sinceDateTime);
+
+    void addSteward(Flight flight, Steward steward);
 }

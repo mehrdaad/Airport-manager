@@ -4,6 +4,7 @@ package cz.fi.muni.pa165.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class Flight {
     private LocalDateTime departureTime;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Steward> stewards;
+    private List<Steward> stewards = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Airplane airPlane;
@@ -180,6 +181,10 @@ public class Flight {
             throw new IllegalArgumentException("Cannot set airplane to null.");
         }
         this.airPlane = airPlane;
+    }
+
+    public void addSteward(Steward steward) {
+        stewards.add(steward);
     }
 
 
