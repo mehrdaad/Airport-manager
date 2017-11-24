@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class FlightDTO {
 
@@ -9,7 +10,7 @@ public class FlightDTO {
     private DestinationDTO arrivalLocation;
     private LocalDateTime arrivalTime;
     private LocalDateTime departureTime;
-    private List<StewardDTO> stewards;
+    private List<StewardDTO> stewards = new ArrayList<>();
     private AirplaneDTO airplane;
 
     public Long getId() {
@@ -96,5 +97,18 @@ public class FlightDTO {
         result = 31 * result + (stewards != null ? stewards.hashCode() : 0);
         result = 31 * result + (airplane != null ? airplane.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "FlightDTO{" +
+                "id=" + id +
+                ", departureLocation=" + departureLocation +
+                ", arrivalLocation=" + arrivalLocation +
+                ", arrivalTime=" + arrivalTime +
+                ", departureTime=" + departureTime +
+                ", stewards=" + stewards +
+                ", airplane=" + airplane +
+                '}';
     }
 }
