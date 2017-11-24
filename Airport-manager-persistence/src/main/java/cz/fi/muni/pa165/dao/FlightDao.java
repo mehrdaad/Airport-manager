@@ -1,7 +1,6 @@
 package cz.fi.muni.pa165.dao;
 
 
-import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 
 import java.util.List;
@@ -26,8 +25,8 @@ public interface FlightDao {
     void deleteFlight(Flight flight);
 
     /**
-     * Update data of the {@link Destination} entity instance in the persistence storage
-     * @param flight the {@link Destination} entity instance
+     * Update data of the {@link Flight} entity instance in the persistence storage
+     * @param flight the {@link Flight} entity instance
      */
     void updateFlight(Flight flight);
 
