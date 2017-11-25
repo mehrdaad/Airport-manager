@@ -2,13 +2,17 @@ package cz.fi.muni.pa165.service.facade;
 
 import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
+import cz.fi.muni.pa165.dto.StewardDTO;
+import cz.fi.muni.pa165.entities.Airplane;
+import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.facade.FlightFacade;
-import cz.fi.muni.pa165.service.BeanMappingService;
 import cz.fi.muni.pa165.service.FlightService;
+import cz.fi.muni.pa165.service.MappingService;
+import cz.fi.muni.pa165.service.StewardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +20,13 @@ import javax.inject.Inject;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Implementation of the {@link FlightFacade} interface.
+ *
+ * @author Robert Duriancik
+ */
 
 @Service
 @Transactional
@@ -32,50 +43,70 @@ public class FlightFacadeImpl implements FlightFacade {
     @Inject
     private AirplaneService airplaneService;
 
-    @Autowired
-    private BeanMappingService beanMappingService;
+    @Inject
+    private MappingService mappingService;
 
     @Override
-    public void createFlight(FlightCreateDTO flightCreateDTO) {
-        Flight mappedFlight = beanMappingService.mapTo(flightCreateDTO, Flight.class);
+    public Long createFlight(FlightCreateDTO flightCreateDTO) {
+        Flight mappedFlight = mappingService.mapTo(flightCreateDTO, Flight.class);
         flightService.addFlight(mappedFlight);
+        return mappedFlight.getId();
     }
 
     @Override
     public List<FlightDTO> getFlightsBySteward(StewardDTO stewardDTO) {
-        return null;
+        Steward steward = stewardService.getSteward(stewardDTO.getId());
+
+        return flightService.getAllFlights()
+                .stream()
+                .filter(flight -> flight.getStewards().contains(steward))
+                .map(flight -> mappingService.mapTo(flight, FlightDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<FlightDTO> getFlightsByDestination(DestinationDTO destinationDTO) {
-        return null;
+        Destination destination = destinationService.getDestination(destinationDTO.getId());
+
+        return flightService.getAllFlights()
+                .stream()
+                .filter(flight -> flight.getArrivalLocation().equals(destination) ||
+                        flight.getDepartureLocation().equals(destination))
+                .map(flight -> mappingService.mapTo(flight, FlightDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<FlightDTO> getFlightsByAirplane(AirplaneDTO airplaneDTO) {
-        return null;
+        Airplane airplane = airplaneService.getAirplane(airplaneDTO.getId());
+
+        return flightService.getAllFlights()
+                .stream()
+                .filter(flight -> flight.getAirPlane().equals(airplane))
+                .map(flight -> mappingService.mapTo(flight, FlightDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public FlightDTO getFlight(Long id) {
         Flight flight = flightService.getFlight(id);
-        return flight == null ? null : beanMappingService.mapTo(flight, FlightDTO.class);
+        return flight == null ? null : mappingService.mapTo(flight, FlightDTO.class);
     }
 
     @Override
     public List<FlightDTO> getFlightsSince(LocalDateTime sinceDateTime) {
-        return beanMappingService.mapTo(flightService.getFlightsSince(sinceDateTime), FlightDTO.class);
+        return mappingService.mapTo(flightService.getFlightsSince(sinceDateTime), FlightDTO.class);
     }
 
     @Override
     public Duration getFlightTime(FlightDTO flightDTO) {
-        Flight flight = beanMappingService.mapTo(flightDTO, Flight.class);
+        Flight flight = mappingService.mapTo(flightDTO, Flight.class);
         return flightService.getFlightTime(flight);
     }
 
     @Override
     public List<FlightDTO> getAllFlights() {
-        return beanMappingService.mapTo(flightService.getAllFlights(), FlightDTO.class);
+        return mappingService.mapTo(flightService.getAllFlights(), FlightDTO.class);
     }
 
     @Override
@@ -88,15 +119,15 @@ public class FlightFacadeImpl implements FlightFacade {
         Flight flight = flightService.getFlight(flightId);
 
         if (flight.getDepartureTime().isAfter(arrivalTime)) {
-            throw new IllegalArgumentException("Arrival time cannot be before departure time.")
+            throw new IllegalArgumentException("Arrival time cannot be before departure time.");
         }
 
         flight.setArrivalTime(arrivalTime);
-        flightService.updateFlight(flight);
+//        flightService.updateFlight(flight); // TODO check if its updated in the persistence storage
     }
 
     @Override
-    public void addSteward(Long flightId, Long stewardId) {
+    public void addStewardToFlight(Long flightId, Long stewardId) {
         flightService.addSteward(
                 flightService.getFlight(flightId),
                 stewardService.getSteward(stewardId)
@@ -105,6 +136,8 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public void changeAirplane(Long flightId, Long airplaneId) {
-
+        Flight flight = flightService.getFlight(flightId);
+        Airplane airplane = airplaneService.getAirplane(airplaneId);
+        flight.setAirPlane(airplane);
     }
 }

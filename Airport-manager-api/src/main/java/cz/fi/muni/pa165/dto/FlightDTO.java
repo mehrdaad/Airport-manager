@@ -2,7 +2,11 @@ package cz.fi.muni.pa165.dto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * @author Robert Duriancik
+ */
 public class FlightDTO {
 
     private Long id;

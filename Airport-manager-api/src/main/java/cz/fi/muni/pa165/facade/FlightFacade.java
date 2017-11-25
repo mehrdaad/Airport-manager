@@ -19,8 +19,9 @@ public interface FlightFacade {
      * Creates a new flight.
      *
      * @param flightCreateDTO representation of the flight
+     * @return id of the newly created flight
      */
-    void createFlight(FlightCreateDTO flightCreateDTO);
+    Long createFlight(FlightCreateDTO flightCreateDTO);
 
     /**
      * Returns the list of all flights in which the steward participated.
