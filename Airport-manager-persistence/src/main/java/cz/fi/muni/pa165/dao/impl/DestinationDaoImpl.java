@@ -22,16 +22,39 @@ public class DestinationDaoImpl implements DestinationDao {
 
     @Override
     public void addDestination(Destination destination) {
+        if (destination == null) {
+            throw new NullPointerException("Destination is null");
+        }
+
+        if (destination.getCountry() == null ||
+                destination.getCity() == null) {
+            throw new IllegalArgumentException("Destination's city or country is not set");
+        }
+
         em.persist(destination);
     }
 
     @Override
     public void removeDestination(Destination destination) {
-        em.remove(destination);
+        if (destination == null) {
+            throw new NullPointerException("Destination is null");
+        }
+
+        Destination destFromDb = em.find(Destination.class, destination.getId());
+
+        if (destFromDb != null) {
+            em.remove(getDestination(destination.getId()));
+        } else {
+            throw new IllegalArgumentException("Destination: " + destination + " not in the persistence storage.");
+        }
     }
 
     @Override
     public void updateDestination(Destination destination) {
+        if (destination == null) {
+            throw new NullPointerException("Destination is null");
+        }
+
         Destination destFromDb = em.find(Destination.class, destination.getId());
 
         if (destFromDb != null) {

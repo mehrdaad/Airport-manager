@@ -89,9 +89,7 @@ public class StewardServiceImpl implements StewardService{
     /**
      * Update steward name (first name and surname).
      *
-     * @param id Steward's id
-     * @param firstName New first name.
-     * @param surName New surname.
+     * @param steward Steward to update.
      */
     @Override
     public void updateSteward(Steward steward){
@@ -118,7 +116,7 @@ public class StewardServiceImpl implements StewardService{
     @Override
     public Flight getStewardFutureFlight(long id){
         Steward steward = stewardDao.getSteward(id);
-        List<Flight> allFlights = flightDao.getAllFlight();
+        List<Flight> allFlights = flightDao.getAllFlights();
 
         // No flights found
         if (allFlights == null){
@@ -155,7 +153,7 @@ public class StewardServiceImpl implements StewardService{
         Steward steward = stewardDao.getSteward(id);
         List<Flight> allStewardFlightsAfter = new ArrayList<>();
 
-        for (Flight flight: flightDao.getAllFlight()){
+        for (Flight flight : flightDao.getAllFlights()) {
             List<Steward> flightStewards = flight.getStewards();
             LocalDateTime departureTime = flight.getDepartureTime();
             if (flightStewards.contains(steward) &&
@@ -176,7 +174,7 @@ public class StewardServiceImpl implements StewardService{
     @Override
     public Flight getStewardLastFlight(long id){
         Steward steward = stewardDao.getSteward(id);
-        List<Flight> allFlights = flightDao.getAllFlight();
+        List<Flight> allFlights = flightDao.getAllFlights();
 
         // No flights found
         if (allFlights == null){
@@ -209,7 +207,7 @@ public class StewardServiceImpl implements StewardService{
     public Flight getStewardCurrentFlight(long id){
         Steward steward = stewardDao.getSteward(id);
 
-        for (Flight flight: flightDao.getAllFlight()){
+        for (Flight flight : flightDao.getAllFlights()) {
             List<Steward> flightStewards = flight.getStewards();
             if (flightStewards.contains(steward) &&
                     flight.getDepartureTime().isBefore(LocalDateTime.now()) &&

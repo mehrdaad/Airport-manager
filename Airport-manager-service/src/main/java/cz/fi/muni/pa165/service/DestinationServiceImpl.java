@@ -83,7 +83,7 @@ public class DestinationServiceImpl implements DestinationService {
 
     @Override
     public List<Flight> getAllIncomingFlights(Destination destination) {
-        List<Flight> flights = flightDao.getAllFlight();
+        List<Flight> flights = flightDao.getAllFlights();
         List<Flight> incoming = new ArrayList<>();
         for(Flight flight : flights) {
             if(flight.getArrivalLocation().equals(destination)) {
@@ -95,7 +95,7 @@ public class DestinationServiceImpl implements DestinationService {
 
     @Override
     public List<Flight> getAllOutgoingFlights(Destination destination) {
-        List<Flight> flights = flightDao.getAllFlight();
+        List<Flight> flights = flightDao.getAllFlights();
         List<Flight> outgoing = new ArrayList<>();
         for(Flight flight : flights) {
             if(flight.getDepartureLocation().equals(destination)) {
