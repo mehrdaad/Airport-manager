@@ -2,10 +2,13 @@ package cz.fi.muni.pa165.dao.impl;
 
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Flight;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 /**
@@ -24,28 +27,37 @@ public class FlightDaoImpl implements FlightDao {
         if (flight == null){
             throw new IllegalArgumentException("Cannot create null flight");
         }
-        em.persist(flight);
+        try {
+            em.persist(flight);
+        } catch (PersistenceException e){
+            throw new DataIntegrityViolationException("Error while persisting flight.");
+        }
     }
 
     @Override
     public void deleteFlight(Flight flight) {
-        if (flight == null){
+        if (flight == null) {
             throw new IllegalArgumentException("Cannot delete null flight");
         }
-        em.remove(flight);
+        try {
+            em.remove(flight);
+        } catch (PersistenceException e) {
+            throw new DataIntegrityViolationException("Error while delete data in database");
+        }
     }
+
 
     @Override
     public void updateFlight(Flight flight) {
         if (flight == null){
             throw new IllegalArgumentException("Cannot update null flight");
         }
-        Flight flightFromDb = em.find(Flight.class, flight.getId());
+        Flight flightFromDb = getFlight(flight.getId());
 
-        if (flightFromDb != null) {
+        try {
             em.merge(flightFromDb);
-        } else {
-            throw new IllegalArgumentException("Destination: " + flight + " not in the persistence storage.");
+        } catch (PersistenceException e){
+            throw new DataIntegrityViolationException("Error while updating data in database");
         }
     }
 
@@ -56,7 +68,11 @@ public class FlightDaoImpl implements FlightDao {
 
     @Override
     public Flight getFlight(Long id) {
-        return em.find(Flight.class, id);
+        try {
+            return em.find(Flight.class, id);
+        } catch (NoResultException nrf) {
+            return null;
+        }
     }
 
 
