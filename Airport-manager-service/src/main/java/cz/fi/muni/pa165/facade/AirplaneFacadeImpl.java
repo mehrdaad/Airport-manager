@@ -1,0 +1,53 @@
+package cz.fi.muni.pa165.facade;
+
+import cz.fi.muni.pa165.dto.AirplaneDTO;
+import cz.fi.muni.pa165.entities.Airplane;
+import cz.fi.muni.pa165.service.AirplaneService;
+import cz.fi.muni.pa165.service.MappingService;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ *
+ * @author Jan Cakl
+ */
+public class AirplaneFacadeImpl implements AirplaneFacade {
+    
+    
+    @Autowired
+    private AirplaneService airplaneService;
+
+    @Autowired
+    private MappingService mappingService;
+    
+    @Override
+    public AirplaneDTO findById(Long id) {
+        return mappingService.mapTo(airplaneService.findById(id), AirplaneDTO.class);
+    }
+
+    @Override
+    public Long addAirplane(AirplaneDTO airplane) {
+       Airplane nAirPlane = mappingService.mapTo(airplane, Airplane.class);
+       airplaneService.updateAirplane(nAirPlane);
+       return nAirPlane.getId();
+    }
+
+    @Override
+    public List<AirplaneDTO> findAll() {
+       return mappingService.mapTo(airplaneService.findAll(),AirplaneDTO.class);
+    }
+
+    @Override
+    public void deleteAirplane(Long id) {
+        airplaneService.deleteAirplane(airplaneService.findById(id));
+    }
+
+    @Override
+    public void updateAirplane(AirplaneDTO airplane) {
+        airplaneService.updateAirplane(mappingService.mapTo(airplane.getId(), Airplane.class));
+    }
+    
+    /**
+     * TODO non trivial fce
+     */
+}
