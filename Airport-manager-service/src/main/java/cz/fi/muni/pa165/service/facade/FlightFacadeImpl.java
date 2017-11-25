@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.service.facade;
 
+import cz.fi.muni.pa165.dto.AirplaneDTO;
 import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.dto.StewardDTO;
@@ -8,11 +9,10 @@ import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.facade.FlightFacade;
+import cz.fi.muni.pa165.service.AirplaneService;
 import cz.fi.muni.pa165.service.FlightService;
 import cz.fi.muni.pa165.service.MappingService;
 import cz.fi.muni.pa165.service.StewardService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class FlightFacadeImpl implements FlightFacade {
 
-    final static Logger log = LoggerFactory.getLogger(FlightFacadeImpl.class);
+//    final static Logger log = LoggerFactory.getLogger(FlightFacadeImpl.class);
 
     @Inject
     private FlightService flightService;
@@ -78,7 +78,7 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public List<FlightDTO> getFlightsByAirplane(AirplaneDTO airplaneDTO) {
-        Airplane airplane = airplaneService.getAirplane(airplaneDTO.getId());
+        Airplane airplane = airplaneService.findById(airplaneDTO.getId());
 
         return flightService.getAllFlights()
                 .stream()
@@ -131,13 +131,13 @@ public class FlightFacadeImpl implements FlightFacade {
         flightService.addSteward(
                 flightService.getFlight(flightId),
                 stewardService.getSteward(stewardId)
-        );
+        );// TODO check if its updated in the persistence storage
     }
 
     @Override
     public void changeAirplane(Long flightId, Long airplaneId) {
         Flight flight = flightService.getFlight(flightId);
-        Airplane airplane = airplaneService.getAirplane(airplaneId);
-        flight.setAirPlane(airplane);
+        Airplane airplane = airplaneService.findById(airplaneId);
+        flight.setAirPlane(airplane);// TODO check if its updated in the persistence storage
     }
 }

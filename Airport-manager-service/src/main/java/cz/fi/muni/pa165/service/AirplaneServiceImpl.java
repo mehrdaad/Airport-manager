@@ -2,14 +2,15 @@ package cz.fi.muni.pa165.service;
 
 import cz.fi.muni.pa165.dao.AirplaneDao;
 import cz.fi.muni.pa165.entities.Airplane;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  *
  * @author Jan Cakl
  */
-public class AirplaneServiceImpl implements AirplaneService{
+public class AirplaneServiceImpl implements AirplaneService {
     @Autowired
     private AirplaneDao airplaneDao;
 
