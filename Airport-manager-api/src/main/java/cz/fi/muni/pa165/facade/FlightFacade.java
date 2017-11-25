@@ -1,9 +1,6 @@
 package cz.fi.muni.pa165.facade;
 
-import cz.fi.muni.pa165.dto.AirplaneDTO;
-import cz.fi.muni.pa165.dto.FlightCreateDTO;
-import cz.fi.muni.pa165.dto.FlightDTO;
-import cz.fi.muni.pa165.dto.StewardDTO;
+import cz.fi.muni.pa165.dto.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
