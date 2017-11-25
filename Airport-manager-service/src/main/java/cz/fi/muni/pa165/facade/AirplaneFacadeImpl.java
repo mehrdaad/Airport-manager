@@ -28,7 +28,7 @@ public class AirplaneFacadeImpl implements AirplaneFacade {
     @Override
     public Long addAirplane(AirplaneDTO airplane) {
        Airplane nAirPlane = mappingService.mapTo(airplane, Airplane.class);
-       airplaneService.updateAirplane(nAirPlane);
+       airplaneService.addAirplane(nAirPlane);
        return nAirPlane.getId();
     }
 
