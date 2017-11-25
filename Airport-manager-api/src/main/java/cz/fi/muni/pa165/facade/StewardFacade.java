@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface StewardFacade {
 
+    StewardDTO getSteward(Long id);
+
     List<StewardDTO> listAllStewards();
 
     void deleteSteward(long id);

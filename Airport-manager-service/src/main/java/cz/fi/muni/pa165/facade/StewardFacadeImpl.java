@@ -5,16 +5,19 @@ import cz.fi.muni.pa165.dto.StewardDTO;
 import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.service.MappingService;
 import cz.fi.muni.pa165.service.StewardService;
-import org.apache.commons.collections.list.FixedSizeList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Karel Jiranek
  */
+@Service
+@Transactional
 public class StewardFacadeImpl implements StewardFacade {
 
     @Autowired
@@ -22,6 +25,11 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Autowired
     private MappingService mappingService;
+
+    @Override
+    public StewardDTO getSteward(Long id) {
+        return mappingService.mapTo(stewardService.getSteward(id), StewardDTO.class);
+    }
 
     @Override
     public List<StewardDTO> listAllStewards(){
@@ -51,7 +59,7 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Override
     public List<FlightDTO> getStewardLastAndCurrentAndFutureFlight(long id){
-       List<FlightDTO> lastCurrentFutureStewardFlights = FixedSizeList.decorate(Arrays.asList(new FlightDTO[3]));
+       List<FlightDTO> lastCurrentFutureStewardFlights = new ArrayList<>(3);
        lastCurrentFutureStewardFlights.add(0,
                mappingService.mapTo(stewardService.getStewardCurrentFlight(id), FlightDTO.class));
        lastCurrentFutureStewardFlights.add(1,
@@ -59,7 +67,6 @@ public class StewardFacadeImpl implements StewardFacade {
        lastCurrentFutureStewardFlights.add(2,
                 mappingService.mapTo(stewardService.getStewardFutureFlight(id), FlightDTO.class));
        return lastCurrentFutureStewardFlights;
-
     }
 
     @Override
