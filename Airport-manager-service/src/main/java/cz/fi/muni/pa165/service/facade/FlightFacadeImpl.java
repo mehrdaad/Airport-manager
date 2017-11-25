@@ -1,10 +1,9 @@
 package cz.fi.muni.pa165.service.facade;
 
-import cz.fi.muni.pa165.dto.*;
+import cz.fi.muni.pa165.dto.FlightCreateDTO;
+import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Airplane;
-import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
-import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.facade.FlightFacade;
 import cz.fi.muni.pa165.service.*;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import javax.inject.Inject;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link FlightFacade} interface.
@@ -45,40 +43,6 @@ public class FlightFacadeImpl implements FlightFacade {
         Flight mappedFlight = mappingService.mapTo(flightCreateDTO, Flight.class);
         flightService.addFlight(mappedFlight);
         return mappedFlight.getId();
-    }
-
-    @Override
-    public List<FlightDTO> getFlightsBySteward(StewardDTO stewardDTO) {
-        Steward steward = stewardService.getSteward(stewardDTO.getId());
-
-        return flightService.getAllFlights()
-                .stream()
-                .filter(flight -> flight.getStewards().contains(steward))
-                .map(flight -> mappingService.mapTo(flight, FlightDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FlightDTO> getFlightsByDestination(DestinationDTO destinationDTO) {
-        Destination destination = destinationService.getDestinationById(destinationDTO.getId());
-
-        return flightService.getAllFlights()
-                .stream()
-                .filter(flight -> flight.getArrivalLocation().equals(destination) ||
-                        flight.getDepartureLocation().equals(destination))
-                .map(flight -> mappingService.mapTo(flight, FlightDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FlightDTO> getFlightsByAirplane(AirplaneDTO airplaneDTO) {
-        Airplane airplane = airplaneService.findById(airplaneDTO.getId());
-
-        return flightService.getAllFlights()
-                .stream()
-                .filter(flight -> flight.getAirPlane().equals(airplane))
-                .map(flight -> mappingService.mapTo(flight, FlightDTO.class))
-                .collect(Collectors.toList());
     }
 
     @Override

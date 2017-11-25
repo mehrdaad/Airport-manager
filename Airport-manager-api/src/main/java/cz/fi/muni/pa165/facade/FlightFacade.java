@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165.facade;
 
-import cz.fi.muni.pa165.dto.*;
+import cz.fi.muni.pa165.dto.FlightCreateDTO;
+import cz.fi.muni.pa165.dto.FlightDTO;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,30 +21,6 @@ public interface FlightFacade {
      * @return id of the newly created flight
      */
     Long createFlight(FlightCreateDTO flightCreateDTO);
-
-    /**
-     * Returns the list of all flights in which the steward participated.
-     *
-     * @param stewardDTO representation of the steward
-     * @return the list of FlightDTO objects
-     */
-    List<FlightDTO> getFlightsBySteward(StewardDTO stewardDTO);
-
-    /**
-     * Returns the list of all flights
-     *
-     * @param destinationDTO representation of the destination
-     * @return the list of FlightDTO objects
-     */
-    List<FlightDTO> getFlightsByDestination(DestinationDTO destinationDTO);
-
-    /**
-     * Returns the list of all flights with the specific airplane.
-     *
-     * @param airplaneDTO representation of the airplane
-     * @return the list of FlightDTO objects
-     */
-    List<FlightDTO> getFlightsByAirplane(AirplaneDTO airplaneDTO);
 
     /**
      * Returns a flight specified by id.
