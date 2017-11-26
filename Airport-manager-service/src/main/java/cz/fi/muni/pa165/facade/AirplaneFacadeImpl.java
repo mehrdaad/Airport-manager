@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.dto.AirplaneDTO;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.service.AirplaneService;
 import cz.fi.muni.pa165.service.MappingService;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,8 +47,34 @@ public class AirplaneFacadeImpl implements AirplaneFacade {
     public void updateAirplane(AirplaneDTO airplane) {
         airplaneService.updateAirplane(mappingService.mapTo(airplane.getId(), Airplane.class));
     }
-    
-    /**
-     * TODO non trivial fce
-     */
+
+    @Override
+    public List<AirplaneDTO> findByName(String name) {
+        return mappingService.mapTo(airplaneService.findByName(name),AirplaneDTO.class);
+    }
+
+    @Override
+    public List<AirplaneDTO> findByType(String type) {
+        return mappingService.mapTo(airplaneService.findByType(type),AirplaneDTO.class);
+    }
+
+    @Override
+    public List<AirplaneDTO> findByCapacityMin(int capacity) {
+        return mappingService.mapTo(airplaneService.findByCapacityMin(capacity),AirplaneDTO.class);
+    }
+
+    @Override
+    public List<AirplaneDTO> findByCapacityMax(int capacity) {
+        return mappingService.mapTo(airplaneService.findByCapacityMax(capacity),AirplaneDTO.class);    
+    }
+
+    @Override
+    public List<AirplaneDTO> findByUsedAfterDateTime(LocalDateTime sinceDateTime) {
+        return mappingService.mapTo(airplaneService.findByUsedAfterDateTime(sinceDateTime),AirplaneDTO.class);  
+    }
+
+    @Override
+    public List<AirplaneDTO> findByFreeAfterDateTime(LocalDateTime sinceDateTime) {
+        return mappingService.mapTo(airplaneService.findByFreeAfterDateTime(sinceDateTime),AirplaneDTO.class); 
+    }   
 }
