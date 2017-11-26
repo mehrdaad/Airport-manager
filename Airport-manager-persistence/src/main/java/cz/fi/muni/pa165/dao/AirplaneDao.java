@@ -63,7 +63,7 @@ public interface AirplaneDao {
     /**
      * Find airplanes with given capacity.
      *
-     * @param capacity capcity of airplanes
+     * @param capacity capacity of airplanes
      * @return a list of {@link Airplane} airplanes with given capacity and greater capacity
      */
     List<Airplane> findByCapacityMin(int capacity);
