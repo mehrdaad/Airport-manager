@@ -28,6 +28,10 @@ public class Steward implements Serializable {
     @Column(nullable = false)
     private String firstName;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
