@@ -62,7 +62,7 @@ public interface DestinationDao {
      * @param city the string containing desired city.
      * @return a list of {@link Destination} entities
      */
-    List<Destination> getDestinationByCity(String city);
+    List<Destination> getDestinationsByCity(String city);
 
     /**
      * Find a {@link Destination} entity instance by specified <b>country</b>.
@@ -71,5 +71,5 @@ public interface DestinationDao {
      * @param country the string containing desired country.
      * @return a list of {@link Destination} entities
      */
-    List<Destination> getDestinationByCountry(String country);
+    List<Destination> getDestinationsByCountry(String country);
 }

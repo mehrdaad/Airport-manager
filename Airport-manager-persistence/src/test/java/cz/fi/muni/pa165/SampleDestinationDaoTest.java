@@ -135,7 +135,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
         destinationDao.addDestination(dest1);
         destinationDao.addDestination(dest2);
 
-        List<Destination> destinations = destinationDao.getDestinationByCity("city1");
+        List<Destination> destinations = destinationDao.getDestinationsByCity("city1");
         Assert.assertEquals(destinations.size(), 1);
         Assert.assertTrue(dest1.getCity().equals(destinations.get(0).getCity()));
         Assert.assertTrue(dest1.getCountry().equals(destinations.get(0).getCountry()));
@@ -156,7 +156,7 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
         destinationDao.addDestination(dest1);
         destinationDao.addDestination(dest2);
 
-        List<Destination> destinations = destinationDao.getDestinationByCountry("country2");
+        List<Destination> destinations = destinationDao.getDestinationsByCountry("country2");
         Assert.assertEquals(destinations.size(), 1);
         Assert.assertTrue(dest2.getCity().equals(destinations.get(0).getCity()));
         Assert.assertTrue(dest2.getCountry().equals(destinations.get(0).getCountry()));

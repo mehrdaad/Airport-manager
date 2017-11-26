@@ -75,13 +75,13 @@ public class DestinationDaoImpl implements DestinationDao {
     }
 
     @Override
-    public List<Destination> getDestinationByCity(String city) {
+    public List<Destination> getDestinationsByCity(String city) {
         return em.createQuery("SELECT d FROM Destination d WHERE d.city = :city", Destination.class)
                 .setParameter("city", city).getResultList();
     }
 
     @Override
-    public List<Destination> getDestinationByCountry(String country) {
+    public List<Destination> getDestinationsByCountry(String country) {
         return em.createQuery("SELECT d FROM Destination d WHERE d.country = :country", Destination.class)
                 .setParameter("country", country).getResultList();
     }
