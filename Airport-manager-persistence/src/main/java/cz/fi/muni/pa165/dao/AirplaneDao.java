@@ -43,7 +43,39 @@ public interface AirplaneDao {
      * @return a list of {@link Airplane} entities
      */
     List<Airplane> findAll();
+    
+    /**
+     * Find airplanes with given name.
+     *
+     * @param name name of airplanes
+     * @return a list of {@link Airplane} airplanes with given name
+     */
+    List<Airplane> findByName(String name);
 
+    /**
+     * Find airplanes with given type.
+     *
+     * @param type type of airplanes
+     * @return a list of {@link Airplane} airplanes with given type
+     */
+    List<Airplane> findByType(String type);
+    
+    /**
+     * Find airplanes with given capacity.
+     *
+     * @param capacity capcity of airplanes
+     * @return a list of {@link Airplane} airplanes with given capacity and greater capacity
+     */
+    List<Airplane> findByCapacityMin(int capacity);
+    
+    /**
+     * Find airplanes with given capacity.
+     *
+     * @param capacity capacity of airplanes
+     * @return a list of {@link Airplane} airplanes with given capacity and less capacity
+     */
+    List<Airplane> findByCapacityMax(int capacity);
+            
     /**
      * Find a {@link Airplane} entity instance with specified <b>id</b>.
      * If the entity instance is contained in the persistence storage, it is returned from there.
@@ -52,5 +84,7 @@ public interface AirplaneDao {
      * @return the found {@link Airplane} instance or null if the entity does not exist
      */
     Airplane findById(Long id);
+    
+    
 
 }
