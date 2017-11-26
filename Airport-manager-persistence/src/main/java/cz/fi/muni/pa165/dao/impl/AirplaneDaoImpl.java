@@ -50,4 +50,24 @@ public class AirplaneDaoImpl implements AirplaneDao {
         return em.find(Airplane.class, id);
     }
 
+    @Override
+    public List<Airplane> findByName(String name) {
+         return em.createQuery("select a FROM Airplane a WHERE a.name like :name ",Airplane.class).setParameter("name", name).getResultList();
+    }
+
+    @Override
+    public List<Airplane> findByType(String type) {
+        return em.createQuery("select a FROM Airplane a WHERE a.type = :type", Airplane.class).setParameter("type", type).getResultList();
+    }
+
+    @Override
+    public List<Airplane> findByCapacityMin(int capacity) {
+        return em.createQuery("select a FROM Airplane a WHERE a.capacity >= :capacity").setParameter("capacity", capacity).getResultList();
+    }
+
+    @Override
+    public List<Airplane> findByCapacityMax(int capacity) {
+        return em.createQuery("select a FROM Airplane a WHERE a.capacity <= :capacity").setParameter("capacity", capacity).getResultList();
+    }
+
 }
