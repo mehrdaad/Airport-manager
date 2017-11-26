@@ -43,7 +43,7 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Override
     public void updateSteward(StewardDTO stewardDTO){
-        stewardService.updateSteward(mappingService.mapTo(stewardDTO.getId(), Steward.class));
+        stewardService.updateSteward(mappingService.mapTo(stewardDTO, Steward.class));
     }
 
     @Override
