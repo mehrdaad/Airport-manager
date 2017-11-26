@@ -65,8 +65,9 @@ public class Steward implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = getSurname().hashCode();
-        result = 31 * result + getFirstName().hashCode();
+        int result = 7;
+        result = 31 * result + (getSurname() == null ? 0 : hashCode());
+        result = 31 * result + (getFirstName() == null ? 0 : hashCode());
         return result;
     }
 
