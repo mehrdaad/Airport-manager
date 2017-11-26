@@ -196,4 +196,149 @@ public class SampleAirplaneDaoTest extends BaseDaoTest {
         Assert.assertTrue(airplanesFromDb.size() == 2);
         Assert.assertTrue(airplanesFromDb.containsAll(airplanes));
     }
+    
+    @Test
+    @Transactional
+    public void findByNameTest() {
+        
+    Airplane defaultAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(20)
+                .setName("Boeing")
+                .setType("777")
+                .build();    
+        
+    Airplane correctAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(30)
+                .setName("A-10")
+                .setType("Thunderbolt")
+                .build();
+    
+    
+    airplaneDao.addAirplane(correctAirplane);
+    airplaneDao.addAirplane(defaultAirplane);
+    
+    List<Airplane> airplane = new ArrayList<>();
+    airplane.add(defaultAirplane);
+
+    List<Airplane> airplanesFromDb = airplaneDao.findByName("Boeing");
+    
+    Assert.assertNotNull(airplanesFromDb);
+    Assert.assertTrue(airplanesFromDb.size() == 1);
+    Assert.assertTrue(airplanesFromDb.containsAll(airplane));
+    }
+    
+    @Test
+    @Transactional
+    public void findByTypeTest() {
+        
+    Airplane defaultAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(20)
+                .setName("Boeing")
+                .setType("777")
+                .build();    
+        
+    Airplane correctAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(30)
+                .setName("A-10")
+                .setType("Thunderbolt")
+                .build();
+    
+    
+    airplaneDao.addAirplane(correctAirplane);
+    airplaneDao.addAirplane(defaultAirplane);
+    
+    List<Airplane> airplane = new ArrayList<>();
+    airplane.add(correctAirplane);
+
+    List<Airplane> airplanesFromDb = airplaneDao.findByType("Thunderbolt");
+    
+    Assert.assertNotNull(airplanesFromDb);
+    Assert.assertTrue(airplanesFromDb.size() == 1);
+    Assert.assertTrue(airplanesFromDb.containsAll(airplane));
+    }
+    
+    @Test
+    @Transactional
+    public void findByCapacityMinTest() {
+    
+    Airplane defaultAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(10)
+                .setName("Aero")
+                .setType("789")
+                .build();    
+        
+    Airplane firstAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(20)
+                .setName("Boeing")
+                .setType("777")
+                .build();    
+        
+    Airplane correctAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(30)
+                .setName("A-10")
+                .setType("Thunderbolt")
+                .build();
+    
+    airplaneDao.addAirplane(firstAirplane);
+    airplaneDao.addAirplane(correctAirplane);
+    airplaneDao.addAirplane(defaultAirplane);
+    
+    List<Airplane> airplane = new ArrayList<>();
+    airplane.add(correctAirplane);
+    airplane.add(firstAirplane);
+
+    List<Airplane> airplanesFromDb = airplaneDao.findByCapacityMin(20);
+    
+    Assert.assertNotNull(airplanesFromDb);
+    Assert.assertTrue(airplanesFromDb.size() == 2);
+    Assert.assertTrue(airplanesFromDb.containsAll(airplane));
+    }
+    
+    @Test
+    @Transactional
+    public void findByCapacityMaxTest() {
+    
+    Airplane defaultAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(10)
+                .setName("Aero")
+                .setType("789")
+                .build();    
+        
+    Airplane firstAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(20)
+                .setName("Boeing")
+                .setType("777")
+                .build();    
+        
+    Airplane correctAirplane = new AirplaneBuilder()
+                .setId(null)
+                .setCapacity(30)
+                .setName("A-10")
+                .setType("Thunderbolt")
+                .build();
+    
+    airplaneDao.addAirplane(firstAirplane);
+    airplaneDao.addAirplane(correctAirplane);
+    airplaneDao.addAirplane(defaultAirplane);
+    
+    List<Airplane> airplane = new ArrayList<>();
+    airplane.add(defaultAirplane);
+    airplane.add(firstAirplane);
+
+    List<Airplane> airplanesFromDb = airplaneDao.findByCapacityMax(20);
+    
+    Assert.assertNotNull(airplanesFromDb);
+    Assert.assertTrue(airplanesFromDb.size() == 2);
+    Assert.assertTrue(airplanesFromDb.containsAll(airplane));
+    }
+            
 }
