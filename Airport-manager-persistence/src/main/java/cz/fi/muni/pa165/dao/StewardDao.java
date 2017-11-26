@@ -16,6 +16,8 @@ public interface StewardDao {
      * Method which adds steward to database.
      *
      * @param steward to be added.
+     * @throws NullPointerException when steward is null
+     * @throws IllegalArgumentException when steward's firstname or surname is null
      */
     void createSteward(Steward steward);
 
@@ -23,6 +25,7 @@ public interface StewardDao {
      * Method which removes steward from the database.
      *
      * @param steward to be removed.
+     * @throws NullPointerException when steward is null
      */
     void deleteSteward(Steward steward);
 
@@ -30,6 +33,8 @@ public interface StewardDao {
      * This method updates stewards attributes.
      *
      * @param steward to be modified.
+     * @throws NullPointerException when steward is null
+     * @throws IllegalArgumentException when steward's firstname or surname is null, or steward is not in db
      */
     void updateSteward(Steward steward);
 
@@ -37,6 +42,7 @@ public interface StewardDao {
      * This methods returns steward from the database by his ID.
      *
      * @param id identifier of steward.
+     * @throws IllegalArgumentException id is null
      * @return Instance of Steward if the id is in database, null otherwise.
      */
     Steward getSteward(Long id);

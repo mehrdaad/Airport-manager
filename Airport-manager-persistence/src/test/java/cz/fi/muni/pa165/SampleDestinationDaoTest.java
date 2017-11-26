@@ -120,4 +120,45 @@ public class SampleDestinationDaoTest extends BaseDaoTest {
         Assert.assertNull(destinationDao.getDestination(dest.getId()));
     }
 
+    @Test
+    @Transactional
+    public void findByCity() {
+
+        Destination dest1 = new Destination();
+        Destination dest2 = new Destination();
+
+        dest1.setCountry("country1");
+        dest1.setCity("city1");
+        dest2.setCountry("country2");
+        dest2.setCity("city2");
+
+        destinationDao.addDestination(dest1);
+        destinationDao.addDestination(dest2);
+
+        List<Destination> destinations = destinationDao.getDestinationsByCity("city1");
+        Assert.assertEquals(destinations.size(), 1);
+        Assert.assertTrue(dest1.getCity().equals(destinations.get(0).getCity()));
+        Assert.assertTrue(dest1.getCountry().equals(destinations.get(0).getCountry()));
+    }
+
+    @Test
+    @Transactional
+    public void findByCountry() {
+
+        Destination dest1 = new Destination();
+        Destination dest2 = new Destination();
+
+        dest1.setCountry("country1");
+        dest1.setCity("city1");
+        dest2.setCountry("country2");
+        dest2.setCity("city2");
+
+        destinationDao.addDestination(dest1);
+        destinationDao.addDestination(dest2);
+
+        List<Destination> destinations = destinationDao.getDestinationsByCountry("country2");
+        Assert.assertEquals(destinations.size(), 1);
+        Assert.assertTrue(dest2.getCity().equals(destinations.get(0).getCity()));
+        Assert.assertTrue(dest2.getCountry().equals(destinations.get(0).getCountry()));
+    }
 }

@@ -45,7 +45,7 @@ public class SampleStewardDaoTest extends BaseDaoTest {
         Assert.assertEquals(surname, stewards.get(0).getSurname());
     }
 
-    @Test(expectedExceptions = {PersistenceException.class})
+    @Test(expectedExceptions = {IllegalArgumentException.class})
     @Transactional
     public void testCreateInvalidSteward_shouldThrowPropertyValueException() throws Exception {
         Steward steward = new Steward();
@@ -54,7 +54,7 @@ public class SampleStewardDaoTest extends BaseDaoTest {
         stewardDao.createSteward(steward);
     }
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test(expectedExceptions = {NullPointerException.class})
     @Transactional
     public void testNullSteward_shouldThrowIllegalArgumentException() throws Exception {
         stewardDao.createSteward(null);
@@ -86,7 +86,7 @@ public class SampleStewardDaoTest extends BaseDaoTest {
         Assert.assertEquals(0, stewards.size());
     }
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test(expectedExceptions = {NullPointerException.class})
     @Transactional
     public void testDeleteNullSteward_shouldThrowIllegalArgumentException() throws Exception {
         stewardDao.deleteSteward(null);

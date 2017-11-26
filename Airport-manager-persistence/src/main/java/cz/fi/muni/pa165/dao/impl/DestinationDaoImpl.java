@@ -73,4 +73,22 @@ public class DestinationDaoImpl implements DestinationDao {
     public Destination getDestination(Long id) {
         return em.find(Destination.class, id);
     }
+
+    @Override
+    public List<Destination> getDestinationsByCity(String city) {
+        if (city == null) {
+            throw new IllegalArgumentException("City is null.");
+        }
+        return em.createQuery("SELECT d FROM Destination d WHERE d.city = :city", Destination.class)
+                .setParameter("city", city).getResultList();
+    }
+
+    @Override
+    public List<Destination> getDestinationsByCountry(String country) {
+        if(country == null) {
+            throw new IllegalArgumentException("Country is null.");
+        }
+        return em.createQuery("SELECT d FROM Destination d WHERE d.country = :country", Destination.class)
+                .setParameter("country", country).getResultList();
+    }
 }

@@ -20,16 +20,34 @@ public class StewardDaoImpl implements StewardDao {
     private EntityManager em;
 
     public void createSteward(Steward steward) {
+        if(steward == null) {
+            throw new NullPointerException("Steward is null.");
+        }
+
+        if(steward.getFirstName() == null || steward.getSurname() == null) {
+            throw new IllegalArgumentException("Steward's firstname or surname is null.");
+        }
+
         em.persist(steward);
     }
 
     public void deleteSteward(Steward steward) {
+        if(steward == null) {
+            throw new NullPointerException("Steward is null.");
+        }
+
         em.remove(steward);
     }
 
     public void updateSteward(Steward steward) {
-        Steward stewardFromDb = em.find(Steward.class, steward.getId());
+        if(steward == null) {
+            throw new NullPointerException("Steward is null.");
+        }
+        if(steward.getFirstName() == null || steward.getSurname() == null) {
+            throw new IllegalArgumentException("Steward's firstname or surname is null.");
+        }
 
+        Steward stewardFromDb = em.find(Steward.class, steward.getId());
         if (stewardFromDb != null) {
             em.merge(steward);
         } else {
@@ -38,6 +56,9 @@ public class StewardDaoImpl implements StewardDao {
     }
 
     public Steward getSteward(Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("ID is null.");
+        }
         return em.find(Steward.class, id);
     }
 
