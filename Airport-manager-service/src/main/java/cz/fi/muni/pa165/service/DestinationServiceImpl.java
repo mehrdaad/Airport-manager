@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of DestinationService interface
+ *
+ * @author Ondřej Přikryl
+ * @date 24.11.2017
+ */
 @Service
 public class DestinationServiceImpl implements DestinationService {
 
