@@ -49,7 +49,7 @@ public class AirplaneFacadeImpl implements AirplaneFacade {
 
     @Override
     public void updateAirplane(AirplaneDTO airplane) {
-        airplaneService.updateAirplane(mappingService.mapTo(airplane.getId(), Airplane.class));
+        airplaneService.updateAirplane(mappingService.mapTo(airplane, Airplane.class));
     }
 
     @Override
