@@ -55,4 +55,23 @@ public interface DestinationDao {
      */
     Destination getDestination(Long id);
 
+    /**
+     * Find a {@link Destination} entity instance by specified <b>city</b>.
+     * If the entity instance is contained in the persistence storage, it is returned from there.
+     *
+     * @param city the string containing desired city.
+     * @throws IllegalArgumentException if city is null.
+     * @return a list of {@link Destination} entities
+     */
+    List<Destination> getDestinationsByCity(String city);
+
+    /**
+     * Find a {@link Destination} entity instance by specified <b>country</b>.
+     * If the entity instance is contained in the persistence storage, it is returned from there.
+     *
+     * @param country the string containing desired country.
+     * @throws IllegalArgumentException if country is null.
+     * @return a list of {@link Destination} entities
+     */
+    List<Destination> getDestinationsByCountry(String country);
 }

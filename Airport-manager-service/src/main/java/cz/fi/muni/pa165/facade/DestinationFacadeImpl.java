@@ -5,10 +5,10 @@ import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.service.DestinationService;
 import cz.fi.muni.pa165.service.MappingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -21,10 +21,10 @@ import java.util.List;
 @Transactional
 public class DestinationFacadeImpl implements DestinationFacade{
 
-    @Autowired
+    @Inject
     private DestinationService destinationService;
 
-    @Autowired
+    @Inject
     private MappingService mappingService;
 
     @Override
@@ -45,11 +45,6 @@ public class DestinationFacadeImpl implements DestinationFacade{
     @Override
     public DestinationDTO getDestinationById(Long id) {
         return mappingService.mapTo(destinationService.getDestinationById(id), DestinationDTO.class);
-    }
-
-    @Override
-    public DestinationDTO getDestinationByPosition(String country, String city) {
-        return mappingService.mapTo(destinationService.getDestinationByPosition(country, city), DestinationDTO.class);
     }
 
     @Override

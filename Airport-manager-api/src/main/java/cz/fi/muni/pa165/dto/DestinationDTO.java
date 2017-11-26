@@ -45,6 +45,12 @@ public class DestinationDTO {
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (!(obj instanceof DestinationDTO)) return false;
+
+        DestinationDTO that = (DestinationDTO) obj;
+
+        if (country != null && !country.equals(that.getCountry())) return false;
+        return city != null && city.equals(that.getCity());
     }
 }
