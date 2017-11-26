@@ -8,11 +8,13 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Jan Cakl
  */
+@Service
 public class AirplaneServiceImpl implements AirplaneService {
     @Autowired
     private AirplaneDao airplaneDao;
