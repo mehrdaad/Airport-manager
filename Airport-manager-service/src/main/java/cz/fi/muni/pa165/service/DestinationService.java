@@ -24,8 +24,6 @@ public interface DestinationService {
 
     public List<Destination> getDestinationsByCity(String city);
 
-    public Destination getDestinationByPosition(String country, String city);
-
     public List<Destination> getAllDestinations();
 
     public List<Flight> getAllIncomingFlights(Destination destination);

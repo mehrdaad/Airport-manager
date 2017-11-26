@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.exceptions.FlightDataAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -22,58 +23,57 @@ public class DestinationServiceImpl implements DestinationService {
         Destination destination = new Destination();
         destination.setCountry(country);
         destination.setCity(city);
-        destinationDao.addDestination(destination);
+
+        try {
+            destinationDao.addDestination(destination);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while adding destination: " + destination, e);
+        }
     }
 
     @Override
     public void removeDestination(Destination destination) {
-        destinationDao.removeDestination(destination);
+        try {
+            destinationDao.removeDestination(destination);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while removing destination: " + destination, e);
+        }
     }
 
     @Override
     public void updateDestination(Destination destination) {
-        destinationDao.updateDestination(destination);
+        try {
+            destinationDao.updateDestination(destination);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while updating destination: " + destination, e);
+        }
     }
 
     @Override
     public Destination getDestinationById(Long id) {
-        return destinationDao.getDestination(id);
+        try {
+            return destinationDao.getDestination(id);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while getting destination by ID.", e);
+        }
     }
 
     @Override
     public List<Destination> getDestinationsByCountry(String country) {
-        List<Destination> destinations = destinationDao.getAllDestinations();
-        List<Destination> result = new ArrayList<>();
-        for(Destination destination : destinations) {
-            if(destination.getCountry().equals(country)) {
-                result.add(destination);
-            }
+        try {
+            return destinationDao.getDestinationsByCountry(country);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while getting destination by country: " + country, e);
         }
-        return result;
     }
 
     @Override
     public List<Destination> getDestinationsByCity(String city) {
-        List<Destination> destinations = destinationDao.getAllDestinations();
-        List<Destination> result = new ArrayList<>();
-        for(Destination destination : destinations) {
-            if(destination.getCity().equals(city)) {
-                result.add(destination);
-            }
+        try {
+            return destinationDao.getDestinationsByCity(city);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while getting destination by city: " + city, e);
         }
-        return result;
-    }
-
-    @Override
-    public Destination getDestinationByPosition(String country, String city) {
-        List<Destination> destinations = destinationDao.getAllDestinations();
-
-        for(Destination destination : destinations) {
-            if(destination.getCountry().equals(country) && destination.getCity().equals(city)) {
-                return destination;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -83,25 +83,33 @@ public class DestinationServiceImpl implements DestinationService {
 
     @Override
     public List<Flight> getAllIncomingFlights(Destination destination) {
-        List<Flight> flights = flightDao.getAllFlights();
-        List<Flight> incoming = new ArrayList<>();
-        for(Flight flight : flights) {
-            if(flight.getArrivalLocation().equals(destination)) {
-                incoming.add(flight);
+        try {
+            List<Flight> flights = flightDao.getAllFlights();
+            List<Flight> incoming = new ArrayList<>();
+            for(Flight flight : flights) {
+                if(flight.getArrivalLocation().equals(destination)) {
+                    incoming.add(flight);
+                }
             }
+            return incoming;
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while getting all incoming flights in destination: " + destination, e);
         }
-        return incoming;
     }
 
     @Override
     public List<Flight> getAllOutgoingFlights(Destination destination) {
-        List<Flight> flights = flightDao.getAllFlights();
-        List<Flight> outgoing = new ArrayList<>();
-        for(Flight flight : flights) {
-            if(flight.getDepartureLocation().equals(destination)) {
-                outgoing.add(flight);
+        try {
+            List<Flight> flights = flightDao.getAllFlights();
+            List<Flight> outgoing = new ArrayList<>();
+            for(Flight flight : flights) {
+                if(flight.getDepartureLocation().equals(destination)) {
+                    outgoing.add(flight);
+                }
             }
+            return outgoing;
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while getting all outgoing flights in destination: " + destination, e);
         }
-        return outgoing;
     }
 }

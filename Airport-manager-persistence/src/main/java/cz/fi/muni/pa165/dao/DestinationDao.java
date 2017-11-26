@@ -60,6 +60,7 @@ public interface DestinationDao {
      * If the entity instance is contained in the persistence storage, it is returned from there.
      *
      * @param city the string containing desired city.
+     * @throws IllegalArgumentException if city is null.
      * @return a list of {@link Destination} entities
      */
     List<Destination> getDestinationsByCity(String city);
@@ -69,6 +70,7 @@ public interface DestinationDao {
      * If the entity instance is contained in the persistence storage, it is returned from there.
      *
      * @param country the string containing desired country.
+     * @throws IllegalArgumentException if country is null.
      * @return a list of {@link Destination} entities
      */
     List<Destination> getDestinationsByCountry(String country);
