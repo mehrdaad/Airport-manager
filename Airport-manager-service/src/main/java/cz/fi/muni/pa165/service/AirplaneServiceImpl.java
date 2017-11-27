@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.dao.AirplaneDao;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Flight;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -77,12 +78,13 @@ public class AirplaneServiceImpl implements AirplaneService {
             return Collections.emptyList();
         }
         
-        List<Airplane> allUsedAirPlanes = allAirplanes;
+        List<Airplane> allUsedAirPlanes = new ArrayList<>();
                 
          for (Airplane airplane : allAirplanes) {
             for (Flight flight : allFlightSince) {
-                if (flight.getAirPlane() != null && !flight.getAirPlane().equals(airplane)) {
-                    allUsedAirPlanes.remove(airplane);
+                if (flight.getAirPlane() != null && flight.getAirPlane().equals(airplane)) {
+                    allUsedAirPlanes.add(airplane);
+                    break;
                 }
             }
         }
@@ -98,16 +100,22 @@ public class AirplaneServiceImpl implements AirplaneService {
             return allAirplanes;
         }
         
-        List<Airplane> allFreeAirPlanes = allAirplanes;
-                
-         for (Airplane airplane : allAirplanes) {
+        List<Airplane> allFreeAirPlanes = new ArrayList<>();
+
+        for (Airplane airplane : allAirplanes) {
+            boolean used = false;
             for (Flight flight : allFlightSince) {
-                if (flight.getAirPlane() != null && flight.getAirPlane().equals(airplane)) {
-                    allFreeAirPlanes.remove(airplane);
+        	if (flight.getAirPlane() != null && flight.getAirPlane().equals(airplane)) {
+                    used = true;
+                    break;
                 }
             }
-        }
+                    
+            if(!used){
+                allFreeAirPlanes.add(airplane);
+            }
+	}
+
         return allFreeAirPlanes;
     }
-
 }
