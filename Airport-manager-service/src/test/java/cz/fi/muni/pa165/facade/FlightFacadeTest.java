@@ -1,7 +1,8 @@
 package cz.fi.muni.pa165.facade;
 
 import cz.fi.muni.pa165.ServiceConfig;
-import cz.fi.muni.pa165.dto.*;
+import cz.fi.muni.pa165.dto.FlightCreateDTO;
+import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
@@ -28,13 +29,11 @@ import java.util.List;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.*;
 
 /**
  * Tests for FlightFacade
  *
  * @author Ondrej Prikryl
- * @date 27.11.2017
  */
 @ContextConfiguration(classes = ServiceConfig.class)
 public class FlightFacadeTest {
@@ -62,10 +61,10 @@ public class FlightFacadeTest {
 
 
     @Mock
-    FlightDTO flightDTO;
+    private FlightDTO flightDTO;
 
     @Mock
-    FlightCreateDTO flightCreateDTO;
+    private FlightCreateDTO flightCreateDTO;
 
     @Autowired
     @InjectMocks
