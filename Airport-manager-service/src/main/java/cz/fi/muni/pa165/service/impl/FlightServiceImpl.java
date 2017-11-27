@@ -54,7 +54,11 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public Flight getFlight(Long id) {
-        return flightDao.getFlight(id);
+        try {
+            return flightDao.getFlight(id);
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while fetching flight wit id " + id, e);
+        }
     }
 
     @Override
@@ -96,11 +100,14 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public void addSteward(Flight flight, Steward steward) {
+        if (flight == null || steward == null) {
+            throw new NullPointerException("Flight or steward is null");
+        }
         if (flight.getStewards().contains(steward)) {
             throw new IllegalArgumentException("Steward: " + steward +
                     " already on the flight: " + flight);
         }
 
-        flight.addSteward(steward);
+        flight.addSteward(steward); // TODO check
     }
 }
