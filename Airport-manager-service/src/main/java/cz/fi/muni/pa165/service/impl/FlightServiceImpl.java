@@ -64,6 +64,9 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public Duration getFlightTime(Flight flight) {
+        if (flight == null) {
+            throw new NullPointerException("Flight is null");
+        }
         if (flightDao.getFlight(flight.getId()) == null) {
             throw new IllegalArgumentException("Flight id has to be set.");
         }
