@@ -53,4 +53,12 @@ public class DestinationDTO {
         if (country != null && !country.equals(that.getCountry())) return false;
         return city != null && city.equals(that.getCity());
     }
+
+    @Override
+    public String toString() {
+        return "DestinationDTO{" +
+                    "country='" + country + '\'' +
+                    ", city='" + city + '\'' +
+                    '}';
+    }
 }

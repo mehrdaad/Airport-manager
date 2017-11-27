@@ -168,17 +168,17 @@ public class TestFlightDao extends BaseDaoTest {
         Assert.assertTrue(createdFlight1.equals(createdFlight2));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testCreateNullFlight(){
         flightDao.addFlight(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testUpdateNullFlight(){
         flightDao.updateFlight(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testDeleteNullFlight(){
         flightDao.deleteFlight(null);
     }

@@ -20,8 +20,9 @@ public interface DestinationService {
      * @param country String containing name of the country.
      * @param city String containing name of the city.
      * @throws DestinationDataAccessException if fail in DAO occurs.
+     * @return Long id of created destination.
      */
-    public void createDestination(String country, String city);
+    public Long createDestination(String country, String city);
 
     /**
      * Removes destination from the db.

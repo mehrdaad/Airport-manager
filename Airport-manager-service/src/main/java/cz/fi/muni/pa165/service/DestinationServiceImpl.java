@@ -27,13 +27,14 @@ public class DestinationServiceImpl implements DestinationService {
     private FlightDao flightDao;
 
     @Override
-    public void createDestination(String country, String city) {
+    public Long createDestination(String country, String city) {
         Destination destination = new Destination();
         destination.setCountry(country);
         destination.setCity(city);
 
         try {
             destinationDao.addDestination(destination);
+            return destination.getId();
         } catch (Exception e) {
             throw new DestinationDataAccessException("Exception while adding destination: " + destination, e);
         }

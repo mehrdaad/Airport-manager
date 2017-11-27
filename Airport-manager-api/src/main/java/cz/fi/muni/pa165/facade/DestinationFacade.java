@@ -19,7 +19,7 @@ public interface DestinationFacade {
      * @param country string containing name of country.
      * @param city string containing name of city.
      */
-    public void createDestination(String country, String city);
+    public Long createDestination(String country, String city);
 
     /**
      * Removes destination by given id.
