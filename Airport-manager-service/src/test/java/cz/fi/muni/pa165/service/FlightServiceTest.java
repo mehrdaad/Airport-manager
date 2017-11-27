@@ -204,7 +204,7 @@ public class FlightServiceTest extends BaseServiceTest{
         verifyZeroInteractions(flightDao.getFlight(any()));
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void getFlightTimeNotInDb() {
         when(flightDao.getFlight(flight.getId())).thenReturn(null);
         flightService.getFlightTime(flight);
