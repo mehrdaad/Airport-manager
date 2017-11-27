@@ -4,7 +4,7 @@ import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
-import cz.fi.muni.pa165.exceptions.FlightDataAccessException;
+import cz.fi.muni.pa165.exceptions.DestinationDataAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class DestinationServiceImpl implements DestinationService {
         try {
             destinationDao.addDestination(destination);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while adding destination: " + destination, e);
+            throw new DestinationDataAccessException("Exception while adding destination: " + destination, e);
         }
     }
 
@@ -44,7 +44,7 @@ public class DestinationServiceImpl implements DestinationService {
         try {
             destinationDao.removeDestination(destination);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while removing destination: " + destination, e);
+            throw new DestinationDataAccessException("Exception while removing destination: " + destination, e);
         }
     }
 
@@ -53,7 +53,7 @@ public class DestinationServiceImpl implements DestinationService {
         try {
             destinationDao.updateDestination(destination);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while updating destination: " + destination, e);
+            throw new DestinationDataAccessException("Exception while updating destination: " + destination, e);
         }
     }
 
@@ -62,7 +62,7 @@ public class DestinationServiceImpl implements DestinationService {
         try {
             return destinationDao.getDestination(id);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while getting destination by ID.", e);
+            throw new DestinationDataAccessException("Exception while getting destination by ID.", e);
         }
     }
 
@@ -71,7 +71,7 @@ public class DestinationServiceImpl implements DestinationService {
         try {
             return destinationDao.getDestinationsByCountry(country);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while getting destination by country: " + country, e);
+            throw new DestinationDataAccessException("Exception while getting destination by country: " + country, e);
         }
     }
 
@@ -80,7 +80,7 @@ public class DestinationServiceImpl implements DestinationService {
         try {
             return destinationDao.getDestinationsByCity(city);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while getting destination by city: " + city, e);
+            throw new DestinationDataAccessException("Exception while getting destination by city: " + city, e);
         }
     }
 
@@ -101,7 +101,7 @@ public class DestinationServiceImpl implements DestinationService {
             }
             return incoming;
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while getting all incoming flights in destination: " + destination, e);
+            throw new DestinationDataAccessException("Exception while getting all incoming flights in destination: " + destination, e);
         }
     }
 
@@ -117,7 +117,7 @@ public class DestinationServiceImpl implements DestinationService {
             }
             return outgoing;
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while getting all outgoing flights in destination: " + destination, e);
+            throw new DestinationDataAccessException("Exception while getting all outgoing flights in destination: " + destination, e);
         }
     }
 }
