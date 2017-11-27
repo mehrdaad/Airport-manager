@@ -34,7 +34,6 @@ import static org.mockito.Mockito.when;
  * Tests for FlightFacade
  *
  * @author Ondrej Prikryl
- * @date 27.11.2017
  */
 @ContextConfiguration(classes = ServiceConfig.class)
 public class FlightFacadeTest {
@@ -62,10 +61,10 @@ public class FlightFacadeTest {
 
 
     @Mock
-    FlightDTO flightDTO;
+    private FlightDTO flightDTO;
 
     @Mock
-    FlightCreateDTO flightCreateDTO;
+    private FlightCreateDTO flightCreateDTO;
 
     @Autowired
     @InjectMocks

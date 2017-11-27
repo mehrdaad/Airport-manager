@@ -15,7 +15,6 @@ import java.util.List;
  * Implementation of the DestinationFacade interface. 
  *
  * @author Ondřej Přikryl
- * @date 24.11.2017
  */
 @Service
 @Transactional
@@ -28,8 +27,8 @@ public class DestinationFacadeImpl implements DestinationFacade{
     private MappingService mappingService;
 
     @Override
-    public void createDestination(String country, String city) {
-        destinationService.createDestination(country, city);
+    public Long createDestination(String country, String city) {
+        return destinationService.createDestination(country, city);
     }
 
     @Override

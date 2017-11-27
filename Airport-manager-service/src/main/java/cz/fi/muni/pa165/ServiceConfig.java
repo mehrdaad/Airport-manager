@@ -13,6 +13,11 @@ import java.util.Collections;
 @Import(PersistenceConfig.class)
 @ComponentScan("cz.fi.muni.pa165")
 public class ServiceConfig {
+
+    /**
+     * Create dozer.
+     * @return New bean dozer.
+     */
     @Bean
     public Mapper dozer() {
         DozerBeanMapper mapper = new DozerBeanMapper();
