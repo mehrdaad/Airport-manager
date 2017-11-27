@@ -6,6 +6,7 @@ import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.dao.StewardDao;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
+import cz.fi.muni.pa165.exceptions.StewardDataAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,11 @@ public class StewardServiceImpl implements StewardService{
       */
     @Override
     public void deleteSteward(Steward steward){
-        stewardDao.deleteSteward(steward);
+        try {
+            stewardDao.deleteSteward(steward);
+        }catch (Exception e) {
+            throw new StewardDataAccessException("Exception while deleting steward: " + steward, e);
+        }
     }
 
     /**
@@ -80,10 +85,14 @@ public class StewardServiceImpl implements StewardService{
      */
     @Override
     public void createSteward(String firstName, String surName){
+        try{
         Steward steward = new Steward();
         steward.setFirstName(firstName);
         steward.setSurname(surName);
         stewardDao.createSteward(steward);
+        }catch (Exception e) {
+            throw new StewardDataAccessException("Exception while deleting steward.", e);
+        }
     }
 
     /**
@@ -93,7 +102,11 @@ public class StewardServiceImpl implements StewardService{
      */
     @Override
     public void updateSteward(Steward steward){
-        stewardDao.updateSteward(steward);
+        try {
+            stewardDao.updateSteward(steward);
+        }catch (Exception e) {
+            throw new StewardDataAccessException("Exception while deleting steward: " + steward, e);
+        }
     }
 
     /**
