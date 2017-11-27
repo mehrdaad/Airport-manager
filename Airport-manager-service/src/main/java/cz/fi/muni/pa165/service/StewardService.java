@@ -47,9 +47,7 @@ public interface StewardService {
     /**
      * Update steward name (first name and surname).
      *
-     * @param id Steward's id
-     * @param firstName New first name.
-     * @param surName New surname.
+     * @param steward steward to update
      */
     void updateSteward(Steward steward);
 

@@ -78,7 +78,8 @@ public class FlightFacadeImpl implements FlightFacade {
             throw new IllegalArgumentException("Arrival time cannot be before departure time.");
         }
 
-        flight.setArrivalTime(arrivalTime); // updates also in the persistence storage
+        flight.setArrivalTime(arrivalTime);
+        flightService.updateFlight(flight);
     }
 
     @Override
@@ -94,6 +95,7 @@ public class FlightFacadeImpl implements FlightFacade {
         Flight flight = flightService.getFlight(flightId);
         Airplane airplane = airplaneService.findById(airplaneId);
 
-        flight.setAirPlane(airplane); // updates also in the persistence storage
+        flight.setAirPlane(airplane);
+        flightService.updateFlight(flight);
     }
 }

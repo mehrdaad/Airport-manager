@@ -107,11 +107,15 @@ public class FlightServiceImpl implements FlightService {
         if (flight == null || steward == null) {
             throw new NullPointerException("Flight or steward is null");
         }
+        if (flight.getId() == null || steward.getId() == null) {
+            throw new IllegalArgumentException("Id of flight or steward is not set");
+        }
         if (flight.getStewards().contains(steward)) {
             throw new IllegalArgumentException("Steward: " + steward +
                     " already on the flight: " + flight);
         }
 
         flight.addSteward(steward);
+        updateFlight(flight);
     }
 }
