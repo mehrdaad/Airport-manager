@@ -57,13 +57,17 @@ public class FlightServiceImpl implements FlightService {
         try {
             return flightDao.getFlight(id);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while fetching flight wit id " + id, e);
+            throw new FlightDataAccessException("Exception while fetching flight with id " + id, e);
         }
     }
 
     @Override
     public List<Flight> getAllFlights() {
-        return flightDao.getAllFlights();
+        try {
+            return flightDao.getAllFlights();
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while fetching all flights.", e);
+        }
     }
 
     @Override
@@ -108,6 +112,6 @@ public class FlightServiceImpl implements FlightService {
                     " already on the flight: " + flight);
         }
 
-        flight.addSteward(steward); // TODO check
+        flight.addSteward(steward);
     }
 }

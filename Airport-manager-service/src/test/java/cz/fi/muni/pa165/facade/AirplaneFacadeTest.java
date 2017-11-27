@@ -23,6 +23,9 @@ import java.util.List;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * @author Robert Duriancik
+ */
 @ContextConfiguration(classes = ServiceConfig.class)
 public class AirplaneFacadeTest {
 

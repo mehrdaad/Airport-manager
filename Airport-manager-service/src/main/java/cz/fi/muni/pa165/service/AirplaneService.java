@@ -1,6 +1,8 @@
 package cz.fi.muni.pa165.service;
 
 import cz.fi.muni.pa165.entities.Airplane;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import java.util.List;
  *
  * @author Jan Cakl
  */
+@Service
 public interface AirplaneService {
     
     /**

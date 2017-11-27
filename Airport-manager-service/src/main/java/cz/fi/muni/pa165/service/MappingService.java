@@ -1,14 +1,16 @@
 package cz.fi.muni.pa165.service;
 
+import org.dozer.Mapper;
+import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.List;
-
-import org.dozer.Mapper;
 
 
 /**
  * @author Karel Jiranek
  */
+@Service
 public interface MappingService {
     /**
      * Map objects of any type to given class.

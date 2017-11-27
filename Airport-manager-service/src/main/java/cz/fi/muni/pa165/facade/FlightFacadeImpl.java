@@ -4,7 +4,10 @@ import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Flight;
-import cz.fi.muni.pa165.service.*;
+import cz.fi.muni.pa165.service.AirplaneService;
+import cz.fi.muni.pa165.service.FlightService;
+import cz.fi.muni.pa165.service.MappingService;
+import cz.fi.muni.pa165.service.StewardService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +26,8 @@ import java.util.List;
 @Transactional
 public class FlightFacadeImpl implements FlightFacade {
 
-//    final static Logger log = LoggerFactory.getLogger(FlightFacadeImpl.class);
-
     @Inject
     private FlightService flightService;
-    @Inject
-    private DestinationService destinationService;
     @Inject
     private StewardService stewardService;
     @Inject
@@ -79,8 +78,7 @@ public class FlightFacadeImpl implements FlightFacade {
             throw new IllegalArgumentException("Arrival time cannot be before departure time.");
         }
 
-        flight.setArrivalTime(arrivalTime);
-//        flightService.updateFlight(flight); // TODO check if it's updated in the persistence storage
+        flight.setArrivalTime(arrivalTime); // updates also in the persistence storage
     }
 
     @Override
@@ -88,13 +86,14 @@ public class FlightFacadeImpl implements FlightFacade {
         flightService.addSteward(
                 flightService.getFlight(flightId),
                 stewardService.getSteward(stewardId)
-        );// TODO check if it's updated in the persistence storage
+        );
     }
 
     @Override
     public void changeAirplane(Long flightId, Long airplaneId) {
         Flight flight = flightService.getFlight(flightId);
         Airplane airplane = airplaneService.findById(airplaneId);
-        flight.setAirPlane(airplane);// TODO check if it's updated in the persistence storage
+
+        flight.setAirPlane(airplane); // updates also in the persistence storage
     }
 }
