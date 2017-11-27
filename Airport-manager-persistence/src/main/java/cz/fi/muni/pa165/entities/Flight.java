@@ -1,14 +1,7 @@
 package cz.fi.muni.pa165.entities;
 
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,7 +69,7 @@ public class Flight {
      * @param departureLocation Location to set
      */
     public void setDepartureLocation(Destination departureLocation) {
-        if (departureLocation == null){
+        if (departureLocation == null) {
             throw new IllegalArgumentException("DepartureLocation set DepartureTime to null.");
         }
         this.departureLocation = departureLocation;
@@ -97,7 +90,7 @@ public class Flight {
      * @param arrivalLocation Location to set
      */
     public void setArrivalLocation(Destination arrivalLocation) {
-        if (arrivalLocation == null){
+        if (arrivalLocation == null) {
             throw new IllegalArgumentException("ArrivalLocation set DepartureTime to null.");
         }
         this.arrivalLocation = arrivalLocation;
@@ -118,7 +111,7 @@ public class Flight {
      * @param arrivalTime Flight arrival time to set
      */
     public void setArrivalTime(LocalDateTime arrivalTime) {
-        if (arrivalTime == null){
+        if (arrivalTime == null) {
             throw new IllegalArgumentException("ArrivalTime set DepartureTime to null.");
         }
         this.arrivalTime = arrivalTime;
@@ -139,7 +132,7 @@ public class Flight {
      * @param departureTime Flight departure to set
      */
     public void setDepartureTime(LocalDateTime departureTime) {
-        if (departureTime == null){
+        if (departureTime == null) {
             throw new IllegalArgumentException("Cannot set DepartureTime to null.");
         }
         this.departureTime = departureTime;
@@ -160,10 +153,10 @@ public class Flight {
      * @param stewards Stewards to set for flight
      */
     public void setStewards(List<Steward> stewards) {
-        if (stewards == null){
+        if (stewards == null) {
             throw new IllegalArgumentException("Cannot set stewards to null.");
         }
-        if (stewards.contains(null)){
+        if (stewards.contains(null)) {
             throw new IllegalArgumentException("Cannot set stewards with null values");
         }
         this.stewards = stewards;
@@ -184,7 +177,7 @@ public class Flight {
      * @param airPlane Flight airplane
      */
     public void setAirPlane(Airplane airPlane) {
-        if (airPlane == null){
+        if (airPlane == null) {
             throw new IllegalArgumentException("Cannot set airplane to null.");
         }
         this.airPlane = airPlane;
@@ -208,8 +201,8 @@ public class Flight {
                 .append("Departure time: ").append(departureTime).append("\n")
                 .append("Arrival location: ").append(arrivalLocation).append("\n")
                 .append("Arrival time: ").append(arrivalTime).append("\n")
-                .append("Airplane: ").append(airPlane);
-        //.append("Stewards: ").append(stawards);
+                .append("Airplane: ").append(airPlane)
+                .append("Stewards: ").append(stewards);
         return strBuilder.toString();
     }
 

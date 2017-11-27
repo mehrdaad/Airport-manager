@@ -6,24 +6,25 @@ import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
+import cz.fi.muni.pa165.service.impl.StewardServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.testng.Assert;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 /**
  *

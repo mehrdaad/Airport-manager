@@ -57,13 +57,17 @@ public class FlightServiceImpl implements FlightService {
         try {
             return flightDao.getFlight(id);
         } catch (Exception e) {
-            throw new FlightDataAccessException("Exception while fetching flight wit id " + id, e);
+            throw new FlightDataAccessException("Exception while fetching flight with id " + id, e);
         }
     }
 
     @Override
     public List<Flight> getAllFlights() {
-        return flightDao.getAllFlights();
+        try {
+            return flightDao.getAllFlights();
+        } catch (Exception e) {
+            throw new FlightDataAccessException("Exception while fetching all flights.", e);
+        }
     }
 
     @Override
@@ -103,11 +107,15 @@ public class FlightServiceImpl implements FlightService {
         if (flight == null || steward == null) {
             throw new NullPointerException("Flight or steward is null");
         }
+        if (flight.getId() == null || steward.getId() == null) {
+            throw new IllegalArgumentException("Id of flight or steward is not set");
+        }
         if (flight.getStewards().contains(steward)) {
             throw new IllegalArgumentException("Steward: " + steward +
                     " already on the flight: " + flight);
         }
 
-        flight.addSteward(steward); // TODO check
+        flight.addSteward(steward);
+        updateFlight(flight);
     }
 }

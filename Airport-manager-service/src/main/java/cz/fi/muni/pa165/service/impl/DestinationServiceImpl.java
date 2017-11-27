@@ -1,10 +1,11 @@
-package cz.fi.muni.pa165.service;
+package cz.fi.muni.pa165.service.impl;
 
 import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.exceptions.DestinationDataAccessException;
+import cz.fi.muni.pa165.service.DestinationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

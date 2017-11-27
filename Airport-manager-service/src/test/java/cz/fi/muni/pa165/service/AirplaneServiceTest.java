@@ -20,6 +20,9 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * @author Robert Duriancik
+ */
 public class AirplaneServiceTest extends BaseServiceTest {
     @Mock
     private AirplaneDao airplaneDao;

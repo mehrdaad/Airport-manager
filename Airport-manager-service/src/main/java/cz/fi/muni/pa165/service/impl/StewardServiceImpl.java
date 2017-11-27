@@ -1,12 +1,12 @@
-package cz.fi.muni.pa165.service;
+package cz.fi.muni.pa165.service.impl;
 
 
-import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.dao.StewardDao;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.exceptions.StewardDataAccessException;
+import cz.fi.muni.pa165.service.StewardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +29,6 @@ public class StewardServiceImpl implements StewardService{
 
     @Autowired
     private FlightDao flightDao;
-
-    @Autowired
-    private DestinationDao destinationDao;
-
 
     /**
      * Get steward by id.
