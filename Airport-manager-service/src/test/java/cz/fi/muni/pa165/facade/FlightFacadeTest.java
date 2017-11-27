@@ -77,8 +77,7 @@ public class FlightFacadeTest {
 
     @BeforeMethod
     public void resetMocks() {
-        Mockito.reset(mappingService);
-        Mockito.reset(flightService);
+        Mockito.reset(mappingService, flightService);
     }
 
     @Test
@@ -155,15 +154,12 @@ public class FlightFacadeTest {
         verify(flightService).deleteFlight(flight);
     }
 
-    /*
     @Test
     public void testChangeArrivalTime() {
-        flight.setDepartureTime(LocalDateTime.of(2000, 2, 1, 6, 30));
+        when(flight.getDepartureTime()).thenReturn(LocalDateTime.of(2000, 2, 1, 6, 30));
 
         when(flightService.getFlight(flight.getId())).thenReturn(flight);
         flightFacade.changeArrivalTime(flight.getId(), LocalDateTime.of(2000, 2, 2, 6, 30));
-
-        verify(flightService).updateFlight(flight);
     }
 
     @Test
@@ -174,7 +170,7 @@ public class FlightFacadeTest {
         flightFacade.addStewardToFlight(flight.getId(), steward.getId());
         verify(flightService).getFlight(flight.getId());
         verify(stewardService).getSteward(steward.getId());
-        verify(flightService).updateFlight(flight);
+        verify(flightService).addSteward(flight, steward);
     }
 
     @Test
@@ -187,5 +183,5 @@ public class FlightFacadeTest {
         verify(flightService).getFlight(flight.getId());
         verify(airplaneService).findById(airplane.getId());
         verify(flightService).updateFlight(flight);
-    }*/
+    }
 }

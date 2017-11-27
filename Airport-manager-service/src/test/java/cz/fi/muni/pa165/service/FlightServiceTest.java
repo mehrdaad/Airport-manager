@@ -14,7 +14,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -22,11 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class FlightServiceTest extends BaseServiceTest{
@@ -41,7 +36,7 @@ public class FlightServiceTest extends BaseServiceTest{
     @InjectMocks
     private FlightServiceImpl flightService;
 
-    @BeforeTest
+    @BeforeMethod
     public void setUpFlight() {
         createFlight();
     }
@@ -152,13 +147,11 @@ public class FlightServiceTest extends BaseServiceTest{
         Assert.assertTrue(flight.equals(temp));
     }
 
-    /*
     @Test(expectedExceptions = DataAccessException.class)
     public void getFlightNull() {
         doThrow(new NullPointerException()).when(flightDao).getFlight(null);
         flightService.getFlight(null);
     }
-    */
 
     @Test
     public void getFlightNonExisting() {
@@ -236,24 +229,23 @@ public class FlightServiceTest extends BaseServiceTest{
         flightService.getFlightsSince(null);
     }
 
-    /*
     @Test
     public void addStewardHappyDayScenario() {
         Steward steward = new Steward();
+        steward.setId(1L);
         steward.setSurname("Novotny");
         steward.setFirstName("Petr");
 
-        // TODO Robert check this
         flightService.addSteward(flight, steward);
         verify(flightDao).updateFlight(any());
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void addStewardNullSteward() {
         flightService.addSteward(flight, null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void addStewardNullFlight() {
         Steward steward = new Steward();
         steward.setSurname("Novotny");
@@ -262,8 +254,8 @@ public class FlightServiceTest extends BaseServiceTest{
         flightService.addSteward(null, steward);
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
-    public void addStewardAlreaderInFlight() {
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void addStewardAlreadyInFlight() {
         Steward steward = new Steward();
         steward.setSurname("Novotny");
         steward.setFirstName("Petr");
@@ -274,7 +266,6 @@ public class FlightServiceTest extends BaseServiceTest{
 
         flightService.addSteward(flight, steward);
     }
-    */
 
     private void createFlight() {
 

@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.service;
 
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  *
  * @author Karel Jiranek
  */
+@Service
 public interface StewardService {
     /**
      * Get steward by id.
@@ -43,11 +45,9 @@ public interface StewardService {
     void createSteward(String firstName, String surName);
 
     /**
-     * Update steward name (first name and surname).
+     * Update steward/
      *
-     * @param id Steward's id
-     * @param firstName New first name.
-     * @param surName New surname.
+     * @param steward Steward to be changed.
      */
     void updateSteward(Steward steward);
 
