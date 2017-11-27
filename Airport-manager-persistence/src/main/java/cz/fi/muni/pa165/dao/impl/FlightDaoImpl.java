@@ -25,7 +25,7 @@ public class FlightDaoImpl implements FlightDao {
     @Override
     public void addFlight(Flight flight) {
         if (flight == null){
-            throw new IllegalArgumentException("Cannot create null flight");
+            throw new NullPointerException("Cannot create null flight");
         }
         try {
             em.persist(flight);
@@ -37,7 +37,7 @@ public class FlightDaoImpl implements FlightDao {
     @Override
     public void deleteFlight(Flight flight) {
         if (flight == null) {
-            throw new IllegalArgumentException("Cannot delete null flight");
+            throw new NullPointerException("Cannot delete null flight");
         }
         try {
             em.remove(flight);
@@ -50,7 +50,7 @@ public class FlightDaoImpl implements FlightDao {
     @Override
     public void updateFlight(Flight flight) {
         if (flight == null){
-            throw new IllegalArgumentException("Cannot update null flight");
+            throw new NullPointerException("Cannot update null flight");
         }
         Flight flightFromDb = getFlight(flight.getId());
 
