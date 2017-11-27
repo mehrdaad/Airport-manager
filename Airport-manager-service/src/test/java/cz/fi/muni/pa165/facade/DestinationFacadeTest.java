@@ -1,6 +1,5 @@
 package cz.fi.muni.pa165.facade;
 
-import cz.fi.muni.pa165.ServiceConfig;
 import cz.fi.muni.pa165.dto.DestinationDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Destination;
@@ -10,9 +9,7 @@ import cz.fi.muni.pa165.service.MappingService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -23,13 +20,11 @@ import java.util.List;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author Karel Jiranek
  */
-@ContextConfiguration(classes = ServiceConfig.class)
-public class DestinationFacadeTest {
+public class DestinationFacadeTest extends BaseFacadeTest {
 
     @Mock
     private MappingService mappingService;
@@ -58,11 +53,6 @@ public class DestinationFacadeTest {
     @Autowired
     @InjectMocks
     private DestinationFacadeImpl destinationFacade;
-
-    @BeforeClass
-    public void setUp() throws Exception {
-        initMocks(this);
-    }
 
     @Test
     public void createDestinationTest() {

@@ -177,14 +177,6 @@ public class StewardServiceTest extends BaseServiceTest{
         Assert.assertTrue(steward.equals(tmp));
     }
     
-    /*
-    @Test(expectedExceptions = DataAccessException.class)
-    public void getStewardNullTest() {
-        doThrow(new NullPointerException()).when(stewardDao).getSteward(null);
-        stewardService.getSteward(null);
-    }
-    */
-    
     @Test
     public void getStewardNoExistingTest() {
         when(flightDao.getFlight(steward.getId())).thenReturn(null);
@@ -470,20 +462,5 @@ public class StewardServiceTest extends BaseServiceTest{
         when(flightDao.getAllFlights()).thenReturn(flights);
         
         assertEquals(stewardService.getStewardLastFlight(steward.getId()), flight3);
-        
-        when(stewardDao.getSteward(steward3.getId())).thenReturn(steward3);
-        when(flightDao.getAllFlights()).thenReturn(flights);
-        
-        /*
-        Expected NULL - TODO
-        assertNull(stewardService.getStewardLastFlight(steward3.getId()));
-        
-        when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(new ArrayList<>());
-        
-        assertNull(stewardService.getStewardLastFlight(steward.getId()));
-         */   
     }
-    
-
 }
