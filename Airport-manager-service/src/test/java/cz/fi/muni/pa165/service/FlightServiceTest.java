@@ -23,7 +23,10 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-
+/**
+ *
+ * @author Ondrej Prikryl
+ */
 public class FlightServiceTest extends BaseServiceTest{
     private Flight flight;
     private Flight flight2;
