@@ -3,7 +3,6 @@ package cz.fi.muni.pa165.dto;
 /**
  *
  * @author Ondřej Přikryl
- * @date 24. 11. 2017
  */
 public class DestinationDTO {
     private Long id;

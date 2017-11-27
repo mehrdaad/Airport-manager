@@ -15,7 +15,6 @@ import java.util.List;
  * Implementation of the DestinationFacade interface. 
  *
  * @author Ondřej Přikryl
- * @date 24.11.2017
  */
 @Service
 @Transactional
