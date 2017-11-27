@@ -61,6 +61,7 @@ public interface FlightService {
      * @param flight the {@link Flight} entity instance
      * @return duration of the flight represented by a {@link Duration} object
      * @throws IllegalArgumentException if the flight id is null
+     * @throws NullPointerException if the flight is null
      */
     Duration getFlightTime(Flight flight);
 
