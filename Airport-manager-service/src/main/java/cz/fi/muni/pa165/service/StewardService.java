@@ -43,11 +43,9 @@ public interface StewardService {
     void createSteward(String firstName, String surName);
 
     /**
-     * Update steward name (first name and surname).
+     * Update steward/
      *
-     * @param id Steward's id
-     * @param firstName New first name.
-     * @param surName New surname.
+     * @param steward Steward to be changed.
      */
     void updateSteward(Steward steward);
 

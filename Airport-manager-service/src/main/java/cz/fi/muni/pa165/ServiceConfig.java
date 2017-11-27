@@ -11,6 +11,11 @@ import org.springframework.context.annotation.Import;
 @Import(PersistenceConfig.class)
 @ComponentScan("cz.fi.muni.pa165")
 public class ServiceConfig {
+
+    /**
+     * Create dozer.
+     * @return New bean dozer.
+     */
     @Bean
     public Mapper dozer() {
         return new DozerBeanMapper();

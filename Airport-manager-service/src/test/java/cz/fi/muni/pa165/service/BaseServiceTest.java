@@ -13,6 +13,11 @@ import org.testng.annotations.BeforeClass;
 @ContextConfiguration(classes = {ServiceConfig.class})
 public class BaseServiceTest extends AbstractTransactionalTestNGSpringContextTests {
 
+    /**
+     * Init mocks.
+     *
+     * @throws ServiceException If init goes wrong.
+     */
     @BeforeClass
     public void setUp() throws ServiceException {
         MockitoAnnotations.initMocks(this);

@@ -4,7 +4,11 @@ import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Flight;
-import cz.fi.muni.pa165.service.*;
+import cz.fi.muni.pa165.service.AirplaneService;
+import cz.fi.muni.pa165.service.DestinationService;
+import cz.fi.muni.pa165.service.FlightService;
+import cz.fi.muni.pa165.service.MappingService;
+import cz.fi.muni.pa165.service.StewardService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

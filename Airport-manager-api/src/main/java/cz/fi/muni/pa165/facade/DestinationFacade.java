@@ -9,7 +9,6 @@ import java.util.List;
  * Facade interface of Destination
  *
  * @author Ondřej Přikryl
- * @date 24. 11. 2017
  */
 public interface DestinationFacade {
 
@@ -18,22 +17,23 @@ public interface DestinationFacade {
      *
      * @param country string containing name of country.
      * @param city string containing name of city.
+     * @return Id of created destination.
      */
-    public Long createDestination(String country, String city);
+    Long createDestination(String country, String city);
 
     /**
      * Removes destination by given id.
      *
      * @param id of the destination we wanna remove.
      */
-    public void removeDestination(Long id);
+    void removeDestination(Long id);
 
     /**
      * Update destination.
      *
      * @param destination we want to update.
      */
-    public void updateDestination(DestinationDTO destination);
+    void updateDestination(DestinationDTO destination);
 
     /**
      * Get destination by its id.
@@ -41,7 +41,7 @@ public interface DestinationFacade {
      * @param id of the destination we want to retrieve.
      * @return DestinationDTO instance.
      */
-    public DestinationDTO getDestinationById(Long id);
+    DestinationDTO getDestinationById(Long id);
 
     /**
      * Find all destinations by country.
@@ -49,7 +49,7 @@ public interface DestinationFacade {
      * @param country String specifying country name.
      * @return List of all destinations in specified country in db.
      */
-    public List<DestinationDTO> getDestinationsByCountry(String country);
+    List<DestinationDTO> getDestinationsByCountry(String country);
 
     /**
      * Find all destinations by city.
@@ -57,14 +57,14 @@ public interface DestinationFacade {
      * @param city String with name of the city.
      * @return List of all destinations named "city" in db.
      */
-    public List<DestinationDTO> getDestinationsByCity(String city);
+    List<DestinationDTO> getDestinationsByCity(String city);
 
     /**
      * Find all destinations.
      *
      * @return List of all destinations in db.
      */
-    public List<DestinationDTO> getAllDestinations();
+    List<DestinationDTO> getAllDestinations();
 
     /**
      * Find all incoming flights in this destination.
@@ -72,7 +72,7 @@ public interface DestinationFacade {
      * @param destination of interest.
      * @return List of FlightDTO containing flights.
      */
-    public List<FlightDTO> getAllIncomingFlights(DestinationDTO destination);
+    List<FlightDTO> getAllIncomingFlights(DestinationDTO destination);
 
     /**
      * Find all outgoing flights in this destination.
@@ -80,5 +80,5 @@ public interface DestinationFacade {
      * @param destination of interest.
      * @return List of FlightDTO containing flights.
      */
-    public List<FlightDTO> getAllOutgoingFlights(DestinationDTO destination);
+    List<FlightDTO> getAllOutgoingFlights(DestinationDTO destination);
 }

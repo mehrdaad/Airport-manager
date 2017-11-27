@@ -1,6 +1,6 @@
 package cz.fi.muni.pa165.dto;
 
-import java.util.Objects;
+
 
 /**
  *
@@ -66,18 +66,16 @@ public class AirplaneDTO {
         
         return type.equals(other.getType());
     }
-    
-    
+
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Objects.hashCode(this.name);
-        result = prime * result + this.capacity;
-        result = prime * result + Objects.hashCode(this.type);
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + capacity;
         return result;
     }
-    
+
     @Override
     public String toString() {
         return "AirplaneDTO{" +
