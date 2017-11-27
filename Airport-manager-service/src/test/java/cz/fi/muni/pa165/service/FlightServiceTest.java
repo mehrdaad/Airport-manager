@@ -22,7 +22,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 
 public class FlightServiceTest extends BaseServiceTest{
@@ -86,7 +90,7 @@ public class FlightServiceTest extends BaseServiceTest{
 
     @Test(expectedExceptions = DataAccessException.class)
     public void deleteFlightNull() {
-        doThrow(new IllegalArgumentException()).when(flightDao).deleteFlight(null);
+        doThrow(new NullPointerException()).when(flightDao).deleteFlight(null);
         flightService.deleteFlight(null);
     }
 
@@ -121,7 +125,7 @@ public class FlightServiceTest extends BaseServiceTest{
 
     @Test(expectedExceptions = DataAccessException.class)
     public void updateFlightNull() {
-        doThrow(new IllegalArgumentException()).when(flightDao).updateFlight(null);
+        doThrow(new NullPointerException()).when(flightDao).updateFlight(null);
         flightService.updateFlight(null);
     }
 
@@ -200,7 +204,7 @@ public class FlightServiceTest extends BaseServiceTest{
         verifyZeroInteractions(flightDao.getFlight(any()));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void getFlightTimeNotInDb() {
         when(flightDao.getFlight(flight.getId())).thenReturn(null);
         flightService.getFlightTime(flight);

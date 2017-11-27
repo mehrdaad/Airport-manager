@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.dao.DestinationDao;
 import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
+import cz.fi.muni.pa165.exceptions.DestinationDataAccessException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,8 +35,9 @@ public class DestinationServiceTest extends BaseServiceTest  {
     @InjectMocks
     private  DestinationService destinationService;
 
-    private final Destination destinationA = new Destination();
     private final String  DESTINATION_AB_COUNTRY = "USA";
+
+    private final Destination destinationA = new Destination();
     private final String  DESTINATION_A_CITY = "Boston";
     private final long  DESTINATION_A_ID = 4L;
 
@@ -74,19 +78,32 @@ public class DestinationServiceTest extends BaseServiceTest  {
         flightC.setDepartureLocation(destinationA);
     }
 
-    @Test (expectedExceptions = NullPointerException.class)
+    @Test (expectedExceptions = DestinationDataAccessException.class)
     public void removeDestinationNullTest(){
+        doThrow(new NullPointerException())
+                .when(destinationDao).removeDestination(any(Destination.class));
         destinationService.removeDestination(null);
     }
 
-    @Test (expectedExceptions = NullPointerException.class)
+    @Test (expectedExceptions = DestinationDataAccessException.class)
     public void createDestinationCountryNullTest(){
+        doThrow(new NullPointerException())
+                .when(destinationDao).addDestination(any(Destination.class));
         destinationService.createDestination(null, "Boston");
     }
 
-    @Test (expectedExceptions = NullPointerException.class)
+    @Test (expectedExceptions = DestinationDataAccessException.class)
     public void createDestinationCityNullTest(){
+        doThrow(new NullPointerException())
+                .when(destinationDao).addDestination(any(Destination.class));
         destinationService.createDestination("USA", null);
+    }
+
+    @Test (expectedExceptions = DestinationDataAccessException.class)
+    public void updateDestinationNullTest(){
+        doThrow(new NullPointerException())
+                .when(destinationDao).updateDestination(any(Destination.class));
+        destinationService.updateDestination(null);
     }
 
     @Test
@@ -132,7 +149,7 @@ public class DestinationServiceTest extends BaseServiceTest  {
 
     @Test
     public void getDestinationsByCountryTest(){
-        when(destinationDao.getDestinationsByCity(DESTINATION_AB_COUNTRY))
+        when(destinationDao.getDestinationsByCountry(DESTINATION_AB_COUNTRY))
                 .thenReturn(Arrays.asList(destinationA, destinationB));
         List<Destination> destinationsByCountry = destinationService.getDestinationsByCountry(DESTINATION_AB_COUNTRY);
 
@@ -147,17 +164,8 @@ public class DestinationServiceTest extends BaseServiceTest  {
                 .thenReturn(null);
         List<Destination> destinationsByCountry = destinationService.getDestinationsByCountry("NOPE GO LAND");
 
-        Assert.assertNull(destinationsByCountry);
-        verify(destinationDao).getDestinationsByCountry("NOPE GO LAND");
-    }
-
-    @Test
-    public void getDestinationsByCountryNullTest(){
-        when(destinationDao.getDestinationsByCity("NOPE GO LAND"))
-                .thenReturn(null);
-        List<Destination> destinationsByCountry = destinationService.getDestinationsByCountry("NOPE GO LAND");
-
-        Assert.assertNull(destinationsByCountry);
+        Assert.assertNotNull(destinationsByCountry);
+        Assert.assertEquals(destinationsByCountry.size(), 0);
         verify(destinationDao).getDestinationsByCountry("NOPE GO LAND");
     }
 
