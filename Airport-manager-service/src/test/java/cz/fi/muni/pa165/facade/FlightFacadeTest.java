@@ -1,6 +1,5 @@
 package cz.fi.muni.pa165.facade;
 
-import cz.fi.muni.pa165.ServiceConfig;
 import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Airplane;
@@ -13,11 +12,8 @@ import cz.fi.muni.pa165.service.StewardService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -35,8 +31,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Ondrej Prikryl
  */
-@ContextConfiguration(classes = ServiceConfig.class)
-public class FlightFacadeTest {
+public class FlightFacadeTest extends BaseFacadeTest {
 
     @Mock
     private FlightService flightService;
@@ -69,11 +64,6 @@ public class FlightFacadeTest {
     @Autowired
     @InjectMocks
     private FlightFacadeImpl flightFacade;
-
-    @BeforeClass
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @BeforeMethod
     public void resetMocks() {

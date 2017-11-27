@@ -1,6 +1,5 @@
 package cz.fi.muni.pa165.facade;
 
-import cz.fi.muni.pa165.ServiceConfig;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.dto.StewardDTO;
 import cz.fi.muni.pa165.entities.Airplane;
@@ -9,30 +8,28 @@ import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.service.MappingService;
 import cz.fi.muni.pa165.service.StewardService;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collections;
 import java.util.List;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  *
  * @author Jan Cakl
  */
 
-@ContextConfiguration(classes = ServiceConfig.class)
-public class StewardFacadeTest {
+public class StewardFacadeTest extends BaseFacadeTest {
     
     @Mock
     private StewardService stewardService;
@@ -57,12 +54,6 @@ public class StewardFacadeTest {
     @Autowired
     @InjectMocks
     private StewardFacadeImpl stewardFacade;
-    
-    
-    @BeforeClass
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
     
     @BeforeMethod
     public void prepareTestData() {
