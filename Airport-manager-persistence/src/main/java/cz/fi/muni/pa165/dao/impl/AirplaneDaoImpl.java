@@ -52,7 +52,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
 
     @Override
     public List<Airplane> findByName(String name) {
-         return em.createQuery("select a FROM Airplane a WHERE a.name like :name ",Airplane.class).setParameter("name", name).getResultList();
+        return em.createQuery("select a FROM Airplane a WHERE a.name like :name ", Airplane.class).setParameter("name", name).getResultList();
     }
 
     @Override
@@ -62,12 +62,12 @@ public class AirplaneDaoImpl implements AirplaneDao {
 
     @Override
     public List<Airplane> findByCapacityMin(int capacity) {
-        return em.createQuery("select a FROM Airplane a WHERE a.capacity >= :capacity").setParameter("capacity", capacity).getResultList();
+        return em.createQuery("select a FROM Airplane a WHERE a.capacity >= :capacity", Airplane.class).setParameter("capacity", capacity).getResultList();
     }
 
     @Override
     public List<Airplane> findByCapacityMax(int capacity) {
-        return em.createQuery("select a FROM Airplane a WHERE a.capacity <= :capacity").setParameter("capacity", capacity).getResultList();
+        return em.createQuery("select a FROM Airplane a WHERE a.capacity <= :capacity", Airplane.class).setParameter("capacity", capacity).getResultList();
     }
 
 }

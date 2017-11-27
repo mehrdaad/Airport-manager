@@ -81,6 +81,7 @@ public interface FlightService {
      * @param flight  the {@link Flight} entity instance
      * @param steward the {@link Steward} entity instance
      * @throws IllegalArgumentException if the steward is already on the flight
+     * @throws NullPointerException if flight or steward is null
      */
     void addSteward(Flight flight, Steward steward);
 }
