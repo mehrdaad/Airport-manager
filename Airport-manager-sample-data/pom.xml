@@ -26,6 +26,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>test</scope><!-- logging implementation should not be part of a library, but is needed for tests -->
@@ -34,11 +38,6 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
             <scope>test</scope><!-- conflicts with tomcat libraries, but needed for tests -->
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>4.3.11.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>cz.fi.muni.pa165</groupId>
