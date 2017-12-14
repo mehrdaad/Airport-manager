@@ -3,13 +3,15 @@ package cz.fi.muni.pa165.dto;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-public class DestinationCreateDTO {
+public class NewDestinationDTO {
 
-    @NotNull
-    private String city;
+    private Long id;
 
     @NotNull
     private String country;
+
+    @NotNull
+    private String city;
 
     public String getCity() {
         return city;
@@ -31,7 +33,7 @@ public class DestinationCreateDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DestinationCreateDTO that = (DestinationCreateDTO) o;
+        NewDestinationDTO that = (NewDestinationDTO) o;
         return Objects.equals(city, that.city) &&
                 Objects.equals(country, that.country);
     }
@@ -42,4 +44,11 @@ public class DestinationCreateDTO {
     }
 
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
