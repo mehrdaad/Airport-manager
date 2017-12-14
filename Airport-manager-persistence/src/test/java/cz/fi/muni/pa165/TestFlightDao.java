@@ -140,19 +140,6 @@ public class TestFlightDao extends BaseDaoTest {
     }
 
     @Test
-    public void testToString() {
-        String expectedOutput = "Flight:\n" +
-                "Departure location: Destination{country='USA', city='UNKOWN'}\n" +
-                "Departure time: 2017-12-24T08:30\n" +
-                "Arrival location: Destination{country='Czech Republic', city='UNKOWN'}\n" +
-                "Arrival time: 2017-12-24T20:30\n" +
-                "Airplane: Airplane{name='Boeing 737', type='Basic', capacity='100'}";
-
-        Flight createdFlight = createFlight("Czech Republic", "USA");
-        Assert.assertEquals(expectedOutput, createdFlight.toString());
-    }
-
-    @Test
     public void testHashCode() {
         Flight createdFlight1 = createFlight("USA", "Czech Republic");
         Flight createdFlight2 = createFlight("USA", "Czech Republic");
