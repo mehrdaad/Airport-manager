@@ -43,6 +43,10 @@ public class DestinationFacadeImpl implements DestinationFacade{
 
     @Override
     public DestinationDTO getDestinationById(Long id) {
+        Destination destinationById = destinationService.getDestinationById(id);
+        if (destinationById == null){
+            return null;
+        }
         return mappingService.mapTo(destinationService.getDestinationById(id), DestinationDTO.class);
     }
 
