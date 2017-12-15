@@ -18,6 +18,15 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
     @Override
     @SuppressWarnings("unused")
     public void loadData() {
-        destinationService.createDestination("US", "Boston");
+        destinationService.createDestination("USA", "Boston");
+        destinationService.createDestination("Germany", "Berlin");
+        destinationService.createDestination("Poland", "Wroclaw");
+        destinationService.createDestination("Bhutan", "Thimphu");
+        destinationService.createDestination("Bolivia", "Sucre");
+        destinationService.createDestination("Brazil", "Brasilia");
+        destinationService.createDestination("Bulgaria", "Sofia");
+        destinationService.createDestination("Dominica", "Roseau");
+        destinationService.createDestination("Egypt", "Cairo");
+        destinationService.createDestination("Fiji", "Suva");
     }
 }

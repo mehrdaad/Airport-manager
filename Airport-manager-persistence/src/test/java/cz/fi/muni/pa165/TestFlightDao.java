@@ -33,7 +33,7 @@ public class TestFlightDao extends BaseDaoTest {
 
     @Test
     @Transactional
-    public void testCreate() throws Exception {
+    public void testCreate() {
         Flight flight = createFlight("USA", "Czech Republic");
         flightDao.addFlight(flight);
         List<Flight> flights = em.createQuery("select f from Flight f", Flight.class).getResultList();
@@ -137,6 +137,19 @@ public class TestFlightDao extends BaseDaoTest {
                 && allFlights.contains(flight2)
                 && allFlights.contains(flight3));
 
+    }
+
+    @Test
+    public void testToString() {
+        String expectedOutput = "Flight:\n" +
+                "Departure location: Destination{country='USA', city='UNKOWN'}\n" +
+                "Departure time: 2017-12-24T08:30\n" +
+                "Arrival location: Destination{country='Czech Republic', city='UNKOWN'}\n" +
+                "Arrival time: 2017-12-24T20:30\n" +
+                "Airplane: Airplane{name='Boeing 737', type='Basic', capacity='100'}Stewards: [Steward{first name='John', surname='Dail'}]";
+
+        Flight createdFlight = createFlight("Czech Republic", "USA");
+        Assert.assertEquals(expectedOutput, createdFlight.toString());
     }
 
     @Test
