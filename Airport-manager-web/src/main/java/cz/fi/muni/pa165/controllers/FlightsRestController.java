@@ -1,6 +1,9 @@
 package cz.fi.muni.pa165.controllers;
 
+import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
+import cz.fi.muni.pa165.exceptions.FlightDataAccessException;
+import cz.fi.muni.pa165.exceptions.InvalidRequestException;
 import cz.fi.muni.pa165.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.facade.FlightFacade;
 import cz.fi.muni.pa165.hateoas.FlightResource;
@@ -9,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -34,6 +37,7 @@ public class FlightsRestController {
     ) {
 
         this.flightFacade = flightFacade;
+        this.flightResourceAssembler = flightResourceAssembler;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -53,4 +57,24 @@ public class FlightsRestController {
         return new ResponseEntity<>(flightResource, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public final void deleteFlight(@PathVariable("id") long id) throws Exception {
+        try {
+            flightFacade.deleteFlight(id);
+        } catch (FlightDataAccessException e) {
+            // TODO error handling
+        }
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public final HttpEntity<FlightResource> createFlight(@RequestBody @Valid FlightCreateDTO flightCreateDTO,
+                                                         BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            throw new InvalidRequestException("Failed validation");
+        }
+
+        Long id = flightFacade.createFlight(flightCreateDTO);
+        FlightResource flightResource = flightResourceAssembler.toResource(flightFacade.getFlight(id));
+        return new ResponseEntity<>(flightResource, HttpStatus.OK);
+    }
 }

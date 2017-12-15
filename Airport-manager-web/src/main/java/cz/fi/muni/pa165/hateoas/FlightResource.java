@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Robert Duriancik
  */
-@Relation(value = "flight", collectionRelation = "products")
+@Relation(value = "flight", collectionRelation = "flights")
 public class FlightResource extends ResourceSupport {
 
     @JsonProperty("id")
