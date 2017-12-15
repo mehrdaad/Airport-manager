@@ -41,12 +41,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Airport Manager</a>
+            <a class="navbar-brand" href="#!/main">Airport Manager</a>
         </div>
 
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Flights</a></li>
+                <li><a href="#!/flights">Flights</a></li>
                 <li><a href="#">Stewards</a></li>
                 <li><a href="#">Airplanes</a></li>
                 <li><a href="#">Destinations</a></li>
@@ -73,7 +73,7 @@
         <div ng-show="successAlert" class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" aria-label="Close" ng-click="hideSuccessAlert()"><span
                     aria-hidden="true">&times;</span></button>
-            <strong>Success !</strong> <span>{{successAlert}}</span>
+            <strong>Success!</strong> <span>{{successAlert}}</span>
         </div>
 
         <div ng-view></div>
