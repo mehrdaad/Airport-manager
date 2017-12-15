@@ -1,0 +1,24 @@
+<div>
+    <h1>Flights</h1>
+    <br/>
+    <table class="table table-condensed table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Departure Location</th>
+            <th>Arrival Location</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="flight in flights track by $index">
+            <td>{{flight.id}}</td>
+            <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
+            <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>
+            <td>{{flight.departureTime}}</td>
+            <td>{{flight.arrivalTime}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
