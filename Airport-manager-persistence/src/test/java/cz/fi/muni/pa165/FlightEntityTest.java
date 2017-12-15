@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Karel Jiranek
  */
-public class TestFlightEntity extends BaseDaoTest {
+public class FlightEntityTest extends BaseDaoTest {
     @Autowired
     private FlightDao flightDao;
 
