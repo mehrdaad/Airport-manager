@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165.controllers;
 
 import cz.fi.muni.pa165.dto.FlightDTO;
+import cz.fi.muni.pa165.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.facade.FlightFacade;
 import cz.fi.muni.pa165.hateoas.FlightResource;
 import cz.fi.muni.pa165.hateoas.FlightResourceAssembler;
@@ -47,7 +48,7 @@ public class FlightsRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public final HttpEntity<FlightResource> getFlight(@PathVariable("id") long id) throws Exception {
         FlightDTO flightDTO = flightFacade.getFlight(id);
-//        if (flightDTO == null) throw new ResourceNo
+        if (flightDTO == null) throw new ResourceNotFoundException("Flight " + id + " not found.");
         FlightResource flightResource = flightResourceAssembler.toResource(flightDTO);
         return new ResponseEntity<>(flightResource, HttpStatus.OK);
     }

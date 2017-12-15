@@ -32,5 +32,5 @@ airportManagerApp.run(function ($rootScope) {
 
 managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
-
+        $http.get('/')
     });
