@@ -5,8 +5,9 @@ var managerControllers = angular.module('managerControllers', []);
 /* Configures URL fragment routing  */
 airportManagerApp.config(['$routeProvider',
     function ($routeProvider) {
-        // $routeProvider.when()
-        //     .otherwise();
+        $routeProvider
+            .when('/flights', {templateUrl: 'partials/flights.html', controller: 'FlightsCtrl'})
+            .otherwise({redirectTo: '/'});
     }
 ]);
 
@@ -29,3 +30,7 @@ airportManagerApp.run(function ($rootScope) {
 /* Controllers */
 
 
+managerControllers.controller('FlightsCtrl',
+    function ($scope, $rootScope, $routeParams, $http) {
+
+    });
