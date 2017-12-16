@@ -5,6 +5,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
+/**
+ * The entity representing an user.
+ *
+ * @author Robert Duriancik
+ */
+
 @Entity
 @Table(name = "Users")
 public class User {
@@ -30,10 +36,10 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime registered;
 
+    private boolean isAdmin;
+
     public User() {
     }
-
-    private boolean isAdmin;
 
     public Long getId() {
         return id;
