@@ -19,6 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String passwordHash;
+
     @Column(nullable = false, unique = true)
     @NotNull
     @Pattern(regexp = ".+@.+\\....?")
@@ -47,6 +49,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getEmail() {
@@ -96,20 +106,13 @@ public class User {
 
         User user = (User) o;
 
-        if (isAdmin != user.isAdmin()) return false;
-        if (email != null ? !email.equals(user.getEmail()) : user.getEmail() != null) return false;
-        if (name != null ? !name.equals(user.getName()) : user.getName() != null) return false;
-        if (surname != null ? !surname.equals(user.getSurname()) : user.getSurname() != null) return false;
-        return registered != null ? registered.equals(user.getRegistered()) : user.getRegistered() == null;
+        return (email != null ? email.equals(user.getEmail()) : user.getEmail() == null);
     }
 
     @Override
     public int hashCode() {
-        int result = email != null ? email.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (surname != null ? surname.hashCode() : 0);
-        result = 31 * result + (registered != null ? registered.hashCode() : 0);
-        result = 31 * result + (isAdmin ? 1 : 0);
+        int result = 1;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
 
@@ -117,6 +120,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", passwordHash='" + passwordHash + '\'' +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
