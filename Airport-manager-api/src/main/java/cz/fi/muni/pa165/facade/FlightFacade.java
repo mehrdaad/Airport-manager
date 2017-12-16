@@ -54,6 +54,8 @@ public interface FlightFacade {
     Duration getFlightTime(FlightDTO flightDTO);
 
     /**
+     * Removes flight.
+     *
      * @param flightId id of the flight
      */
     void deleteFlight(Long flightId);
