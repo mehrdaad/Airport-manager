@@ -47,7 +47,7 @@ public interface StewardFacade {
      * @param firstName First steward name.
      * @param surName Second steward name.
      */
-    void createSteward(String firstName, String surName);
+    Long createSteward(String firstName, String surName);
 
     /**
      * Get all stewards flights in given time range. All departured flights in range are

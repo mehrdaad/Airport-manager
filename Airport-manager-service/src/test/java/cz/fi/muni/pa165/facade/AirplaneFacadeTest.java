@@ -76,6 +76,7 @@ public class AirplaneFacadeTest extends BaseFacadeTest {
     @Test
     public void testAddAirplane() throws Exception {
         when(mappingService.mapTo(airplaneDTO, Airplane.class)).thenReturn(airplane);
+        when(airplaneFacade.addAirplane(airplaneDTO)).thenReturn(airplane.getId());
 
         Long returnedId = airplaneFacade.addAirplane(airplaneDTO);
 

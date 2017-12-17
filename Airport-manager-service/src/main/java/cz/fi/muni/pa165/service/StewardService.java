@@ -42,7 +42,7 @@ public interface StewardService {
      * @param firstName Steward first name.
      * @param surName Steward surname.
      */
-    void createSteward(String firstName, String surName);
+    Long createSteward(String firstName, String surName);
 
     /**
      * Update steward/

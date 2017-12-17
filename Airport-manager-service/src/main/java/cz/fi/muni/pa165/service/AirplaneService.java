@@ -32,7 +32,7 @@ public interface AirplaneService {
      *
      *  @param airplane Airplane to add.
      */
-    void addAirplane(Airplane airplane);
+    Long addAirplane(Airplane airplane);
     
     /**
      * Update airplane.
