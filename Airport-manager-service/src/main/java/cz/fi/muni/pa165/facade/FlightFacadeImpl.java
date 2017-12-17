@@ -39,8 +39,7 @@ public class FlightFacadeImpl implements FlightFacade {
     @Override
     public Long createFlight(FlightCreateDTO flightCreateDTO) {
         Flight mappedFlight = mappingService.mapTo(flightCreateDTO, Flight.class);
-        flightService.addFlight(mappedFlight);
-        return mappedFlight.getId();
+        return flightService.addFlight(mappedFlight);
     }
 
     @Override

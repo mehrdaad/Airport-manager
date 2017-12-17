@@ -26,9 +26,10 @@ public class FlightServiceImpl implements FlightService {
     private FlightDao flightDao;
 
     @Override
-    public void addFlight(Flight flight) {
+    public Long addFlight(Flight flight) {
         try {
             flightDao.addFlight(flight);
+            return flight.getId();
         } catch (Exception e) {
             throw new FlightDataAccessException("Exception while adding flight: " + flight, e);
         }

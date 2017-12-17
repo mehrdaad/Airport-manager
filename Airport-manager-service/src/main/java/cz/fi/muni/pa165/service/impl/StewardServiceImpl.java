@@ -80,12 +80,13 @@ public class StewardServiceImpl implements StewardService{
      * @param surName Steward surname.
      */
     @Override
-    public void createSteward(String firstName, String surName){
+    public Long createSteward(String firstName, String surName){
         try{
         Steward steward = new Steward();
         steward.setFirstName(firstName);
         steward.setSurname(surName);
         stewardDao.createSteward(steward);
+        return steward.getId();
         }catch (Exception e) {
             throw new StewardDataAccessException("Exception while deleting steward.", e);
         }
