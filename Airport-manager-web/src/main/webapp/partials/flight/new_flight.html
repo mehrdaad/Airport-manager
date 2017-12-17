@@ -17,9 +17,54 @@
         </select>
     </div>
     <div class="form-group">
+        <label class="control-label">Departure Time</label>
+        <div class='input-group date' id='departureTime'>
+            <input type='text' class="form-control" ng-model="flight.departureTime"/>
+            <span class="input-group-addon">
+                     <span class="glyphicon glyphicon-calendar"></span>
+             </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Arrival Time</label>
+        <div class='input-group date' id='arrivalTime' ng-model="flight.arrivalTime">
+            <input type='text' class="form-control"/>
+            <span class="input-group-addon">
+                     <span class="glyphicon glyphicon-calendar"></span>
+             </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="airplaneId" class="control-label">Airplane</label>
+        <select id="airplaneId" class="form-control" ng.model="flight.airplaneId">
+            <option ng-repeat="airplane in airplanes" value="{{airplane.id}}">
+                {{airplane.name}}
+            </option>
+        </select>
+    </div>
+    <div class="form-group">
 
     </div>
-    <div class="form-group"></div>
-    <div class="form-group"></div>
-    <div class="form-group"></div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#departureTime').datetimepicker({
+                'showClear': true,
+                'showClose': true,
+                'toolbarPlacement': 'top'
+            });
+            $('#arrivalTime').datetimepicker({
+                'useCurrent': false,
+                'showClear': true,
+                'showClose': true,
+                'toolbarPlacement': 'top'
+            });
+            $('#departureTime').on("dp.change", function (e) {
+                $('#arrivalTime').data("DateTimePicker").minDate(e.date);
+            });
+            $('#arrivalTime').on("dp.change", function (e) {
+                $('#departureTime').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+    </script>
 </form>
