@@ -17,12 +17,12 @@ import java.util.List;
 @Service
 public interface FlightService {
     /**
-     * Saves Save a {@link Flight} entity instance in the persistence storage.
+     * Saves a {@link Flight} entity instance in the persistence storage.
      *
      * @param flight the {@link Flight} entity instance
      * @throws cz.fi.muni.pa165.exceptions.FlightDataAccessException in case of any exception on a DAO layer
      */
-    void addFlight(Flight flight);
+    Long addFlight(Flight flight);
 
     /**
      * Removes a {@link Flight} entity instance from the persistence storage.

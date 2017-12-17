@@ -46,9 +46,10 @@ public class AirplaneServiceImpl implements AirplaneService {
     }
 
     @Override
-    public void addAirplane(Airplane airplane) {
+    public Long addAirplane(Airplane airplane) {
         try {
             airplaneDao.addAirplane(airplane);
+            return airplane.getId();
         } catch (Exception e) {
             throw new AirplaneDataAccessException("Exception while adding airplane: " + airplane, e);
         }

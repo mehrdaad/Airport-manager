@@ -47,8 +47,8 @@ public class StewardFacadeImpl implements StewardFacade {
     }
 
     @Override
-    public void createSteward(String firstName, String surName){
-        stewardService.createSteward(firstName, surName);
+    public Long createSteward(String firstName, String surName){
+        return stewardService.createSteward(firstName, surName);
     }
 
     @Override
