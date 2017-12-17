@@ -26,14 +26,17 @@ public class Flight {
     @NotNull
     private Destination arrivalLocation;
 
+    @NotNull
     private LocalDateTime arrivalTime;
 
+    @NotNull
     private LocalDateTime departureTime;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Steward> stewards = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @NotNull
     private Airplane airPlane;
 
     /**
