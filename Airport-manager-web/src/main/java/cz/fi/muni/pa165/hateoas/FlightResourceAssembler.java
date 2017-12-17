@@ -35,6 +35,6 @@ public class FlightResourceAssembler extends ResourceAssemblerSupport<FlightDTO,
         } catch (Exception e) {
             // TODO log
         }
-        return null;
+        return flightResource;
     }
 }

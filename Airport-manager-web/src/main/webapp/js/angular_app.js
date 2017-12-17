@@ -51,7 +51,8 @@ managerControllers.controller('MainCtrl', function () {
 managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
         $http.get('/pa165/api/flights').then(function (response) {
-            $scope.flights = response.data._embedded.flights
+            $scope.flights = response.data._embedded.flights;
+            formatFlightsDates($scope.flights);
         })
     }
 );
@@ -96,3 +97,20 @@ managerControllers.directive('convertToInt', function () {
         }
     };
 });
+
+function formatFlightsDates(flights) {
+    for (var i = 0; i < flights.length; ++i) {
+        formatFlightDates(flights[i]);
+    }
+}
+
+function formatFlightDates(flight) {
+    var rawDepartureDate = flight.departureTime;
+    var rawArrivalDate = flight.arrivalTime;
+    flight.departureTime = formatDate(rawDepartureDate);
+    flight.arrivalTime = formatDate(rawArrivalDate);
+}
+
+function formatDate(date) {
+    return moment(date).format("DD.MM.YYYY - HH:mm");
+}

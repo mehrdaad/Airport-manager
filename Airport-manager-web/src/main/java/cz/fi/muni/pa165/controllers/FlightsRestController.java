@@ -8,6 +8,8 @@ import cz.fi.muni.pa165.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.facade.FlightFacade;
 import cz.fi.muni.pa165.hateoas.FlightResource;
 import cz.fi.muni.pa165.hateoas.FlightResourceAssembler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
@@ -29,6 +31,7 @@ public class FlightsRestController {
 
     private FlightFacade flightFacade;
     private FlightResourceAssembler flightResourceAssembler;
+    private final static Logger logger = LoggerFactory.getLogger(FlightsRestController.class);
 
 
     public FlightsRestController(
