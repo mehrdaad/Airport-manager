@@ -68,7 +68,31 @@ managerControllers.controller('FlightDetailCtrl',
 );
 
 managerControllers.controller('NewFlightCtrl',
-    function () {
-
+    function ($scope, $routeParams, $http, $location, $rootScope) {
+        $scope.flight = {
+            'departureLocationId': '',
+            'arrivalLocationId': '',
+            'departureTime': '',
+            'arrivalTime': '',
+            'airplaneId': '',
+            'stewardsIds': []
+        };
     }
 );
+
+// defines new directive (HTML attribute "convert-to-int") for conversion between string and int
+// of the value of a selection list in a form
+// without this, the value of the selected option is always a string, not an integer
+managerControllers.directive('convertToInt', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModel) {
+            ngModel.$parsers.push(function (val) {
+                return parseInt(val, 10);
+            });
+            ngModel.$formatters.push(function (val) {
+                return '' + val;
+            });
+        }
+    };
+});

@@ -1,3 +1,25 @@
-<div>
+<h1>Record Flight</h1>
+<form name="form-horizontal">
+    <div class="form-group">
+        <label for="departureLocationId" class="control-label">Departure Location</label>
+        <select id="departureLocationId" class="form-control" ng.model="flight.departureLocationId">
+            <option ng-repeat="departureDestination in departureDestinations" value="{{departureDestination.id}}">
+                {{departureDestination.city}}, {{departureDestination.country}}
+            </option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="arrivalLocationId" class="control-label">Arrival Location</label>
+        <select id="arrivalLocationId" class="form-control" ng.model="flight.arrivalLocationId">
+            <option ng-repeat="arrivalDestination in arrivalDestinations" value="{{arrivalDestination.id}}">
+                {{arrivalDestination.city}}, {{arrivalDestination.country}}
+            </option>
+        </select>
+    </div>
+    <div class="form-group">
 
-</div>
+    </div>
+    <div class="form-group"></div>
+    <div class="form-group"></div>
+    <div class="form-group"></div>
+</form>
