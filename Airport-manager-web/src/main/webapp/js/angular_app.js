@@ -10,6 +10,14 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/main.html',
                 controller: "MainCtrl"
             })
+            .when('/stewards', {
+                templateUrl: 'partials//steward/stewards.html',
+                controller: 'StewardsCtrl'
+            })
+            .when('/steward/:stewardId', {
+                templateUrl: 'partials/steward/steward_detail.html',
+                controller: 'StewardDetailCtrl'
+            })
             .when('/flights', {
                 templateUrl: 'partials//flight/flights.html',
                 controller: 'FlightsCtrl'
@@ -21,6 +29,10 @@ airportManagerApp.config(['$routeProvider',
             .when('/airplanes', {
                 templateUrl: 'partials//airplane/airplanes.html',
                 controller: 'AirplanesCtrl'
+            })
+            .when('/airplane/:airplaneId', {
+                templateUrl: 'partials/airplane/airplane_detail.html',
+                controller: 'AirplaneDetailCtrl'
             })
             .when('/destination', {
                 templateUrl: 'partials/destination.html',
@@ -57,10 +69,46 @@ managerControllers.controller('MainCtrl',
 );
 
 managerControllers.controller('AirplanesCtrl',
-    function ($scope, $rootScope, $routeParams, $http) {
-        $http.get('/pa165/api/airplanes').then(function (response) {
-            $scope.airplanes = response.data._embedded.airplanes;
-        })
+    function ($scope, $rootScope, $routeParams, $http, $location) {
+        var get = function () {
+            $http.get('/pa165/api/airplanes').then(function (response) {
+                $scope.airplanes = response.data._embedded.airplanes;
+                $scope.goToAirplaneDetail = function (airplaneId) {
+                    console.log(airplaneId);
+                    $location.path('/airplane/' + airplaneId);
+                }
+            });
+        };
+        get();
+        $scope.airplane = {
+            'name': '',
+            'type': '',
+            'capacity': ''
+        };
+
+        $scope.createAirplane = function (airplane) {
+            console.log(airplane);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/airplanes/create',
+                data: airplane
+            }).then(function (response) {
+                console.log(response);
+                get();
+            });
+        }
+
+    }
+);
+
+managerControllers.controller('AirplaneDetailCtrl',
+    function ($scope, $routeParams, $http) {
+        var airplaneId = $routeParams.airplaneId;
+        $http.get('/pa165/api/airplanes/' + airplaneId).then(function (response) {
+            console.log(response.data);
+            var airplane = response.data;
+            $scope.airplane = airplane;
+        });
     }
 );
 
@@ -191,7 +239,74 @@ managerControllers.controller('DestinationCtrl',
         };
 
 
-    });
+    }
+);
+
+managerControllers.controller('StewardsCtrl',
+    function ($scope, $rootScope, $routeParams, $http, $location) {
+        var get = function () {
+            $http.get('/pa165/api/stewards').then(function (response) {
+                $scope.stewards = response.data._embedded.stewards;
+                $scope.goToStewardDetail = function (stewardId) {
+                    $location.path('/steward/' + stewardId);
+                }
+            });
+        };
+        get();
+        $scope.steward = {
+            'firstname': '',
+            'surname': ''
+        };
+        $scope.createSteward = function (steward) {
+            console.log(steward);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/stewards/create',
+                data: steward
+            }).then(function (response) {
+                console.log(response);
+                get();
+            });
+        }
+    }
+);
+
+managerControllers.controller('StewardDetailCtrl',
+    function ($scope, $routeParams, $http, $location) {
+        var stewardId = $routeParams.stewardId;
+        $http.get('/pa165/api/stewards/' + stewardId).then(function (response) {
+            var steward = response.data;
+            $scope.steward = steward;
+        });
+        $http.get('/pa165/api/stewards/' + stewardId + '/flights').then(function (response) {
+            console.log(response);
+            var flights = response.data._embedded.flights;
+            $scope.flights = flights;
+        });
+        $scope.deleteSteward = function (stewardId) {
+            $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
+                $location.path('/stewards');
+            });
+        }
+    }
+);
+
+managerControllers.controller('NewStewardCtrl',
+    function ($scope, $routeParams, $http, $location, $rootScope) {
+        $scope.flight = {
+            'departureLocationId': '',
+            'arrivalLocationId': '',
+            'departureTime': '',
+            'arrivalTime': '',
+            'airplaneId': '',
+            'stewardsIds': []
+        };
+
+        $scope.create = function (flight) {
+            console.log(flight);
+        }
+    }
+);
 
 managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
