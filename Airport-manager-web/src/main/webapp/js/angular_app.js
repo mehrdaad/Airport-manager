@@ -18,10 +18,6 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/steward/steward_detail.html',
                 controller: 'StewardDetailCtrl'
             })
-            .when('/newsteward', {
-                templateUrl: 'partials/steward/new_steward.html',
-                controller: 'NewStewardCtrl'
-            })
             .otherwise({redirectTo: '/main'});
     }
 ]);
@@ -51,12 +47,30 @@ managerControllers.controller('MainCtrl', function () {
 
 managerControllers.controller('StewardsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
-        $http.get('/pa165/api/stewards').then(function (response) {
-            $scope.stewards = response.data._embedded.stewards;
-            $scope.goToStewardDetail = function (stewardId) {
-                $location.path('/steward/' + stewardId);
-            }
-        })
+        var get = function () {
+            $http.get('/pa165/api/stewards').then(function (response) {
+                $scope.stewards = response.data._embedded.stewards;
+                $scope.goToStewardDetail = function (stewardId) {
+                    $location.path('/steward/' + stewardId);
+                }
+            });
+        };
+        get();
+        $scope.steward = {
+                'firstname': '',
+                'surname': ''
+        };
+        $scope.createSteward = function (steward) {
+            console.log(steward);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/stewards/create',
+                data: steward
+            }).then(function (response) {
+                console.log(response);
+                get();
+            });
+        }
     }
 );
 

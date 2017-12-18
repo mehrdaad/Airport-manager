@@ -20,5 +20,41 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary" href="#!/newsteward"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New steward</a>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New steward
+    </button>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Create steward</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="form" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">Firstname</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="firstname" id="firstname" ng-model="steward.firstname" required>
+                                <p class="help-block" ng-show="form.firstname.$error.required">firstname cannot be empty</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname" class="col-sm-2 control-label">Surname</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="surname" id="surname" ng-model="steward.surname" required>
+                                <p class="help-block" ng-show="form.surname.$error.required">surname cannot be empty</p>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="createSteward(steward)" data-dismiss="modal" disabled="{{((!form.firstname.$valid) || (!form.surname.$valid))}}">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
