@@ -49,7 +49,7 @@
                 <li class="active"><a href="#">Flights</a></li>
                 <li><a href="#">Stewards</a></li>
                 <li><a href="#!/airplanes">Airplanes</a></li>
-                <li><a href="#">Destinations</a></li>
+                <li><a href="#!/destination">Destinations</a></li>
             </ul>
             <button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>
         </div>
