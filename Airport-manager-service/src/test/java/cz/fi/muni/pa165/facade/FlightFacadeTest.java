@@ -106,6 +106,22 @@ public class FlightFacadeTest extends BaseFacadeTest {
     }
 
     @Test
+    public void testGetCurrentFlights() {
+        List<Flight> flights = new ArrayList<>();
+        List<FlightDTO> flightsDto = new ArrayList<>();
+        flights.add(flight);
+        flightsDto.add(flightDTO);
+
+        when(flightService.getCurrentFlights(any(LocalDateTime.class))).thenReturn(flights);
+        when(mappingService.mapTo(flights, FlightDTO.class)).thenReturn(flightsDto);
+
+        List<FlightDTO> temp = flightFacade.getCurrentFlights(LocalDateTime.now());
+
+        Assert.assertEquals(flightsDto, temp);
+        verify(flightService).getCurrentFlights(any(LocalDateTime.class));
+    }
+
+    @Test
     public void testGetFlightTime() {
         Duration dur = Duration.ofDays(1);
 

@@ -2,6 +2,8 @@ package cz.fi.muni.pa165.hateoas;
 
 import cz.fi.muni.pa165.controllers.FlightsRestController;
 import cz.fi.muni.pa165.dto.FlightDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FlightResourceAssembler extends ResourceAssemblerSupport<FlightDTO, FlightResource> {
 
+    private final static Logger logger = LoggerFactory.getLogger(FlightResourceAssembler.class);
     private EntityLinks entityLinks;
 
     public FlightResourceAssembler(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -33,7 +36,7 @@ public class FlightResourceAssembler extends ResourceAssemblerSupport<FlightDTO,
             Link self = entityLinks.linkToSingleResource(FlightDTO.class, id).withSelfRel();
             flightResource.add(self);
         } catch (Exception e) {
-            // TODO log
+            logger.error("FlightResource error", e);
         }
         return flightResource;
     }

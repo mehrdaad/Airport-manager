@@ -19,6 +19,8 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -230,6 +232,23 @@ public class FlightServiceTest extends BaseServiceTest{
     @Test(expectedExceptions = NullPointerException.class)
     public void getFlightsSinceNull() {
         flightService.getFlightsSince(null);
+    }
+
+    @Test
+    public void getCurrentFlights() {
+        LocalDateTime current = LocalDateTime.of(2000, 4, 1, 15, 30);
+        when(flightDao.getAllFlights()).thenReturn(Arrays.asList(flight, flight2));
+
+        List<Flight> result = flightService.getCurrentFlights(current);
+
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(Collections.singletonList(flight), result);
+        verify(flightDao).getAllFlights();
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void getCurrentFlightsNull() {
+        List<Flight> result = flightService.getCurrentFlights(null);
     }
 
     @Test

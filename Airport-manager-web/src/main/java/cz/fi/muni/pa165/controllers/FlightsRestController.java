@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -67,6 +68,18 @@ public class FlightsRestController {
         } catch (FlightDataAccessException e) {
             // TODO error handling
         }
+    }
+
+    @RequestMapping(value = "/current", method = RequestMethod.GET)
+    public final HttpEntity<Resources<FlightResource>> getCurrentFlights() {
+        List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(
+                flightFacade.getCurrentFlights(LocalDateTime.now()));
+
+        Resources<FlightResource> flightResources = new Resources<>(resourcesCollection,
+                linkTo(FlightsRestController.class).withSelfRel(),
+                linkTo(FlightsRestController.class).slash("/create").withRel("create"));
+
+        return new ResponseEntity<>(flightResources, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

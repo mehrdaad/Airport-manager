@@ -54,6 +54,11 @@ public class FlightFacadeImpl implements FlightFacade {
     }
 
     @Override
+    public List<FlightDTO> getCurrentFlights(LocalDateTime now) {
+        return mappingService.mapTo(flightService.getCurrentFlights(now), FlightDTO.class);
+    }
+
+    @Override
     public Duration getFlightTime(FlightDTO flightDTO) {
         Flight flight = mappingService.mapTo(flightDTO, Flight.class);
         return flightService.getFlightTime(flight);

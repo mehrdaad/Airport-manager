@@ -61,7 +61,7 @@ public interface FlightService {
      * @param flight the {@link Flight} entity instance
      * @return duration of the flight represented by a {@link Duration} object
      * @throws IllegalArgumentException if the flight id is null
-     * @throws NullPointerException if the flight is null
+     * @throws NullPointerException     if the flight is null
      */
     Duration getFlightTime(Flight flight);
 
@@ -76,12 +76,22 @@ public interface FlightService {
     List<Flight> getFlightsSince(LocalDateTime sinceDateTime);
 
     /**
+     * Find all instances of the {@link Flight} entity in the persistence storage
+     * which are currently in the sky.
+     *
+     * @param now the current date
+     * @return list of currently flying {@link Flight} entities
+     * @throws NullPointerException if the now parameter is null
+     */
+    List<Flight> getCurrentFlights(LocalDateTime now);
+
+    /**
      * Adds steward to the flight.
      *
      * @param flight  the {@link Flight} entity instance
      * @param steward the {@link Steward} entity instance
      * @throws IllegalArgumentException if the steward is already on the flight
-     * @throws NullPointerException if flight or steward is null
+     * @throws NullPointerException     if flight or steward is null
      */
     void addSteward(Flight flight, Steward steward);
 }
