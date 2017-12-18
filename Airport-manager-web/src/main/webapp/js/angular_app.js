@@ -267,6 +267,7 @@ managerControllers.controller('StewardDetailCtrl',
             console.log(response);
             var flights = response.data._embedded.flights;
             $scope.flights = flights;
+            formatFlightsDates($scope.flights);
         });
         $scope.deleteSteward = function (stewardId) {
             $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
@@ -292,6 +293,23 @@ managerControllers.controller('NewStewardCtrl',
         }
     }
 );
+
+function formatFlightsDates(flights) {
+    for (var i = 0; i < flights.length; ++i) {
+        formatFlightDates(flights[i]);
+    }
+}
+
+function formatFlightDates(flight) {
+    var rawDepartureDate = flight.departureTime;
+    var rawArrivalDate = flight.arrivalTime;
+    flight.departureTime = formatDate(rawDepartureDate);
+    flight.arrivalTime = formatDate(rawArrivalDate);
+}
+
+function formatDate(date) {
+    return moment(date).format("DD.MM.YYYY - h:mm A");
+}
 
 // defines new directive (HTML attribute "convert-to-int") for conversion between string and int
 // of the value of a selection list in a form
