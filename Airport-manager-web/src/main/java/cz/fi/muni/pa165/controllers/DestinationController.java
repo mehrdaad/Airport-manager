@@ -11,7 +11,6 @@ import cz.fi.muni.pa165.hateoas.DestinationResource;
 import cz.fi.muni.pa165.hateoas.DestinationResourceAssembler;
 import cz.fi.muni.pa165.hateoas.FlightResource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
@@ -35,7 +34,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class DestinationController {
 
     private FlightFacade flightFacade;
-    private EntityLinks entityLinks;
     private  DestinationResourceAssembler destinationResourceAssembler;
     private DestinationFacade destinationFacade;
 
@@ -43,18 +41,15 @@ public class DestinationController {
      * Create DestinationController
      * @param destinationFacade Destination facade.
      * @param destinationResourceAssembler Destination Resource Assembler.
-     * @param entityLinks  Entity links
      */
     public DestinationController(
             @Autowired DestinationFacade destinationFacade,
             @Autowired FlightFacade flightFacade,
             @SuppressWarnings("SpringJavaAutowiringInspection")
-            @Autowired DestinationResourceAssembler destinationResourceAssembler,
-            @Autowired EntityLinks entityLinks
+            @Autowired DestinationResourceAssembler destinationResourceAssembler
     ) {
         this.destinationFacade = destinationFacade;
         this.destinationResourceAssembler = destinationResourceAssembler;
-        this.entityLinks = entityLinks;
         this.flightFacade = flightFacade;
     }
 

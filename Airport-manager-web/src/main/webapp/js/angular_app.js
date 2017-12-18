@@ -114,21 +114,21 @@ managerControllers.controller('DestinationCtrl',
                 $scope.destinations = response.data._embedded.destinations;
             }.then(
                 function success(response) {
-                    console.log('deleted product ' + product.id + ' on server');
+                    console.log('deleted destination ' + product.id + ' on server');
                     //display confirmation alert
-                    $rootScope.successAlert = 'Deleted product "' + product.name + '"';
+                    $rootScope.successAlert = 'Deleted destination "' + product.name + '"';
                     //load new list of all products
                     loadAdminProducts($http, $scope);
                 },
                 function error(response) {
-                    console.log("error when deleting product");
+                    console.log("error when deleting destination");
                     console.log(response);
                     switch (response.data.code) {
                         case 'ResourceNotFoundException':
-                            $rootScope.errorAlert = 'Cannot delete non-existent product ! ';
+                            $rootScope.errorAlert = 'Cannot delete non-existent destination ! ';
                             break;
                         default:
-                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
+                            $rootScope.errorAlert = 'Cannot delete destination ! Reason given by the server: ' + response.data.message;
                             break;
                     }
                 }
@@ -148,7 +148,7 @@ managerControllers.controller('DestinationCtrl',
                 url: '/pa165/api/destination/create',
                 data: newDestination
             }).then(function success(response) {
-                console.log('created product');
+                console.log('created destination');
                 var createdDestination = response.data;
                 //display confirmation alert
                 $rootScope.successAlert = 'Destination "' + createdDestination.country + '" was created';
@@ -156,7 +156,7 @@ managerControllers.controller('DestinationCtrl',
                 $location.path("/pa165/destination");
             }, function error(response) {
                 //display error
-                console.log("error when creating product");
+                console.log("error when creating destination");
                 switch (response.data.code) {
                     case 'InvalidRequestException':
                         $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
@@ -174,7 +174,7 @@ managerControllers.controller('DestinationCtrl',
                 url: '/pa165/api/destination/update',
                 data: destination
             }).then(function success(response) {
-                console.log('created product');
+                console.log('created destination');
                 var createdDestination = response.data;
                 //display confirmation alert
                 $rootScope.successAlert = 'Destination "' + createdDestination.country + '" was updated';
@@ -182,7 +182,7 @@ managerControllers.controller('DestinationCtrl',
                 $location.path("/pa165/destination");
             }, function error(response) {
                 //display error
-                console.log("error when creating product");
+                console.log("error when creating destination");
                 switch (response.data.code) {
                     case 'InvalidRequestException':
                         $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
@@ -214,7 +214,7 @@ managerControllers.controller('FlightsCtrl',
                 function error(response) {
                     switch (response.data.code) {
                         case 'ResourceNotFoundException':
-                            $rootScope.errorAlert = 'Cannot delete non-existent product ! ';
+                            $rootScope.errorAlert = 'Cannot delete non-existent flight ! ';
                             break;
                         default:
                             $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
@@ -241,6 +241,15 @@ managerControllers.controller('FlightDetailCtrl',
 
 managerControllers.controller('NewFlightCtrl',
     function ($scope, $routeParams, $http, $location, $rootScope) {
+
+        $http.get('/pa165/api/airplanes').then(function (response) {
+            $scope.airplanes = response.data._embedded.airplanes;
+        });
+
+        $http.get('/pa165/api/destination').then(function (response) {
+            $scope.destinations = response.data._embedded.destinations;
+        });
+
         $scope.flight = {
             'departureLocationId': '',
             'arrivalLocationId': '',
@@ -248,6 +257,20 @@ managerControllers.controller('NewFlightCtrl',
             'arrivalTime': '',
             'airplaneId': '',
             'stewardsIds': []
+        };
+
+        $scope.optionsDepartureTime = {
+            useCurrent: true,
+            showClear: true,
+            showClose: true,
+            toolbarPlacement: 'top'
+        };
+
+        $scope.optionsArrivalTime = {
+            useCurrent: false,
+            showClear: true,
+            showClose: true,
+            toolbarPlacement: 'top'
         };
 
         $scope.create = function (flight) {
@@ -297,3 +320,70 @@ function formatFlightDates(flight) {
 function formatDate(date) {
     return moment(date).format("DD.MM.YYYY - h:mm A");
 }
+
+airportManagerApp.directive('datetimepicker', [
+    '$timeout',
+    function ($timeout) {
+        return {
+            restrict: 'EA',
+            require: 'ngModel',
+            scope: {
+                options: '=?',
+                onChange: '&?',
+                onClick: '&?'
+            },
+            link: function ($scope, $element, $attrs, ngModel) {
+                var dpElement = $element.parent().hasClass('input-group') ? $element.parent() : $element;
+
+                $scope.$watch('options', function (newValue) {
+                    var dtp = dpElement.data('DateTimePicker');
+                    $.map(newValue, function (value, key) {
+                        dtp[key](value);
+                    });
+                }, true);
+
+                ngModel.$render = function () {
+                    // if value is undefined/null do not do anything, unless some date was set before
+                    var currentDate = dpElement.data('DateTimePicker').date();
+                    if (!ngModel.$viewValue && currentDate) {
+                        dpElement.data('DateTimePicker').clear();
+                    } else if (ngModel.$viewValue) {
+                        // otherwise make sure it is moment object
+                        if (!moment.isMoment(ngModel.$viewValue)) {
+                            ngModel.$setViewValue(moment(ngModel.$viewValue));
+                        }
+                        dpElement.data('DateTimePicker').date(ngModel.$viewValue);
+                    }
+                };
+
+                var isDateEqual = function (d1, d2) {
+                    return moment.isMoment(d1) && moment.isMoment(d2) && d1.valueOf() === d2.valueOf();
+                };
+
+                dpElement.on('dp.change', function (e) {
+                    if (!isDateEqual(e.date, ngModel.$viewValue)) {
+                        var newValue = e.date === false ? null : e.date;
+                        ngModel.$setViewValue(newValue._d);
+
+                        $timeout(function () {
+                            if (typeof $scope.onChange === 'function') {
+                                $scope.onChange();
+                            }
+                        });
+                    }
+                });
+
+
+                dpElement.on('click', function () {
+                    $timeout(function () {
+                        if (typeof $scope.onClick === 'function') {
+                            $scope.onClick();
+                        }
+                    });
+                });
+
+                dpElement.datetimepicker($scope.options);
+            }
+        };
+    }
+]);
