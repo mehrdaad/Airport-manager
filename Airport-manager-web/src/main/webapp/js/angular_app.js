@@ -49,13 +49,34 @@ managerControllers.controller('MainCtrl', function () {
 
 managerControllers.controller('AirplanesCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
-        $http.get('/pa165/api/airplanes').then(function (response) {
-            $scope.airplanes = response.data._embedded.airplanes;
-            $scope.goToAirplaneDetail = function (airplaneId) {
-                console.log(airplaneId);
-                $location.path('/airplane/' + airplaneId);
-            }
-        })
+        var get = function () {
+            $http.get('/pa165/api/airplanes').then(function (response) {
+                $scope.airplanes = response.data._embedded.airplanes;
+                $scope.goToAirplaneDetail = function (airplaneId) {
+                    console.log(airplaneId);
+                    $location.path('/airplane/' + airplaneId);
+                }
+            });
+        };
+        get();
+        $scope.airplane = {
+            'name': '',
+            'type': '',
+            'capacity': ''
+        };
+
+        $scope.createAirplane = function (airplane) {
+            console.log(airplane);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/airplanes/create',
+                data: airplane
+            }).then(function (response) {
+                console.log(response);
+                get();
+            });
+        }
+
     }
 );
 
