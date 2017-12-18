@@ -10,6 +10,10 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/main.html',
                 controller: "MainCtrl"
             })
+            .when('/login', {
+                templateUrl: 'partials/login.html',
+                controller: 'LoginCtrl'
+            })
             .when('/airplanes', {
                 templateUrl: 'partials//airplane/airplanes.html',
                 controller: 'AirplanesCtrl'
@@ -24,6 +28,21 @@ airportManagerApp.config(['$routeProvider',
             .otherwise({redirectTo: '/main'});
     }
 ]);
+
+airportManagerApp.constant('AUTH_EVENTS', {
+    loginSuccess: 'auth-login-success',
+    loginFailed: 'auth-login-failed',
+    logoutSuccess: 'auth-logout-success',
+    sessionTimeout: 'auth-session-timeout',
+    notAuthenticated: 'auth-not-authenticated',
+    notAuthorized: 'auth-not-authorized'
+});
+
+airportManagerApp.constant('USER_ROLES', {
+    admin: 'admin',
+    user: 'user',
+    guest: 'guest'
+});
 
 
 /*
@@ -45,6 +64,23 @@ airportManagerApp.run(function ($rootScope) {
 managerControllers.controller('MainCtrl', function () {
 
 });
+
+managerControllers.controller('LoginCtrl',
+    function ($scope, $rootScope, $routeParams, $http, $location) {
+        $scope.credentials = {
+            username: '',
+            password: ''
+        };
+
+        $scope.login = function (credentials) {
+            // AuthService.login(credentials).then(function (user) {
+            //     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+            //     $scope.setCurrentUser(user);
+            // }, function () {
+            //     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+            // });
+        };
+    });
 
 
 managerControllers.controller('AirplanesCtrl',
@@ -77,10 +113,6 @@ function loadDestinations($http, $scope) {
         $scope.destinations = response.data._embedded.destinations;
     });
 }
-
-
-
-
 
 managerControllers.controller('DestinationCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
