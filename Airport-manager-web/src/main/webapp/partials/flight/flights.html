@@ -107,43 +107,19 @@
                             <label for="stewardIds" class="col-sm-2 control-label">Stewards</label>
                             <div class="col-sm-10">
                                 <select id="stewardIds" class="form-control" ng-model="flight.stewardsIds" multiple
-                                        data-actions-box="true">
+                                        ng-multiple="true" convert-to-ints>
                                     <option ng-repeat="steward in stewards" value="{{steward.id}}">
-                                        {{steward.name}}
+                                        {{steward.firstName}} {{steward.surname}}
                                     </option>
                                 </select>
                             </div>
                         </div>
-
-
-                        <!--<script type="text/javascript">-->
-                        <!--$(function () {-->
-                        <!--// $('#departureTime').datetimepicker({-->
-                        <!--//     'showClear': true,-->
-                        <!--//     'showClose': true,-->
-                        <!--//     'toolbarPlacement': 'top'-->
-                        <!--// });-->
-                        <!--// $('#arrivalTime').datetimepicker({-->
-                        <!--//     'useCurrent': false,-->
-                        <!--//     'showClear': true,-->
-                        <!--//     'showClose': true,-->
-                        <!--//     'toolbarPlacement': 'top'-->
-                        <!--// });-->
-                        <!--// $('#departureTime').on("dp.change", function (e) {-->
-                        <!--//     $('#arrivalTime').data("DateTimePicker").minDate(e.date);-->
-                        <!--// });-->
-                        <!--// $('#arrivalTime').on("dp.change", function (e) {-->
-                        <!--//     $('#departureTime').data("DateTimePicker").maxDate(e.date);-->
-                        <!--// });-->
-                        <!--$('#stewardIds').selectpicker();-->
-                        <!--});-->
-                        <!--</script>-->
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" ng-click="createFlight(flight)" data-dismiss="modal"
-                    >Save changes
+                            ng-disabled="!form.$valid">Save changes
                     </button>
                 </div>
             </div>

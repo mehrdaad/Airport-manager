@@ -291,23 +291,6 @@ managerControllers.controller('StewardDetailCtrl',
     }
 );
 
-managerControllers.controller('NewStewardCtrl',
-    function ($scope, $routeParams, $http, $location, $rootScope) {
-        $scope.flight = {
-            'departureLocationId': '',
-            'arrivalLocationId': '',
-            'departureTime': '',
-            'arrivalTime': '',
-            'airplaneId': '',
-            'stewardsIds': []
-        };
-
-        $scope.create = function (flight) {
-            console.log(flight);
-        }
-    }
-);
-
 managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         loadFlights($scope, $http);
@@ -322,6 +305,10 @@ managerControllers.controller('FlightsCtrl',
 
         $http.get('/pa165/api/destination').then(function (response) {
             $scope.destinations = response.data._embedded.destinations;
+        });
+
+        $http.get('/pa165/api/stewards').then(function (response) {
+            $scope.stewards = response.data._embedded.stewards;
         });
 
         $scope.flight = {
@@ -357,7 +344,7 @@ managerControllers.controller('FlightsCtrl',
             }).then(function success(response) {
                     var createdFlight = response.data;
                     $rootScope.successAlert = 'A new flight "' + createdFlight.id + '" was created';
-                    $location.path("/flights");
+                    loadFlights($scope, $http);
                 },
                 function error(response) {
                     console.log(response);
@@ -366,7 +353,7 @@ managerControllers.controller('FlightsCtrl',
                             $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
                             break;
                         default:
-                            $rootScope.errorAlert = 'Cannot create product ! Reason given by the server: ' + response.data.message;
+                            $rootScope.errorAlert = 'Cannot create flight ! Reason given by the server: ' + response.data.message + response.data.code;
                             break;
                     }
                 });
@@ -384,7 +371,7 @@ managerControllers.controller('FlightsCtrl',
                             $rootScope.errorAlert = 'Cannot delete non-existent flight ! ';
                             break;
                         default:
-                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
+                            $rootScope.errorAlert = 'Cannot delete flight ! Reason given by the server: ' + response.data.message;
                             break;
                     }
                 }
@@ -418,6 +405,28 @@ managerControllers.directive('convertToInt', function () {
             });
             ngModel.$formatters.push(function (val) {
                 return '' + val;
+            });
+        }
+    };
+});
+
+managerControllers.directive('convertToInts', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModel) {
+            ngModel.$parsers.push(function (val) {
+                var parsed = [];
+                for (var i = 0; i < val.length; ++i) {
+                    parsed.push(parseInt(val[i], 10))
+                }
+                return parsed;
+            });
+            ngModel.$formatters.push(function (val) {
+                var formatted = [];
+                for (var i = 0; i < val.length; ++i) {
+                    formatted.push('' + val[i])
+                }
+                return formatted;
             });
         }
     };
