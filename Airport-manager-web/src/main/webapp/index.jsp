@@ -46,9 +46,9 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Flights</a></li>
-                <li><a href="/pa165/#!/stewards">Stewards</a></li>
-                <li><a href="#">Airplanes</a></li>
-                <li><a href="#">Destinations</a></li>
+                <li><a href="#!/stewards">Stewards</a></li>
+                <li><a href="#!/airplanes">Airplanes</a></li>
+                <li><a href="#!/destination">Destinations</a></li>
             </ul>
             <button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>
         </div>

@@ -1,0 +1,41 @@
+<!-- Author: Jan Cakl -->
+
+<div>
+    <h1>Airplanes</h1>
+    <br/>
+
+    <a href="#!/newairplane" class="btn btn-primary">
+
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+
+        Record Airplane
+
+    </a>
+
+
+    <table class="table table-condensed table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Capacity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="airplane in airplanes track by $index">
+            <th>{{airplane.id}}</th>
+            <td>{{airplane.name}}</td>
+            <td>{{airplane.type}}</td>
+            <td>{{airplane.capacity}}</td>
+            <td>
+
+                <button ng-click="goToAirplaneDetail(airplane.id)" type="submit" class="btn btn-primary">Detail</button>
+
+                <button ng-click="deleteAirplane(airplane)" type="submit" class="btn btn-danger">Delete</button>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
