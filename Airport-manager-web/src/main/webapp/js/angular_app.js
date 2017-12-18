@@ -18,10 +18,6 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/flight/flight_detail.html',
                 controller: 'FlightDetailCtrl'
             })
-            .when('/newflight', {
-                templateUrl: 'partials/flight/new_flight.html',
-                controller: 'NewFlightCtrl'
-            })
             .when('/airplanes', {
                 templateUrl: 'partials//airplane/airplanes.html',
                 controller: 'AirplanesCtrl'
@@ -205,43 +201,6 @@ managerControllers.controller('FlightsCtrl',
             $location.path('/flight/' + flightId);
         };
 
-
-        $scope.deleteFlight = function (flight) {
-            $http.delete(flight._links.delete.href).then(
-                function success(response) {
-                    $rootScope.successAlert = 'Deleted Flight "' + flight.id + '"';
-                },
-                function error(response) {
-                    switch (response.data.code) {
-                        case 'ResourceNotFoundException':
-                            $rootScope.errorAlert = 'Cannot delete non-existent flight ! ';
-                            break;
-                        default:
-                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
-                            break;
-                    }
-                }
-            )
-        };
-
-    }
-);
-
-managerControllers.controller('FlightDetailCtrl',
-    function ($scope, $routeParams, $http) {
-        var flightId = $routeParams.flightId;
-        $http.get('/pa165/api/flights/' + flightId).then(function (response) {
-            console.log(response.data);
-            var flight = response.data;
-            formatFlightDates(flight);
-            $scope.flight = flight;
-        });
-    }
-);
-
-managerControllers.controller('NewFlightCtrl',
-    function ($scope, $routeParams, $http, $location, $rootScope) {
-
         $http.get('/pa165/api/airplanes').then(function (response) {
             $scope.airplanes = response.data._embedded.airplanes;
         });
@@ -273,7 +232,7 @@ managerControllers.controller('NewFlightCtrl',
             toolbarPlacement: 'top'
         };
 
-        $scope.create = function (flight) {
+        $scope.createFlight = function (flight) {
             console.log(flight);
 
             $http({
@@ -297,6 +256,38 @@ managerControllers.controller('NewFlightCtrl',
                     }
                 });
         };
+
+
+        $scope.deleteFlight = function (flight) {
+            $http.delete(flight._links.delete.href).then(
+                function success(response) {
+                    $rootScope.successAlert = 'Deleted Flight "' + flight.id + '"';
+                },
+                function error(response) {
+                    switch (response.data.code) {
+                        case 'ResourceNotFoundException':
+                            $rootScope.errorAlert = 'Cannot delete non-existent flight ! ';
+                            break;
+                        default:
+                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
+                            break;
+                    }
+                }
+            )
+        };
+
+    }
+);
+
+managerControllers.controller('FlightDetailCtrl',
+    function ($scope, $routeParams, $http) {
+        var flightId = $routeParams.flightId;
+        $http.get('/pa165/api/flights/' + flightId).then(function (response) {
+            console.log(response.data);
+            var flight = response.data;
+            formatFlightDates(flight);
+            $scope.flight = flight;
+        });
     }
 );
 
