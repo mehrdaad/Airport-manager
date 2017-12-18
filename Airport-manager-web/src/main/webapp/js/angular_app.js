@@ -48,7 +48,7 @@ managerControllers.controller('MainCtrl', function () {
 
 
 managerControllers.controller('AirplanesCtrl',
-    function ($scope, $rootScope, $routeParams, $http) {
+    function ($scope, $rootScope, $routeParams, $http, $location) {
         $http.get('/pa165/api/airplanes').then(function (response) {
             $scope.airplanes = response.data._embedded.airplanes;
             $scope.goToAirplaneDetail = function (airplaneId) {
