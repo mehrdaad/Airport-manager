@@ -44,12 +44,12 @@
             <a class="navbar-brand" href="#">Airport Manager</a>
         </div>
 
-        <div id="navbar" class="collapse navbar-collapse">
+        <div id="navbar" class="collapse navbar-collapse" ng-controller="HeaderController">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Flights</a></li>
+                <li><a href="#">Flights</a></li>
                 <li><a href="#">Stewards</a></li>
                 <li><a href="#">Airplanes</a></li>
-                <li><a href="#">Destinations</a></li>
+                <li><a href="#!/destination">Destinations</a></li>
             </ul>
             <button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>
         </div>
@@ -84,6 +84,7 @@
         <p>&copy;&nbsp;Masaryk University</p>
     </footer>
 </div>
+
 
 </body>
 </html>
