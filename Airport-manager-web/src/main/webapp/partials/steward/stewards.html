@@ -52,7 +52,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-click="createSteward(steward)" data-dismiss="modal" disabled="{{((!form.firstname.$valid) || (!form.surname.$valid))}}">Save changes</button>
+                    <button type="button" class="btn btn-primary" ng-click="createSteward(steward)" data-dismiss="modal"  ng-disabled="form.surname.$error.required || form.firstname.$error.required">Save changes</button>
                 </div>
             </div>
         </div>
