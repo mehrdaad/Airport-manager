@@ -317,7 +317,7 @@ managerControllers.controller('FlightsCtrl',
             'departureTime': '',
             'arrivalTime': '',
             'airplaneId': '',
-            'stewardsIds': []
+            'stewardIds': []
         };
 
         $scope.optionsDepartureTime = {

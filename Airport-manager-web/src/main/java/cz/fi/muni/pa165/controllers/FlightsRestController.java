@@ -92,6 +92,7 @@ public class FlightsRestController {
         }
 
         Long id = flightFacade.createFlight(flightCreateDTO);
+        logger.warn(id.toString());
         FlightResource flightResource = flightResourceAssembler.toResource(flightFacade.getFlight(id));
         return new ResponseEntity<>(flightResource, HttpStatus.OK);
     }

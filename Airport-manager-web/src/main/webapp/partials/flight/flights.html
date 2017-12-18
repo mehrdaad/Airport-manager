@@ -106,7 +106,7 @@
                         <div class="form-group">
                             <label for="stewardIds" class="col-sm-2 control-label">Stewards</label>
                             <div class="col-sm-10">
-                                <select id="stewardIds" class="form-control" ng-model="flight.stewardsIds" multiple
+                                <select id="stewardIds" class="form-control" ng-model="flight.stewardIds" multiple
                                         ng-multiple="true" convert-to-ints>
                                     <option ng-repeat="steward in stewards" value="{{steward.id}}">
                                         {{steward.firstName}} {{steward.surname}}
