@@ -5,11 +5,21 @@ var managerControllers = angular.module('managerControllers', []);
 /* Configures URL fragment routing  */
 airportManagerApp.config(['$routeProvider',
     function ($routeProvider) {
-        $routeProvider.
-        when('/destination', {templateUrl: 'partials/destination.html', controller: 'DestinationCtrl'}).
-        otherwise({redirectTo: '/pa165'});
-    }]
-);
+        $routeProvider
+            .when('/main', {
+                templateUrl: 'partials/main.html',
+                controller: "MainCtrl"
+            })
+            .when('/airplanes', {
+                templateUrl: 'partials//airplane/airplanes.html',
+                controller: 'AirplanesCtrl'
+            })
+            .when('/destination', {
+                templateUrl: 'partials/destination.html',
+                controller: 'DestinationCtrl'})
+            .otherwise({redirectTo: '/main'});
+    }
+]);
 
 
 /*
@@ -26,6 +36,20 @@ airportManagerApp.run(function ($rootScope) {
         $rootScope.errorAlert = undefined;
     };
 });
+
+/* Controllers */
+managerControllers.controller('MainCtrl', function () {
+
+});
+
+
+managerControllers.controller('AirplanesCtrl',
+    function ($scope, $rootScope, $routeParams, $http) {
+        $http.get('/pa165/api/airplanes').then(function (response) {
+            $scope.airplanes = response.data._embedded.airplanes;
+        })
+    }
+);
 
 /* Controllers */
 /* Destination controller*/
@@ -157,10 +181,4 @@ managerControllers.controller('DestinationCtrl',
         };
 
 
-});
-
-
-
-
-
-
+    });
