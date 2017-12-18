@@ -99,7 +99,7 @@ public class FlightFacadeImpl implements FlightFacade {
         Flight flight = flightService.getFlight(flightId);
         Airplane airplane = airplaneService.findById(airplaneId);
 
-        flight.setAirPlane(airplane);
+        flight.setAirplane(airplane);
         flightService.updateFlight(flight);
     }
 }
