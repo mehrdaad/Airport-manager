@@ -275,7 +275,28 @@ managerControllers.controller('NewFlightCtrl',
 
         $scope.create = function (flight) {
             console.log(flight);
-        }
+
+            $http({
+                method: 'POST',
+                url: '/pa165/api/flights/create',
+                data: flight
+            }).then(function success(response) {
+                    var createdFlight = response.data;
+                    $rootScope.successAlert = 'A new flight "' + createdFlight.id + '" was created';
+                    $location.path("/flights");
+                },
+                function error(response) {
+                    console.log(response);
+                    switch (response.data.code) {
+                        case 'InvalidRequestException':
+                            $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
+                            break;
+                        default:
+                            $rootScope.errorAlert = 'Cannot create product ! Reason given by the server: ' + response.data.message;
+                            break;
+                    }
+                });
+        };
     }
 );
 

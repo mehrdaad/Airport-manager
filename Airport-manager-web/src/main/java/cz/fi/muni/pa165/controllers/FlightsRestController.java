@@ -86,6 +86,7 @@ public class FlightsRestController {
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public final HttpEntity<FlightResource> createFlight(@RequestBody @Valid FlightCreateDTO flightCreateDTO,
                                                          BindingResult bindingResult) throws Exception {
+        logger.warn(flightCreateDTO.toString());
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Failed validation");
         }
