@@ -145,7 +145,7 @@ public class StewardFacadeTest extends BaseFacadeTest {
         arrivalTime_past = LocalDateTime.of(2030, Month.NOVEMBER, 25, 20, 30);
         
         Flight flight1 = new Flight();
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
         flight1.setDepartureTime(departureTime_past);
         flight1.setArrivalTime(arrivalTime_past);
         flight1.setDepartureLocation(new Destination());
@@ -173,7 +173,7 @@ public class StewardFacadeTest extends BaseFacadeTest {
         arrivalTime_past = LocalDateTime.of(2030, Month.NOVEMBER, 25, 20, 30);
         
         Flight flight1 = new Flight();
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
         flight1.setDepartureTime(departureTime_past);
         flight1.setArrivalTime(arrivalTime_past);
         flight1.setDepartureLocation(new Destination());

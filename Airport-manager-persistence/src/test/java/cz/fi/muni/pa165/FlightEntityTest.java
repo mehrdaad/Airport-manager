@@ -58,7 +58,7 @@ public class FlightEntityTest extends BaseDaoTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSetAirPlaneNull() {
-        flight.setAirPlane(null);
+        flight.setAirplane(null);
     }
 
 }

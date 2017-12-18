@@ -18,6 +18,14 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/steward/steward_detail.html',
                 controller: 'StewardDetailCtrl'
             })
+            .when('/flights', {
+                templateUrl: 'partials//flight/flights.html',
+                controller: 'FlightsCtrl'
+            })
+            .when('/flight/:flightId', {
+                templateUrl: 'partials/flight/flight_detail.html',
+                controller: 'FlightDetailCtrl'
+            })
             .when('/airplanes', {
                 templateUrl: 'partials//airplane/airplanes.html',
                 controller: 'AirplanesCtrl'
@@ -28,7 +36,8 @@ airportManagerApp.config(['$routeProvider',
             })
             .when('/destination', {
                 templateUrl: 'partials/destination.html',
-                controller: 'DestinationCtrl'})
+                controller: 'DestinationCtrl'
+            })
             .otherwise({redirectTo: '/main'});
     }
 ]);
@@ -50,10 +59,14 @@ airportManagerApp.run(function ($rootScope) {
 });
 
 /* Controllers */
-managerControllers.controller('MainCtrl', function () {
-
-});
-
+managerControllers.controller('MainCtrl',
+    function ($scope, $rootScope, $routeParams, $http) {
+        $http.get('/pa165/api/flights/current').then(function (response) {
+            $scope.currentFlights = response.data._embedded.flights;
+            formatFlightsDates($scope.currentFlights);
+        })
+    }
+);
 
 managerControllers.controller('AirplanesCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
@@ -100,12 +113,14 @@ managerControllers.controller('AirplaneDetailCtrl',
 );
 
 /* Controllers */
+
 /* Destination controller*/
 function loadDestinations($http, $scope) {
     $http.get('/pa165/api/destination/').then(function (response) {
         $scope.destinations = response.data._embedded.destinations;
     });
 }
+
 
 managerControllers.controller('DestinationCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
@@ -143,28 +158,27 @@ managerControllers.controller('DestinationCtrl',
                 $scope.destinations = response.data._embedded.destinations;
             }.then(
                 function success(response) {
-                    console.log('deleted product ' + product.id + ' on server');
+                    console.log('deleted destination ' + product.id + ' on server');
                     //display confirmation alert
-                    $rootScope.successAlert = 'Deleted product "' + product.name + '"';
+                    $rootScope.successAlert = 'Deleted destination "' + product.name + '"';
                     //load new list of all products
                     loadAdminProducts($http, $scope);
                 },
                 function error(response) {
-                    console.log("error when deleting product");
+                    console.log("error when deleting destination");
                     console.log(response);
                     switch (response.data.code) {
                         case 'ResourceNotFoundException':
-                            $rootScope.errorAlert = 'Cannot delete non-existent product ! ';
+                            $rootScope.errorAlert = 'Cannot delete non-existent destination ! ';
                             break;
                         default:
-                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
+                            $rootScope.errorAlert = 'Cannot delete destination ! Reason given by the server: ' + response.data.message;
                             break;
                     }
                 }
             ));
             loadDestinations($http, $scope);
         };
-
 
         $scope.newDestination = {
             'city': '',
@@ -178,7 +192,7 @@ managerControllers.controller('DestinationCtrl',
                 url: '/pa165/api/destination/create',
                 data: newDestination
             }).then(function success(response) {
-                console.log('created product');
+                console.log('created destination');
                 var createdDestination = response.data;
                 //display confirmation alert
                 $rootScope.successAlert = 'Destination "' + createdDestination.country + '" was created';
@@ -186,7 +200,7 @@ managerControllers.controller('DestinationCtrl',
                 $location.path("/pa165/destination");
             }, function error(response) {
                 //display error
-                console.log("error when creating product");
+                console.log("error when creating destination");
                 switch (response.data.code) {
                     case 'InvalidRequestException':
                         $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
@@ -204,7 +218,7 @@ managerControllers.controller('DestinationCtrl',
                 url: '/pa165/api/destination/update',
                 data: destination
             }).then(function success(response) {
-                console.log('created product');
+                console.log('created destination');
                 var createdDestination = response.data;
                 //display confirmation alert
                 $rootScope.successAlert = 'Destination "' + createdDestination.country + '" was updated';
@@ -212,7 +226,7 @@ managerControllers.controller('DestinationCtrl',
                 $location.path("/pa165/destination");
             }, function error(response) {
                 //display error
-                console.log("error when creating product");
+                console.log("error when creating destination");
                 switch (response.data.code) {
                     case 'InvalidRequestException':
                         $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
@@ -223,9 +237,10 @@ managerControllers.controller('DestinationCtrl',
                 }
             });
         };
+
+
     }
 );
-
 
 managerControllers.controller('StewardsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
@@ -239,8 +254,8 @@ managerControllers.controller('StewardsCtrl',
         };
         get();
         $scope.steward = {
-                'firstname': '',
-                'surname': ''
+            'firstname': '',
+            'surname': ''
         };
         $scope.createSteward = function (steward) {
             console.log(steward);
@@ -276,20 +291,105 @@ managerControllers.controller('StewardDetailCtrl',
     }
 );
 
-managerControllers.controller('NewStewardCtrl',
-    function ($scope, $routeParams, $http, $location, $rootScope) {
+managerControllers.controller('FlightsCtrl',
+    function ($scope, $rootScope, $routeParams, $http, $location) {
+        loadFlights($scope, $http);
+        $scope.goToFlightDetail = function (flightId) {
+            console.log(flightId);
+            $location.path('/flight/' + flightId);
+        };
+
+        $http.get('/pa165/api/airplanes').then(function (response) {
+            $scope.airplanes = response.data._embedded.airplanes;
+        });
+
+        $http.get('/pa165/api/destination').then(function (response) {
+            $scope.destinations = response.data._embedded.destinations;
+        });
+
+        $http.get('/pa165/api/stewards').then(function (response) {
+            $scope.stewards = response.data._embedded.stewards;
+        });
+
         $scope.flight = {
             'departureLocationId': '',
             'arrivalLocationId': '',
             'departureTime': '',
             'arrivalTime': '',
             'airplaneId': '',
-            'stewardsIds': []
+            'stewardIds': []
         };
 
-        $scope.create = function (flight) {
+        $scope.optionsDepartureTime = {
+            useCurrent: true,
+            showClear: true,
+            showClose: true,
+            toolbarPlacement: 'top'
+        };
+
+        $scope.optionsArrivalTime = {
+            useCurrent: false,
+            showClear: true,
+            showClose: true,
+            toolbarPlacement: 'top'
+        };
+
+        $scope.createFlight = function (flight) {
             console.log(flight);
-        }
+
+            $http({
+                method: 'POST',
+                url: '/pa165/api/flights/create',
+                data: flight
+            }).then(function success(response) {
+                    var createdFlight = response.data;
+                    $rootScope.successAlert = 'A new flight "' + createdFlight.id + '" was created';
+                    loadFlights($scope, $http);
+                },
+                function error(response) {
+                    console.log(response);
+                    switch (response.data.code) {
+                        case 'InvalidRequestException':
+                            $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
+                            break;
+                        default:
+                            $rootScope.errorAlert = 'Cannot create flight ! Reason given by the server: ' + response.data.message + response.data.code;
+                            break;
+                    }
+                });
+        };
+
+
+        $scope.deleteFlight = function (flight) {
+            $http.delete(flight._links.delete.href).then(
+                function success(response) {
+                    $rootScope.successAlert = 'Deleted Flight "' + flight.id + '"';
+                },
+                function error(response) {
+                    switch (response.data.code) {
+                        case 'ResourceNotFoundException':
+                            $rootScope.errorAlert = 'Cannot delete non-existent flight ! ';
+                            break;
+                        default:
+                            $rootScope.errorAlert = 'Cannot delete flight ! Reason given by the server: ' + response.data.message;
+                            break;
+                    }
+                }
+            )
+        };
+
+    }
+);
+
+managerControllers.controller('FlightDetailCtrl',
+    function ($scope, $routeParams, $http) {
+        var flightId = $routeParams.flightId;
+        $http.get('/pa165/api/flights/' + flightId).then(function (response) {
+            console.log(response.data);
+            var flight = response.data;
+            formatFlightDates(flight);
+            $scope.flight = flight;
+        });
     }
 );
 
@@ -309,3 +409,117 @@ managerControllers.directive('convertToInt', function () {
         }
     };
 });
+
+managerControllers.directive('convertToInts', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModel) {
+            ngModel.$parsers.push(function (val) {
+                var parsed = [];
+                for (var i = 0; i < val.length; ++i) {
+                    parsed.push(parseInt(val[i], 10))
+                }
+                return parsed;
+            });
+            ngModel.$formatters.push(function (val) {
+                var formatted = [];
+                for (var i = 0; i < val.length; ++i) {
+                    formatted.push('' + val[i])
+                }
+                return formatted;
+            });
+        }
+    };
+});
+
+function loadFlights($scope, $http) {
+    $http.get('/pa165/api/flights').then(function (response) {
+        console.log(response.data);
+        $scope.flights = response.data._embedded.flights;
+        formatFlightsDates($scope.flights);
+    });
+}
+
+function formatFlightsDates(flights) {
+    for (var i = 0; i < flights.length; ++i) {
+        formatFlightDates(flights[i]);
+    }
+}
+
+function formatFlightDates(flight) {
+    var rawDepartureDate = flight.departureTime;
+    var rawArrivalDate = flight.arrivalTime;
+    flight.departureTime = formatDate(rawDepartureDate);
+    flight.arrivalTime = formatDate(rawArrivalDate);
+}
+
+function formatDate(date) {
+    return moment(date).format("DD.MM.YYYY - h:mm A");
+}
+
+airportManagerApp.directive('datetimepicker', [
+    '$timeout',
+    function ($timeout) {
+        return {
+            restrict: 'EA',
+            require: 'ngModel',
+            scope: {
+                options: '=?',
+                onChange: '&?',
+                onClick: '&?'
+            },
+            link: function ($scope, $element, $attrs, ngModel) {
+                var dpElement = $element.parent().hasClass('input-group') ? $element.parent() : $element;
+
+                $scope.$watch('options', function (newValue) {
+                    var dtp = dpElement.data('DateTimePicker');
+                    $.map(newValue, function (value, key) {
+                        dtp[key](value);
+                    });
+                }, true);
+
+                ngModel.$render = function () {
+                    // if value is undefined/null do not do anything, unless some date was set before
+                    var currentDate = dpElement.data('DateTimePicker').date();
+                    if (!ngModel.$viewValue && currentDate) {
+                        dpElement.data('DateTimePicker').clear();
+                    } else if (ngModel.$viewValue) {
+                        // otherwise make sure it is moment object
+                        if (!moment.isMoment(ngModel.$viewValue)) {
+                            ngModel.$setViewValue(moment(ngModel.$viewValue));
+                        }
+                        dpElement.data('DateTimePicker').date(ngModel.$viewValue);
+                    }
+                };
+
+                var isDateEqual = function (d1, d2) {
+                    return moment.isMoment(d1) && moment.isMoment(d2) && d1.valueOf() === d2.valueOf();
+                };
+
+                dpElement.on('dp.change', function (e) {
+                    if (!isDateEqual(e.date, ngModel.$viewValue)) {
+                        var newValue = e.date === false ? null : e.date;
+                        ngModel.$setViewValue(newValue._d);
+
+                        $timeout(function () {
+                            if (typeof $scope.onChange === 'function') {
+                                $scope.onChange();
+                            }
+                        });
+                    }
+                });
+
+
+                dpElement.on('click', function () {
+                    $timeout(function () {
+                        if (typeof $scope.onClick === 'function') {
+                            $scope.onClick();
+                        }
+                    });
+                });
+
+                dpElement.datetimepicker($scope.options);
+            }
+        };
+    }
+]);

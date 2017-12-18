@@ -4,8 +4,6 @@ import cz.fi.muni.pa165.controllers.FlightsRestController;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +22,7 @@ public class FlightResourceAssembler extends ResourceAssemblerSupport<FlightDTO,
 
     private final static Logger logger = LoggerFactory.getLogger(FlightResourceAssembler.class);
 
-    public FlightResourceAssembler(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-                                   @Autowired EntityLinks entityLinks) {
+    public FlightResourceAssembler() {
         super(FlightsRestController.class, FlightResource.class);
     }
 

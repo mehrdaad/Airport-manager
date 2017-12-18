@@ -63,9 +63,9 @@ public class FlightDaoTest extends BaseDaoTest {
         selectedFlight.getDepartureLocation().setCountry("Slovakia");
         selectedFlight.getArrivalLocation().setCity("Paris");
         selectedFlight.getArrivalLocation().setCountry("France");
-        selectedFlight.getAirPlane().setType("Huge");
-        selectedFlight.getAirPlane().setName("My little airoplane");
-        selectedFlight.getAirPlane().setCapacity(777);
+        selectedFlight.getAirplane().setType("Huge");
+        selectedFlight.getAirplane().setName("My little airoplane");
+        selectedFlight.getAirplane().setCapacity(777);
         selectedFlight.getStewards().get(0).setSurname("Novicky");
         selectedFlight.getStewards().get(0).setFirstName("Mike");
         flightDao.updateFlight(selectedFlight);
@@ -79,8 +79,8 @@ public class FlightDaoTest extends BaseDaoTest {
         Assert.assertEquals("Paris", selectedFlight.getArrivalLocation().getCity());
         Assert.assertEquals("France", selectedFlight.getArrivalLocation().getCountry());
         Assert.assertEquals(arrivalTime, selectedFlight.getArrivalTime());
-        Assert.assertEquals(777, selectedFlight.getAirPlane().getCapacity());
-        Assert.assertEquals("My little airoplane", selectedFlight.getAirPlane().getName());
+        Assert.assertEquals(777, selectedFlight.getAirplane().getCapacity());
+        Assert.assertEquals("My little airoplane", selectedFlight.getAirplane().getName());
         Assert.assertEquals("Mike", selectedFlight.getStewards().get(0).getFirstName());
         Assert.assertEquals("Novicky", selectedFlight.getStewards().get(0).getSurname());
 
@@ -219,7 +219,7 @@ public class FlightDaoTest extends BaseDaoTest {
         flight.setDepartureTime(departureTime);
         flight.setArrivalTime(arrivalTime);
         flight.setStewards(stewards);
-        flight.setAirPlane(airPlane);
+        flight.setAirplane(airPlane);
         return flight;
     }
 
