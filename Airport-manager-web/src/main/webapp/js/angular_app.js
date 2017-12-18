@@ -14,6 +14,10 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials//airplane/airplanes.html',
                 controller: 'AirplanesCtrl'
             })
+            .when('/airplane/:airplaneId', {
+                templateUrl: 'partials/airplane/airplane_detail.html',
+                controller: 'AirplaneDetailCtrl'
+            })
             .when('/destination', {
                 templateUrl: 'partials/destination.html',
                 controller: 'DestinationCtrl'})
@@ -47,7 +51,22 @@ managerControllers.controller('AirplanesCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
         $http.get('/pa165/api/airplanes').then(function (response) {
             $scope.airplanes = response.data._embedded.airplanes;
+            $scope.goToAirplaneDetail = function (airplaneId) {
+                console.log(airplaneId);
+                $location.path('/airplane/' + airplaneId);
+            }
         })
+    }
+);
+
+managerControllers.controller('AirplaneDetailCtrl',
+    function ($scope, $routeParams, $http) {
+        var airplaneId = $routeParams.airplaneId;
+        $http.get('/pa165/api/airplanes/' + airplaneId).then(function (response) {
+            console.log(response.data);
+            var airplane = response.data;
+            $scope.airplane = airplane;
+        });
     }
 );
 
