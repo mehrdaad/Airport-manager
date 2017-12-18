@@ -6,6 +6,8 @@ import cz.fi.muni.pa165.exceptions.InvalidRequestException;
 import cz.fi.muni.pa165.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.exceptions.StewardDataAccessException;
 import cz.fi.muni.pa165.facade.StewardFacade;
+import cz.fi.muni.pa165.hateoas.FlightResource;
+import cz.fi.muni.pa165.hateoas.FlightResourceAssembler;
 import cz.fi.muni.pa165.hateoas.StewardResource;
 import cz.fi.muni.pa165.hateoas.StewardResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +33,24 @@ public class StewardRestController {
 
     private StewardFacade stewardFacade;
     private StewardResourceAssembler assembler;
+    private FlightResourceAssembler flightResourceAssembler;
 
     public StewardRestController(@Autowired StewardFacade flightFacade,
-                                 @Autowired StewardResourceAssembler flightResourceAssembler) {
+                                 @Autowired StewardResourceAssembler stewardResourceAssembler,
+                                 @Autowired FlightResourceAssembler flightResourceAssembler) {
 
         this.stewardFacade = flightFacade;
-        this.assembler = flightResourceAssembler;
+        this.assembler = stewardResourceAssembler;
+        this.flightResourceAssembler = flightResourceAssembler;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public final HttpEntity<Resources<StewardResource>> getStewards() {
         List<StewardResource> resourcesCollection = assembler.toResources(stewardFacade.listAllStewards());
-        Resources<StewardResource> flightResources = new Resources<>(resourcesCollection,
+        Resources<StewardResource> stewardResources = new Resources<>(resourcesCollection,
                 linkTo(StewardRestController.class).withSelfRel(),
                 linkTo(StewardRestController.class).slash("/create").withRel("create"));
-        return new ResponseEntity<>(flightResources, HttpStatus.OK);
+        return new ResponseEntity<>(stewardResources, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -54,6 +59,13 @@ public class StewardRestController {
         if (stewardDTO == null) throw new ResourceNotFoundException("Steward " + id + " not found.");
         StewardResource resource = assembler.toResource(stewardDTO);
         return new ResponseEntity<>(resource, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/flights", method = RequestMethod.GET)
+    public final ResponseEntity<Resources<FlightResource>> getStewardFlights(@PathVariable("id") long id) throws Exception {
+        List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(stewardFacade.getAllStewardFlights(id));
+        Resources<FlightResource> flightResources = new Resources<>(resourcesCollection);
+        return new ResponseEntity<>(flightResources, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

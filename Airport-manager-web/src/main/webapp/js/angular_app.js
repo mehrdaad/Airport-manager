@@ -80,12 +80,17 @@ managerControllers.controller('StewardDetailCtrl',
         $http.get('/pa165/api/stewards/' + stewardId).then(function (response) {
             var steward = response.data;
             $scope.steward = steward;
-            $scope.deleteSteward = function (stewardId) {
-                $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
-                        $location.path('/stewards');
-                });
-            }
         });
+        $http.get('/pa165/api/stewards/' + stewardId + '/flights').then(function (response) {
+            console.log(response);
+            var flights = response.data._embedded.flights;
+            $scope.flights = flights;
+        });
+        $scope.deleteSteward = function (stewardId) {
+            $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
+                $location.path('/stewards');
+            });
+        }
     }
 );
 

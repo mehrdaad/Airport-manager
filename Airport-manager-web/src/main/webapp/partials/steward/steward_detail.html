@@ -11,7 +11,7 @@
                     <th> </th>
                     <th> &nbsp;</th>
                 </tr>
-            </thead>
+            </thead>;
             <tbody>
                 <tr>
                     <th>Firstname</th>
@@ -29,15 +29,19 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Firstname</th>
-                <th>Surname</th>
+                <th>Departure Location</th>
+                <th>Arrival Location</th>
+                <th>Departure</th>
+                <th>Arrival</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="steward in stewards | orderBy : 'id' track by $index">
-                <td>{{steward.id}}</td>
-                <td>{{steward.firstname}}</td>
-                <td>{{steward.surname}}</td>
+            <tr ng-repeat="flight in flights track by $index">
+                <td>{{flight.id}}</td>
+                <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
+                <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>
+                <td>{{flight.departureTime}}</td>
+                <td>{{flight.arrivalTime}}</td>
             </tr>
             </tbody>
         </table>
@@ -46,6 +50,8 @@
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <button ng-click="deleteSteward(steward.id)">Delete</button>
+        <button type="button" class="btn btn-danger" ng-click="deleteSteward(steward.id)">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+        </button>
     </div>
 </div>
