@@ -10,6 +10,14 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/main.html',
                 controller: "MainCtrl"
             })
+            .when('/stewards', {
+                templateUrl: 'partials//steward/stewards.html',
+                controller: 'StewardsCtrl'
+            })
+            .when('/steward/:stewardId', {
+                templateUrl: 'partials/steward/steward_detail.html',
+                controller: 'StewardDetailCtrl'
+            })
             .when('/airplanes', {
                 templateUrl: 'partials//airplane/airplanes.html',
                 controller: 'AirplanesCtrl'
@@ -99,34 +107,30 @@ function loadDestinations($http, $scope) {
     });
 }
 
-
-
-
-
 managerControllers.controller('DestinationCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
-        $scope.sortType     = 'country';
-        $scope.sortReverse  = false;
-        $scope.searchQuery   = '';
+        $scope.sortType = 'country';
+        $scope.sortReverse = false;
+        $scope.searchQuery = '';
         loadDestinations($http, $scope);
 
         $scope.newField = {};
         $scope.editing = false;
 
 
-        $scope.editAppKey = function(field) {
+        $scope.editAppKey = function (field) {
             $scope.editing = $scope.appkeys.indexOf(field);
             $scope.newField = angular.copy(field);
         };
 
-        $scope.saveField = function(index) {
+        $scope.saveField = function (index) {
             if ($scope.editing !== false) {
                 $scope.appkeys[$scope.editing] = $scope.newField;
                 $scope.editing = false;
             }
         };
 
-        $scope.cancel = function(index) {
+        $scope.cancel = function (index) {
             if ($scope.editing !== false) {
                 $scope.appkeys[$scope.editing] = $scope.newField;
                 $scope.editing = false;
@@ -153,7 +157,7 @@ managerControllers.controller('DestinationCtrl',
                             $rootScope.errorAlert = 'Cannot delete non-existent product ! ';
                             break;
                         default:
-                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: '+response.data.message;
+                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
                             break;
                     }
                 }
@@ -188,7 +192,7 @@ managerControllers.controller('DestinationCtrl',
                         $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
                         break;
                     default:
-                        $rootScope.errorAlert = 'Cannot create destination ! Reason given by the server: '+response.data.message;
+                        $rootScope.errorAlert = 'Cannot create destination ! Reason given by the server: ' + response.data.message;
                         break;
                 }
             });
@@ -214,11 +218,94 @@ managerControllers.controller('DestinationCtrl',
                         $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
                         break;
                     default:
-                        $rootScope.errorAlert = 'Cannot update destination ! Reason given by the server: '+response.data.message;
+                        $rootScope.errorAlert = 'Cannot update destination ! Reason given by the server: ' + response.data.message;
                         break;
                 }
             });
         };
+    }
+);
 
 
-    });
+managerControllers.controller('StewardsCtrl',
+    function ($scope, $rootScope, $routeParams, $http, $location) {
+        var get = function () {
+            $http.get('/pa165/api/stewards').then(function (response) {
+                $scope.stewards = response.data._embedded.stewards;
+                $scope.goToStewardDetail = function (stewardId) {
+                    $location.path('/steward/' + stewardId);
+                }
+            });
+        };
+        get();
+        $scope.steward = {
+                'firstname': '',
+                'surname': ''
+        };
+        $scope.createSteward = function (steward) {
+            console.log(steward);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/stewards/create',
+                data: steward
+            }).then(function (response) {
+                console.log(response);
+                get();
+            });
+        }
+    }
+);
+
+managerControllers.controller('StewardDetailCtrl',
+    function ($scope, $routeParams, $http, $location) {
+        var stewardId = $routeParams.stewardId;
+        $http.get('/pa165/api/stewards/' + stewardId).then(function (response) {
+            var steward = response.data;
+            $scope.steward = steward;
+        });
+        $http.get('/pa165/api/stewards/' + stewardId + '/flights').then(function (response) {
+            console.log(response);
+            var flights = response.data._embedded.flights;
+            $scope.flights = flights;
+        });
+        $scope.deleteSteward = function (stewardId) {
+            $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
+                $location.path('/stewards');
+            });
+        }
+    }
+);
+
+managerControllers.controller('NewStewardCtrl',
+    function ($scope, $routeParams, $http, $location, $rootScope) {
+        $scope.flight = {
+            'departureLocationId': '',
+            'arrivalLocationId': '',
+            'departureTime': '',
+            'arrivalTime': '',
+            'airplaneId': '',
+            'stewardsIds': []
+        };
+
+        $scope.create = function (flight) {
+            console.log(flight);
+        }
+    }
+);
+
+// defines new directive (HTML attribute "convert-to-int") for conversion between string and int
+// of the value of a selection list in a form
+// without this, the value of the selected option is always a string, not an integer
+managerControllers.directive('convertToInt', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModel) {
+            ngModel.$parsers.push(function (val) {
+                return parseInt(val, 10);
+            });
+            ngModel.$formatters.push(function (val) {
+                return '' + val;
+            });
+        }
+    };
+});
