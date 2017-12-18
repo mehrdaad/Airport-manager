@@ -47,7 +47,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Flights</a></li>
-                <li><a href="#">Stewards</a></li>
+                <li><a href="/pa165/#!/stewards">Stewards</a></li>
                 <li><a href="#">Airplanes</a></li>
                 <li><a href="#">Destinations</a></li>
             </ul>

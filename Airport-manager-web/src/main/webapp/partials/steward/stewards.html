@@ -1,0 +1,24 @@
+<div>
+    <h1>Stewards</h1>
+    <br/>
+    <table class="table table-condensed table-striped table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Firstname</th>
+            <th>Surname</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="steward in stewards | orderBy : 'id' track by $index"
+            ng-click="goToStewardDetail(steward.id)"
+            style="cursor: pointer">
+            <td>{{steward.id}}</td>
+            <td>{{steward.firstname}}</td>
+            <td>{{steward.surname}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="#!/newsteward"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New steward</a>
+</div>
