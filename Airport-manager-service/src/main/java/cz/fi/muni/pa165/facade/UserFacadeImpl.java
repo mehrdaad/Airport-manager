@@ -60,7 +60,7 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public boolean authenticate(UserAuthenticateDTO userAuthenticateDTO) {
         return userService.authenticate(
-                userService.getUser(userAuthenticateDTO.getUserId()),
+                userService.getUserByEmail(userAuthenticateDTO.getEmail()),
                 userAuthenticateDTO.getPassword());
     }
 

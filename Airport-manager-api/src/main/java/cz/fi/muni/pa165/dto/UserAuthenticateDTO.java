@@ -4,16 +4,16 @@ package cz.fi.muni.pa165.dto;
  * @author Robert Duriancik
  */
 public class UserAuthenticateDTO {
-    private Long userId;
+    private String email;
 
     private String password;
 
-    public Long getUserId() {
-        return userId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
