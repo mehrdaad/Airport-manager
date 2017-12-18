@@ -1,7 +1,7 @@
 <div>
     <h1>Flights</h1>
     <br/>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
         <thead>
         <tr>
             <th>#</th>
@@ -12,7 +12,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="flight in flights track by $index">
+        <tr ng-repeat="flight in flights track by $index" ng-click="goToFlightDetail(flight.id)"
+            style="cursor: pointer">
             <th>{{flight.id}}</th>
             <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
             <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>

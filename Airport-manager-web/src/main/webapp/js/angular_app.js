@@ -43,16 +43,26 @@ airportManagerApp.run(function ($rootScope) {
 });
 
 /* Controllers */
-managerControllers.controller('MainCtrl', function () {
-
-});
+managerControllers.controller('MainCtrl',
+    function ($scope, $rootScope, $routeParams, $http) {
+        $http.get('/pa165/api/flights/current').then(function (response) {
+            $scope.currentFlights = response.data._embedded.flights;
+            formatFlightsDates($scope.currentFlights);
+        })
+    }
+);
 
 
 managerControllers.controller('FlightsCtrl',
-    function ($scope, $rootScope, $routeParams, $http) {
+    function ($scope, $rootScope, $routeParams, $http, $location) {
         $http.get('/pa165/api/flights').then(function (response) {
+            console.log(response.data);
             $scope.flights = response.data._embedded.flights;
             formatFlightsDates($scope.flights);
+            $scope.goToFlightDetail = function (flightId) {
+                console.log(flightId);
+                $location.path('/flight/' + flightId);
+            }
         })
     }
 );
@@ -61,9 +71,10 @@ managerControllers.controller('FlightDetailCtrl',
     function ($scope, $routeParams, $http) {
         var flightId = $routeParams.flightId;
         $http.get('/pa165/api/flights/' + flightId).then(function (response) {
+            console.log(response.data);
             var flight = response.data;
+            formatFlightDates(flight);
             $scope.flight = flight;
-
         });
     }
 );
@@ -78,6 +89,10 @@ managerControllers.controller('NewFlightCtrl',
             'airplaneId': '',
             'stewardsIds': []
         };
+
+        $scope.create = function (flight) {
+            console.log(flight);
+        }
     }
 );
 
@@ -112,5 +127,5 @@ function formatFlightDates(flight) {
 }
 
 function formatDate(date) {
-    return moment(date).format("DD.MM.YYYY - HH:mm");
+    return moment(date).format("DD.MM.YYYY - h:mm A");
 }
