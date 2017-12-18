@@ -19,6 +19,8 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -115,7 +117,7 @@ public class FlightServiceTest extends BaseServiceTest{
         airplane2.setName("Apollo");
         airplane2.setCapacity(5);
 
-        flight.setAirPlane(airplane2);
+        flight.setAirplane(airplane2);
 
         flightService.updateFlight(flight);
         verify(flightDao).updateFlight(flight);
@@ -233,6 +235,23 @@ public class FlightServiceTest extends BaseServiceTest{
     }
 
     @Test
+    public void getCurrentFlights() {
+        LocalDateTime current = LocalDateTime.of(2000, 4, 1, 15, 30);
+        when(flightDao.getAllFlights()).thenReturn(Arrays.asList(flight, flight2));
+
+        List<Flight> result = flightService.getCurrentFlights(current);
+
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(Collections.singletonList(flight), result);
+        verify(flightDao).getAllFlights();
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void getCurrentFlightsNull() {
+        List<Flight> result = flightService.getCurrentFlights(null);
+    }
+
+    @Test
     public void addStewardHappyDayScenario() {
         Steward steward = new Steward();
         steward.setId(1L);
@@ -303,7 +322,7 @@ public class FlightServiceTest extends BaseServiceTest{
 
         flight = new Flight();
         flight.setId(1L);
-        flight.setAirPlane(airplane1);
+        flight.setAirplane(airplane1);
         flight.setDepartureLocation(destination1);
         flight.setArrivalLocation(destination2);
         flight.setDepartureTime(time1);
@@ -312,7 +331,7 @@ public class FlightServiceTest extends BaseServiceTest{
 
         flight2 = new Flight();
         flight2.setId(2L);
-        flight2.setAirPlane(airplane1);
+        flight2.setAirplane(airplane1);
         flight2.setDepartureLocation(destination2);
         flight2.setArrivalLocation(destination1);
         flight2.setDepartureTime(time2);

@@ -74,7 +74,7 @@ public class FlightsRestController {
     @RequestMapping(value = "/current", method = RequestMethod.GET)
     public final HttpEntity<Resources<FlightResource>> getCurrentFlights() {
         List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(
-            flightFacade.getAllFlights());
+                flightFacade.getCurrentFlights(LocalDateTime.now()));
 
         Resources<FlightResource> flightResources = new Resources<>(resourcesCollection,
                 linkTo(FlightsRestController.class).withSelfRel(),
@@ -92,6 +92,7 @@ public class FlightsRestController {
         }
 
         Long id = flightFacade.createFlight(flightCreateDTO);
+        logger.warn(id.toString());
         FlightResource flightResource = flightResourceAssembler.toResource(flightFacade.getFlight(id));
         return new ResponseEntity<>(flightResource, HttpStatus.OK);
     }

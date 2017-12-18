@@ -131,7 +131,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
     private Flight flight(Airplane airplane, List<Steward> stewards, Destination departure,
                           Destination arrival, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         Flight flight = new Flight();
-        flight.setAirPlane(airplane);
+        flight.setAirplane(airplane);
         flight.setStewards(stewards);
         flight.setDepartureLocation(departure);
         flight.setArrivalLocation(arrival);

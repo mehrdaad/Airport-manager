@@ -104,6 +104,24 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
+    public List<Flight> getCurrentFlights(LocalDateTime now) {
+        if (now == null) {
+            throw new NullPointerException("now cannot be null");
+        }
+
+        List<Flight> flights = getAllFlights();
+        List<Flight> currentFlighs = flights.stream()
+                .filter(flight -> {
+                    LocalDateTime arrivalTime = flight.getArrivalTime();
+                    LocalDateTime departureTime = flight.getDepartureTime();
+                    return departureTime.isBefore(now) && arrivalTime.isAfter(now);
+                })
+                .collect(Collectors.toList());
+
+        return currentFlighs;
+    }
+
+    @Override
     public void addSteward(Flight flight, Steward steward) {
         if (flight == null || steward == null) {
             throw new NullPointerException("Flight or steward is null");

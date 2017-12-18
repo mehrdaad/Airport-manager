@@ -40,7 +40,7 @@ public class FlightDaoImpl implements FlightDao {
             throw new NullPointerException("Cannot delete null flight");
         }
         try {
-            em.remove(flight);
+            em.remove(em.merge(flight));
         } catch (PersistenceException e) {
             throw new DataIntegrityViolationException("Error while delete data in database");
         }

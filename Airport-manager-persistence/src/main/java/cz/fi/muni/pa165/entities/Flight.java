@@ -37,7 +37,7 @@ public class Flight {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @NotNull
-    private Airplane airPlane;
+    private Airplane airplane;
 
     /**
      * Return entity id
@@ -170,20 +170,20 @@ public class Flight {
      *
      * @return Flight airplane
      */
-    public Airplane getAirPlane() {
-        return airPlane;
+    public Airplane getAirplane() {
+        return airplane;
     }
 
     /**
      * Set flight airplane
      *
-     * @param airPlane Flight airplane
+     * @param airplane Flight airplane
      */
-    public void setAirPlane(Airplane airPlane) {
-        if (airPlane == null) {
+    public void setAirplane(Airplane airplane) {
+        if (airplane == null) {
             throw new IllegalArgumentException("Cannot set airplane to null.");
         }
-        this.airPlane = airPlane;
+        this.airplane = airplane;
     }
 
     public void addSteward(Steward steward) {
@@ -204,7 +204,7 @@ public class Flight {
                 .append("Departure time: ").append(departureTime).append("\n")
                 .append("Arrival location: ").append(arrivalLocation).append("\n")
                 .append("Arrival time: ").append(arrivalTime).append("\n")
-                .append("Airplane: ").append(airPlane)
+                .append("Airplane: ").append(airplane)
                 .append("Stewards: ").append(stewards);
         return strBuilder.toString();
     }
@@ -230,7 +230,7 @@ public class Flight {
         if (departureTime != null ? !departureTime.equals(flight.departureTime) : flight.departureTime != null)
             return false;
         if (stewards != null ? !stewards.equals(flight.stewards) : flight.stewards != null) return false;
-        return airPlane != null ? airPlane.equals(flight.airPlane) : flight.airPlane == null;
+        return airplane != null ? airplane.equals(flight.airplane) : flight.airplane == null;
     }
 
     /**
@@ -245,7 +245,7 @@ public class Flight {
         result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
         result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
         result = 31 * result + (stewards != null ? stewards.hashCode() : 0);
-        result = 31 * result + (airPlane != null ? airPlane.hashCode() : 0);
+        result = 31 * result + (airplane != null ? airplane.hashCode() : 0);
         return result;
     }
 
