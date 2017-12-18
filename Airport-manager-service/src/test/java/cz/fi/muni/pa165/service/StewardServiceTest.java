@@ -203,21 +203,21 @@ public class StewardServiceTest extends BaseServiceTest{
     @Test
     public void getAllStewardFlightsTest() {
         Flight flight1 = new Flight();
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
         flight1.setDepartureTime(departureTime_past);
         flight1.setArrivalTime(arrivalTime_past);
         flight1.setDepartureLocation(new Destination());
         flight1.addSteward(steward1);
         
         Flight flight2 = new Flight();
-        flight2.setAirPlane(airplane);
+        flight2.setAirplane(airplane);
         flight2.setDepartureTime(departureTime_future);
         flight2.setArrivalTime(arrivalTime_future);
         flight2.setDepartureLocation(new Destination());
         flight2.addSteward(steward1);
         
         Flight flight3 = new Flight();
-        flight3.setAirPlane(airplane);
+        flight3.setAirplane(airplane);
         flight3.setDepartureTime(departureTime_future1);
         flight3.setArrivalTime(arrivalTime_future1);
         flight3.setDepartureLocation(new Destination());
@@ -263,14 +263,14 @@ public class StewardServiceTest extends BaseServiceTest{
         LocalDateTime arrivalTime_current = LocalDateTime.of(2100, Month.NOVEMBER, 25, 20, 30);
         
         Flight flight1 = new Flight();
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
         flight1.setDepartureTime(departureTime_current);
         flight1.setArrivalTime(arrivalTime_current);
         flight1.setDepartureLocation(new Destination());
         flight1.addSteward(steward1);
         
         Flight flight2 = new Flight();
-        flight2.setAirPlane(airplane);
+        flight2.setAirplane(airplane);
         flight2.setDepartureTime(departureTime_past);
         flight2.setArrivalTime(arrivalTime_past);
         flight2.setDepartureLocation(new Destination());
@@ -302,28 +302,28 @@ public class StewardServiceTest extends BaseServiceTest{
     public void getStewardFutureFlightTest() {
 
         Flight flight1 = new Flight();
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
         flight1.setDepartureTime(departureTime_past);
         flight1.setArrivalTime(arrivalTime_past);
         flight1.setDepartureLocation(new Destination());
         flight1.addSteward(steward);
         
         Flight flight2 = new Flight();
-        flight2.setAirPlane(airplane);
+        flight2.setAirplane(airplane);
         flight2.setDepartureTime(departureTime_future);
         flight2.setArrivalTime(arrivalTime_future);
         flight2.setDepartureLocation(new Destination());
         flight2.addSteward(steward1);
         
         Flight flight3 = new Flight();
-        flight3.setAirPlane(airplane);
+        flight3.setAirplane(airplane);
         flight3.setDepartureTime(departureTime_future);
         flight3.setArrivalTime(arrivalTime_future);
         flight3.setDepartureLocation(new Destination());
         flight3.addSteward(steward);
         
         Flight flight4 = new Flight();
-        flight4.setAirPlane(airplane);
+        flight4.setAirplane(airplane);
         flight4.setDepartureTime(departureTime_future1);
         flight4.setArrivalTime(arrivalTime_future1);
         flight4.setDepartureLocation(new Destination());
@@ -364,28 +364,28 @@ public class StewardServiceTest extends BaseServiceTest{
         LocalDateTime stopTime = LocalDateTime.of(2026, Month.NOVEMBER, 26, 20, 30);
         
         Flight flight1 = new Flight();
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
         flight1.setDepartureTime(departureTime_past);
         flight1.setArrivalTime(arrivalTime_past);
         flight1.setDepartureLocation(new Destination());
         flight1.addSteward(steward);
         
         Flight flight2 = new Flight();
-        flight2.setAirPlane(airplane);
+        flight2.setAirplane(airplane);
         flight2.setDepartureTime(departureTime_future);
         flight2.setArrivalTime(arrivalTime_future);
         flight2.setDepartureLocation(new Destination());
         flight2.addSteward(steward);
         
         Flight flight3 = new Flight();
-        flight3.setAirPlane(airplane);
+        flight3.setAirplane(airplane);
         flight3.setDepartureTime(departureTime_future1);
         flight3.setArrivalTime(arrivalTime_future1);
         flight3.setDepartureLocation(new Destination());
         flight3.addSteward(steward1);
         
         Flight flight4 = new Flight();
-        flight4.setAirPlane(airplane);
+        flight4.setAirplane(airplane);
         flight4.setDepartureTime(departureTime_past);
         flight4.setArrivalTime(arrivalTime_past);
         flight4.setDepartureLocation(new Destination());
@@ -433,21 +433,21 @@ public class StewardServiceTest extends BaseServiceTest{
         steward3.setSurname("Surname33");
         
         Flight flight1 = new Flight();
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
         flight1.setDepartureTime(departureTime_past);
         flight1.setArrivalTime(arrivalTime_past);
         flight1.setDepartureLocation(new Destination());
         flight1.addSteward(steward);
         
         Flight flight2 = new Flight();
-        flight2.setAirPlane(airplane);
+        flight2.setAirplane(airplane);
         flight2.setDepartureTime(departureTime_future1);
         flight2.setArrivalTime(arrivalTime_future1);
         flight2.setDepartureLocation(new Destination());
         flight2.addSteward(steward1);
         
         Flight flight3 = new Flight();
-        flight3.setAirPlane(airplane);
+        flight3.setAirplane(airplane);
         flight3.setDepartureTime(departureTime_future);
         flight3.setArrivalTime(arrivalTime_future);
         flight3.setDepartureLocation(new Destination());

@@ -64,6 +64,7 @@ public class FlightsRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public final void deleteFlight(@PathVariable("id") long id) throws Exception {
         try {
+            logger.warn(Long.toString(id));
             flightFacade.deleteFlight(id);
         } catch (FlightDataAccessException e) {
             // TODO error handling

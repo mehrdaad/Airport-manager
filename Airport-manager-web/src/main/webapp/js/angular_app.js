@@ -55,15 +55,30 @@ managerControllers.controller('MainCtrl',
 
 managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
-        $http.get('/pa165/api/flights').then(function (response) {
-            console.log(response.data);
-            $scope.flights = response.data._embedded.flights;
-            formatFlightsDates($scope.flights);
-            $scope.goToFlightDetail = function (flightId) {
-                console.log(flightId);
-                $location.path('/flight/' + flightId);
-            }
-        })
+        loadFlights($scope, $http);
+        $scope.goToFlightDetail = function (flightId) {
+            console.log(flightId);
+            $location.path('/flight/' + flightId);
+        };
+
+        $scope.deleteFlight = function (flight) {
+            $http.delete(flight._links.delete.href).then(
+                function success(response) {
+                    $rootScope.successAlert = 'Deleted Flight "' + flight.id + '"';
+                },
+                function error(response) {
+                    switch (response.data.code) {
+                        case 'ResourceNotFoundException':
+                            $rootScope.errorAlert = 'Cannot delete non-existent product ! ';
+                            break;
+                        default:
+                            $rootScope.errorAlert = 'Cannot delete product ! Reason given by the server: ' + response.data.message;
+                            break;
+                    }
+                }
+            )
+        };
+
     }
 );
 
@@ -112,6 +127,14 @@ managerControllers.directive('convertToInt', function () {
         }
     };
 });
+
+function loadFlights($scope, $http) {
+    $http.get('/pa165/api/flights').then(function (response) {
+        console.log(response.data);
+        $scope.flights = response.data._embedded.flights;
+        formatFlightsDates($scope.flights);
+    });
+}
 
 function formatFlightsDates(flights) {
     for (var i = 0; i < flights.length; ++i) {

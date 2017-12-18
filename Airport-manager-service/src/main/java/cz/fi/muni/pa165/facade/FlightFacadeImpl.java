@@ -8,6 +8,8 @@ import cz.fi.muni.pa165.service.AirplaneService;
 import cz.fi.muni.pa165.service.FlightService;
 import cz.fi.muni.pa165.service.MappingService;
 import cz.fi.muni.pa165.service.StewardService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,8 @@ import java.util.List;
 @Service
 @Transactional
 public class FlightFacadeImpl implements FlightFacade {
+
+    private Logger logger = LoggerFactory.getLogger(FlightFacadeImpl.class);
 
     @Inject
     private FlightService flightService;
@@ -44,6 +48,7 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public FlightDTO getFlight(Long id) {
+        logger.error("getFLight()");
         Flight flight = flightService.getFlight(id);
         return flight == null ? null : mappingService.mapTo(flight, FlightDTO.class);
     }
@@ -71,6 +76,7 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public void deleteFlight(Long flightId) {
+        logger.error("deleteFlight()");
         flightService.deleteFlight(flightService.getFlight(flightId));
     }
 

@@ -29,6 +29,7 @@
     <logger name="org.dozer" level="error"/>
     <logger name="org.springframework" level="error"/>
     <logger name="org.springframework.web" level="warn"/>
-    <logger name="cz.muni.fi.pa165" level="warn"/>
+    <logger name="cz.fi.muni.pa165" level="warn"/>
+    <logger name="cz.fi.muni.pa165.dao" level="warn"/>
 
 </configuration>

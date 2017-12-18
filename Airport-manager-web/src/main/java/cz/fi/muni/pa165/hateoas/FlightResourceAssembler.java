@@ -23,12 +23,10 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class FlightResourceAssembler extends ResourceAssemblerSupport<FlightDTO, FlightResource> {
 
     private final static Logger logger = LoggerFactory.getLogger(FlightResourceAssembler.class);
-    private EntityLinks entityLinks;
 
     public FlightResourceAssembler(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
                                    @Autowired EntityLinks entityLinks) {
         super(FlightsRestController.class, FlightResource.class);
-        this.entityLinks = entityLinks;
     }
 
     @Override

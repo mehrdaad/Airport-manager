@@ -1,7 +1,11 @@
 <div>
     <h1>Flights</h1>
     <br/>
-    <table class="table table-condensed table-striped table-hover">
+    <a href="#!/newflight" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Record Flight
+    </a>
+    <table class="table table-condensed table-striped">
         <thead>
         <tr>
             <th>#</th>
@@ -12,15 +16,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="flight in flights track by $index" ng-click="goToFlightDetail(flight.id)"
-            style="cursor: pointer">
+        <tr ng-repeat="flight in flights track by $index">
             <th>{{flight.id}}</th>
             <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
             <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>
             <td>{{flight.departureTime}}</td>
             <td>{{flight.arrivalTime}}</td>
+            <td>
+                <button ng-click="goToFlightDetail(flight.id)" type="submit" class="btn btn-primary">Detail</button>
+                <button ng-click="deleteFlight(flight)" type="submit" class="btn btn-danger">Delete</button>
+            </td>
         </tr>
         </tbody>
     </table>
-    <a href="#!/newflight">New Flight</a>
 </div>

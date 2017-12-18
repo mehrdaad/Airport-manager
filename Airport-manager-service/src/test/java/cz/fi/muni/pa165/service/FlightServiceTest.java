@@ -117,7 +117,7 @@ public class FlightServiceTest extends BaseServiceTest{
         airplane2.setName("Apollo");
         airplane2.setCapacity(5);
 
-        flight.setAirPlane(airplane2);
+        flight.setAirplane(airplane2);
 
         flightService.updateFlight(flight);
         verify(flightDao).updateFlight(flight);
@@ -322,7 +322,7 @@ public class FlightServiceTest extends BaseServiceTest{
 
         flight = new Flight();
         flight.setId(1L);
-        flight.setAirPlane(airplane1);
+        flight.setAirplane(airplane1);
         flight.setDepartureLocation(destination1);
         flight.setArrivalLocation(destination2);
         flight.setDepartureTime(time1);
@@ -331,7 +331,7 @@ public class FlightServiceTest extends BaseServiceTest{
 
         flight2 = new Flight();
         flight2.setId(2L);
-        flight2.setAirPlane(airplane1);
+        flight2.setAirplane(airplane1);
         flight2.setDepartureLocation(destination2);
         flight2.setArrivalLocation(destination1);
         flight2.setDepartureTime(time2);

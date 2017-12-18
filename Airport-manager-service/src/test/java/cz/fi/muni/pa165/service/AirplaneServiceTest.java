@@ -208,7 +208,7 @@ public class AirplaneServiceTest extends BaseServiceTest {
         flight1.setArrivalLocation(new Destination("LK", "LKCity"));
         flight1.setDepartureTime(testTime.plusDays(1));
         flight1.setArrivalTime(testTime.plusDays(1).plusHours(1));
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
 
         List<Airplane> testedAirplanes = Arrays.asList(airplane, airplane2);
         List<Airplane> expectedAirplanes = Arrays.asList(airplane);
@@ -258,7 +258,7 @@ public class AirplaneServiceTest extends BaseServiceTest {
         flight1.setArrivalLocation(new Destination("LK", "LKCity"));
         flight1.setDepartureTime(testTime.plusDays(1));
         flight1.setArrivalTime(testTime.plusDays(1).plusHours(1));
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
 
         List<Airplane> testedAirplanes = Arrays.asList(airplane, airplane2);
         List<Airplane> expectedAirplanes = Arrays.asList(airplane2);
@@ -308,7 +308,7 @@ public class AirplaneServiceTest extends BaseServiceTest {
         flight1.setArrivalLocation(new Destination("LK", "LKCity"));
         flight1.setDepartureTime(testTime.plusDays(1));
         flight1.setArrivalTime(testTime.plusDays(1).plusHours(1));
-        flight1.setAirPlane(airplane);
+        flight1.setAirplane(airplane);
 
         Flight flight2 = new Flight();
         flight2.setId(2L);
@@ -316,7 +316,7 @@ public class AirplaneServiceTest extends BaseServiceTest {
         flight2.setArrivalLocation(new Destination("FK", "FKCity"));
         flight2.setDepartureTime(testTime.minusMonths(1));
         flight2.setArrivalTime(testTime.minusMonths(1).plusHours(1));
-        flight2.setAirPlane(airplane2);
+        flight2.setAirplane(airplane2);
 
         List<Airplane> testedAirplanes = Arrays.asList(airplane, airplane2);
 

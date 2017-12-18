@@ -20,18 +20,16 @@
             </tr>
             <tr>
                 <th>Airplane</th>
-                <td>#{{flight.airplane.name}}</td>
+                <td><a href="#!/airplanes/{{flight.airplane.id}}">{{flight.airplane.name}}</a></td>
             </tr>
         </table>
     </div>
     <div class="col-xs-6"> <!--TODO show only if there are some stewards-->
-        <div class="panel panel-default">
+        <div class="panel panel-info">
             <div class="panel-heading">Stewards</div>
-            <div class="panel-body">
-                <div class="list-group">
-                    <a ng-repeat="steward in flight.stewards" href="#!/stewards/{{steward.id}}"
-                       class="list-group-item">{{steward.name}}</a>
-                </div>
+            <div class="list-group">
+                <a ng-repeat="steward in flight.stewards" href="#!/stewards/{{steward.id}}"
+                   class="list-group-item">{{steward.firstName}} {{steward.surname}}</a>
             </div>
         </div>
     </div>
