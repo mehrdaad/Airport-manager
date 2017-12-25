@@ -261,13 +261,18 @@ managerControllers.controller('StewardsCtrl',
                 method: 'POST',
                 url: '/pa165/api/stewards/create',
                 data: steward
-            }).then(function (response) {
+            }).then(function success(response) {
                 console.log(response);
                 get();
+                $rootScope.successAlert = 'Steward was successfully created.';
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Problem during creating steward.';
             });
         };
         $scope.deleteSteward = function (steward) {
             $http.delete('/pa165/api/stewards/' + steward).then(function success(response) {
+                $rootScope.successAlert = 'Steward was successfully deleted.';
                 get();
             }, function error(response) {
                 console.log("Error during deleting steward!");
@@ -289,7 +294,7 @@ managerControllers.controller('StewardsCtrl',
 );
 
 managerControllers.controller('StewardDetailCtrl',
-    function ($scope, $routeParams, $http, $location) {
+    function ($scope, $routeParams, $http, $rootScope) {
         var stewardId = $routeParams.stewardId;
         $http.get('/pa165/api/stewards/' + stewardId).then(function (response) {
             var steward = response.data;
@@ -301,6 +306,25 @@ managerControllers.controller('StewardDetailCtrl',
             $scope.flights = flights;
             formatFlightsDates($scope.flights);
         });
+        $scope.updateSteward = function (steward) {
+            console.log(steward);
+            var karelFirstName = {
+                'id': steward.id,
+                'firstName': steward.firstname,
+                'surname': steward.surname
+            };
+            $http({
+                method: 'POST',
+                url: '/pa165/api/stewards/' + steward.id + '/update/',
+                data: karelFirstName
+            }).then(function success(response) {
+                console.log(response);
+                $rootScope.successAlert = 'Steward was successfully updated.';
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Error during updating steward.';
+            });
+        }
     }
 );
 

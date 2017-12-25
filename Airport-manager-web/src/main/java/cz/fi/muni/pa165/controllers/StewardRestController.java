@@ -80,6 +80,19 @@ public class StewardRestController {
         }
     }
 
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public final void updateSteward(@PathVariable("id") long id,
+                                    @RequestBody @Valid StewardDTO stewardDTO,
+                                    BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            throw new InvalidRequestException("Failed validation");
+        }
+        if(id != stewardDTO.getId()) {
+            throw new InvalidRequestException("Objects differ in ID");
+        }
+        stewardFacade.updateSteward(stewardDTO);
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
         public final HttpEntity<StewardResource> createSteward(@RequestBody @Valid StewardCreateDTO stewardCreateDTO,
                                                                BindingResult bindingResult) throws Exception {
