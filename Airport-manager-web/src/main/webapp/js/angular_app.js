@@ -237,8 +237,6 @@ managerControllers.controller('DestinationCtrl',
                 }
             });
         };
-
-
     }
 );
 
@@ -267,6 +265,11 @@ managerControllers.controller('StewardsCtrl',
                 console.log(response);
                 get();
             });
+        };
+        $scope.deleteSteward = function (stewardId) {
+            $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
+                $location.path('/stewards');
+            });
         }
     }
 );
@@ -284,11 +287,6 @@ managerControllers.controller('StewardDetailCtrl',
             $scope.flights = flights;
             formatFlightsDates($scope.flights);
         });
-        $scope.deleteSteward = function (stewardId) {
-            $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
-                $location.path('/stewards');
-            });
-        }
     }
 );
 
