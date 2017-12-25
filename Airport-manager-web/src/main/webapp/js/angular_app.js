@@ -266,9 +266,23 @@ managerControllers.controller('StewardsCtrl',
                 get();
             });
         };
-        $scope.deleteSteward = function (stewardId) {
-            $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
-                $location.path('/stewards');
+        $scope.deleteSteward = function (steward) {
+            $http.delete('/pa165/api/stewards/' + steward).then(function success(response) {
+                get();
+            }, function error(response) {
+                console.log("Error during deleting steward!");
+                console.log(steward);
+                switch(response.data.code) {
+                    case 'PersistenceException':
+                        $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
+                        break;
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot delete steward! Reason given by the server: '+ response.data.message;
+                        break;
+                }
             });
         }
     }
