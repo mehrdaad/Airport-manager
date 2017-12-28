@@ -140,6 +140,7 @@ public class FlightDaoTest extends BaseDaoTest {
     }
 
     @Test
+    @Transactional
     public void testToString() {
         String expectedOutput = "Flight:\n" +
                 "Departure location: Destination{country='USA', city='UNKOWN'}\n" +
@@ -153,13 +154,17 @@ public class FlightDaoTest extends BaseDaoTest {
     }
 
     @Test
+    @Transactional
     public void testHashCode() {
         Flight createdFlight1 = createFlight("USA", "Czech Republic");
         Flight createdFlight2 = createFlight("USA", "Czech Republic");
+        logger.debug(createdFlight1.toString());
+        logger.debug(createdFlight2.toString());
         Assert.assertEquals(createdFlight1.hashCode(), createdFlight2.hashCode());
     }
 
     @Test
+    @Transactional
     public void testEquals() {
         Flight createdFlight1 = createFlight("USA", "Czech Republic");
         Flight createdFlight2 = createFlight("USA", "Czech Republic");
@@ -183,7 +188,7 @@ public class FlightDaoTest extends BaseDaoTest {
         flightDao.deleteFlight(null);
     }
 
-    private static Flight createFlight(String arrivalState, String departureState) {
+    private Flight createFlight(String arrivalState, String departureState) {
         // Create destinations
         String arrivalCityName = "UNKOWN";
         String departureCityName = "UNKOWN";
@@ -191,17 +196,21 @@ public class FlightDaoTest extends BaseDaoTest {
         Destination arrivalDestination = new Destination();
         arrivalDestination.setCity(arrivalCityName);
         arrivalDestination.setCountry(arrivalState);
+        em.persist(arrivalDestination);
 
         Destination departureDestination = new Destination();
         departureDestination.setCity(departureCityName);
         departureDestination.setCountry(departureState);
+        em.persist(departureDestination);
 
         // Create stewards
         Steward steward = new Steward();
         steward.setFirstName("John");
         steward.setSurname("Dail");
+        em.persist(steward);
         List<Steward> stewards = new LinkedList<>();
         stewards.add(steward);
+
 
         // Create times
         LocalDateTime departureTime = LocalDateTime.of(2017, Month.DECEMBER, 24, 8, 30);
@@ -212,6 +221,7 @@ public class FlightDaoTest extends BaseDaoTest {
         airPlane.setCapacity(100);
         airPlane.setName("Boeing 737");
         airPlane.setType("Basic");
+        em.persist(airPlane);
 
         Flight flight = new Flight();
         flight.setArrivalLocation(arrivalDestination);

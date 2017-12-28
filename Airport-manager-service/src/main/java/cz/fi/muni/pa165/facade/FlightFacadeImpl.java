@@ -55,7 +55,6 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public FlightDTO getFlight(Long id) {
-        logger.error("getFLight()");
         Flight flight = flightService.getFlight(id);
         return flight == null ? null : mappingService.mapTo(flight, FlightDTO.class);
     }
@@ -83,7 +82,6 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public void deleteFlight(Long flightId) {
-        logger.error("deleteFlight()");
         flightService.deleteFlight(flightService.getFlight(flightId));
     }
 

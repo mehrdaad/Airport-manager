@@ -117,7 +117,11 @@ managerControllers.controller('AirplaneDetailCtrl',
 /* Destination controller*/
 function loadDestinations($http, $scope) {
     $http.get('/pa165/api/destination/').then(function (response) {
-        $scope.destinations = response.data._embedded.destinations;
+        if (response.data._embedded !== undefined) {
+            $scope.destinations = response.data._embedded.destinations;
+        } else {
+            $scope.destinations = [];
+        }
     });
 }
 
@@ -244,7 +248,12 @@ managerControllers.controller('StewardsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         var get = function () {
             $http.get('/pa165/api/stewards').then(function (response) {
-                $scope.stewards = response.data._embedded.stewards;
+                if (response.data._embedded !== undefined) {
+                    $scope.stewards = response.data._embedded.stewards;
+                } else {
+                    $scope.stewards = [];
+                }
+
                 $scope.goToStewardDetail = function (stewardId) {
                     $location.path('/steward/' + stewardId);
                 }
@@ -401,6 +410,7 @@ managerControllers.controller('FlightsCtrl',
             $http.delete(flight._links.delete.href).then(
                 function success(response) {
                     $rootScope.successAlert = 'Deleted Flight "' + flight.id + '"';
+                    loadFlights($scope, $http);
                 },
                 function error(response) {
                     switch (response.data.code) {
@@ -489,26 +499,14 @@ managerControllers.directive('convertToInts', function () {
 function loadFlights($scope, $http) {
     $http.get('/pa165/api/flights').then(function (response) {
         console.log(response.data);
-        $scope.flights = response.data._embedded.flights;
-        formatFlightsDates($scope.flights);
+        if (response.data._embedded !== undefined) {
+            $scope.flights = response.data._embedded.flights;
+            formatFlightsDates($scope.flights);
+        } else {
+            $scope.flights = [];
+        }
+
     });
-}
-
-function formatFlightsDates(flights) {
-    for (var i = 0; i < flights.length; ++i) {
-        formatFlightDates(flights[i]);
-    }
-}
-
-function formatFlightDates(flight) {
-    var rawDepartureDate = flight.departureTime;
-    var rawArrivalDate = flight.arrivalTime;
-    flight.departureTime = formatDate(rawDepartureDate);
-    flight.arrivalTime = formatDate(rawArrivalDate);
-}
-
-function formatDate(date) {
-    return moment(date).format("DD.MM.YYYY - h:mm A");
 }
 
 airportManagerApp.directive('datetimepicker', [

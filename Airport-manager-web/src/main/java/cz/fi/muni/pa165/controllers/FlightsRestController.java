@@ -39,7 +39,6 @@ public class FlightsRestController {
             @Autowired FlightFacade flightFacade,
             @Autowired FlightResourceAssembler flightResourceAssembler
     ) {
-
         this.flightFacade = flightFacade;
         this.flightResourceAssembler = flightResourceAssembler;
     }
@@ -47,7 +46,9 @@ public class FlightsRestController {
     @RequestMapping(method = RequestMethod.GET)
     public final HttpEntity<Resources<FlightResource>> getFlights() {
         List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(flightFacade.getAllFlights());
-        Resources<FlightResource> flightResources = new Resources<>(resourcesCollection,
+        logger.error(resourcesCollection.toString());
+        Resources<FlightResource> flightResources = new Resources<>(
+                resourcesCollection,
                 linkTo(FlightsRestController.class).withSelfRel(),
                 linkTo(FlightsRestController.class).slash("/create").withRel("create"));
         return new ResponseEntity<>(flightResources, HttpStatus.OK);
@@ -86,7 +87,6 @@ public class FlightsRestController {
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public final HttpEntity<FlightResource> createFlight(@RequestBody @Valid FlightCreateDTO flightCreateDTO,
                                                          BindingResult bindingResult) throws Exception {
-        logger.warn(flightCreateDTO.toString());
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Failed validation");
         }
