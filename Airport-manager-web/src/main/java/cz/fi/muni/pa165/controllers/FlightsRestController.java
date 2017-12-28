@@ -46,7 +46,6 @@ public class FlightsRestController {
     @RequestMapping(method = RequestMethod.GET)
     public final HttpEntity<Resources<FlightResource>> getFlights() {
         List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(flightFacade.getAllFlights());
-        logger.error(resourcesCollection.toString());
         Resources<FlightResource> flightResources = new Resources<>(
                 resourcesCollection,
                 linkTo(FlightsRestController.class).withSelfRel(),

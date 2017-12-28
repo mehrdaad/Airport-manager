@@ -23,7 +23,9 @@
             <td>{{flight.arrivalTime}}</td>
             <td>
                 <button ng-click="goToFlightDetail(flight.id)" type="submit" class="btn btn-primary">Detail</button>
-                <button ng-click="deleteFlight(flight)" type="submit" class="btn btn-danger">Delete</button>
+                <button ng-click="deleteFlight(flight)" type="submit" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                </button>
             </td>
         </tr>
         </tbody>
