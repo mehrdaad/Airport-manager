@@ -237,8 +237,6 @@ managerControllers.controller('DestinationCtrl',
                 }
             });
         };
-
-
     }
 );
 
@@ -263,16 +261,40 @@ managerControllers.controller('StewardsCtrl',
                 method: 'POST',
                 url: '/pa165/api/stewards/create',
                 data: steward
-            }).then(function (response) {
+            }).then(function success(response) {
                 console.log(response);
                 get();
+                $rootScope.successAlert = 'Steward was successfully created.';
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Problem during creating steward.';
+            });
+        };
+        $scope.deleteSteward = function (steward) {
+            $http.delete('/pa165/api/stewards/' + steward).then(function success(response) {
+                $rootScope.successAlert = 'Steward was successfully deleted.';
+                get();
+            }, function error(response) {
+                console.log("Error during deleting steward!");
+                console.log(steward);
+                switch(response.data.code) {
+                    case 'PersistenceException':
+                        $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
+                        break;
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot delete steward! Reason given by the server: '+ response.data.message;
+                        break;
+                }
             });
         }
     }
 );
 
 managerControllers.controller('StewardDetailCtrl',
-    function ($scope, $routeParams, $http, $location) {
+    function ($scope, $routeParams, $http, $rootScope) {
         var stewardId = $routeParams.stewardId;
         $http.get('/pa165/api/stewards/' + stewardId).then(function (response) {
             var steward = response.data;
@@ -282,10 +304,25 @@ managerControllers.controller('StewardDetailCtrl',
             console.log(response);
             var flights = response.data._embedded.flights;
             $scope.flights = flights;
+            formatFlightsDates($scope.flights);
         });
-        $scope.deleteSteward = function (stewardId) {
-            $http.delete('/pa165/api/stewards/' + stewardId).then(function (response) {
-                $location.path('/stewards');
+        $scope.updateSteward = function (steward) {
+            console.log(steward);
+            var karelFirstName = {
+                'id': steward.id,
+                'firstName': steward.firstname,
+                'surname': steward.surname
+            };
+            $http({
+                method: 'POST',
+                url: '/pa165/api/stewards/' + steward.id + '/update/',
+                data: karelFirstName
+            }).then(function success(response) {
+                console.log(response);
+                $rootScope.successAlert = 'Steward was successfully updated.';
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Error during updating steward.';
             });
         }
     }
@@ -392,6 +429,23 @@ managerControllers.controller('FlightDetailCtrl',
         });
     }
 );
+
+function formatFlightsDates(flights) {
+    for (var i = 0; i < flights.length; ++i) {
+        formatFlightDates(flights[i]);
+    }
+}
+
+function formatFlightDates(flight) {
+    var rawDepartureDate = flight.departureTime;
+    var rawArrivalDate = flight.arrivalTime;
+    flight.departureTime = formatDate(rawDepartureDate);
+    flight.arrivalTime = formatDate(rawArrivalDate);
+}
+
+function formatDate(date) {
+    return moment(date).format("DD.MM.YYYY - h:mm A");
+}
 
 // defines new directive (HTML attribute "convert-to-int") for conversion between string and int
 // of the value of a selection list in a form

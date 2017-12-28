@@ -1,7 +1,11 @@
 <div>
     <h1>Stewards</h1>
     <br/>
-    <table class="table table-condensed table-striped table-hover">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New steward
+    </button>
+
+    <table class="table table-condensed table-striped">
         <thead>
         <tr>
             <th>#</th>
@@ -10,19 +14,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="steward in stewards | orderBy : 'id' track by $index"
-            ng-click="goToStewardDetail(steward.id)"
-            style="cursor: pointer">
+        <tr ng-repeat="steward in stewards | orderBy : 'id' track by $index">
             <td>{{steward.id}}</td>
             <td>{{steward.firstname}}</td>
             <td>{{steward.surname}}</td>
+            <td align="right">
+                <button ng-click="goToStewardDetail(steward.id)" type="submit" class="btn btn-primary">Detail</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteSteward(steward.id)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
-
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New steward
-    </button>
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
