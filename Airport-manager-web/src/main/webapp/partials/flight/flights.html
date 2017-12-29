@@ -1,7 +1,8 @@
 <div>
     <h1>Flights</h1>
     <br/>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
+            ng-click="createFlightModel()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Record flight
     </button>
     <table class="table table-condensed table-striped">
@@ -45,64 +46,78 @@
                         <div class="form-group">
                             <label for="departureLocationId" class="col-sm-2 control-label">Departure Location</label>
                             <div class="col-sm-10">
-                                <select id="departureLocationId" class="form-control"
+                                <select id="departureLocationId" class="form-control" name="departureLocation"
                                         ng-model="flight.departureLocationId" convert-to-int ng-required="true">
                                     <option ng-repeat="departureLocation in destinations"
                                             value="{{departureLocation.id}}">
                                         {{departureLocation.city}}, {{departureLocation.country}}
                                     </option>
                                 </select>
+                                <p class="help-block" ng-show="form.departureLocation.$error.required">Departure
+                                    location is required</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="arrivalLocationId" class="col-sm-2 control-label">Arrival Location</label>
                             <div class="col-sm-10">
                                 <select id="arrivalLocationId" class="form-control" ng-model="flight.arrivalLocationId"
-                                        convert-to-int>
+                                        convert-to-int name="arrivalLocation" ng-required="true">
                                     <option ng-repeat="arrivalLocation in destinations  "
                                             value="{{arrivalLocation.id}}">
                                         {{arrivalLocation.city}}, {{arrivalLocation.country}}
                                     </option>
                                 </select>
+                                <p class="help-block" ng-show="form.arrivalLocation.$error.required">Arrival location is
+                                    required</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="departureTime" class="col-sm-2 control-label">Departure Time</label>
                             <div class="col-sm-10">
                                 <div class='input-group date' datetimepicker id='departureTime'
+                                     ng-required="true"
+                                     name="departureTime"
                                      ng-model="flight.departureTime"
                                      options="optionsDepartureTime"
                                      on-change="optionsArrivalTime.minDate = flight.departureTime">
                                     <input type='text' class="form-control"/>
                                     <span class="input-group-addon">
-                     <span class="glyphicon glyphicon-calendar"></span>
-             </span>
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
+                                <p class="help-block" ng-show="form.departureTime.$error.required">Departure time is
+                                    required</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="arrivalTime" class="col-sm-2 control-label">Arrival Time</label>
                             <div class="col-sm-10">
                                 <div class='input-group date' datetimepicker id='arrivalTime'
+                                     ng-required="true"
+                                     name="arrivalTime"
                                      ng-model="flight.arrivalTime"
                                      options="optionsArrivalTime"
                                      on-change="optionsDepartureTime.maxDate = flight.arrivalTime">
                                     <input id="arrivalTimeInput" type='text' class="form-control"/>
                                     <span class="input-group-addon">
-                     <span class="glyphicon glyphicon-calendar"></span>
-             </span>
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
+                                <p class="help-block" ng-show="form.arrivalTime.$error.required">Arrival time is
+                                    required</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="airplaneId" class="col-sm-2 control-label">Airplane</label>
                             <div class="col-sm-10">
                                 <select id="airplaneId" class="form-control" ng-model="flight.airplaneId"
-                                        convert-to-int ng-required="true">
+                                        convert-to-int ng-required="true" name="airplane">
                                     <option ng-repeat="airplane in airplanes" value="{{airplane.id}}">
                                         {{airplane.name}}
                                     </option>
                                 </select>
+                                <p class="help-block" ng-show="form.airplane.$error.required">Airplane is
+                                    required</p>
                             </div>
                         </div>
                         <div class="form-group">

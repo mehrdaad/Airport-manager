@@ -341,6 +341,20 @@ managerControllers.controller('StewardDetailCtrl',
 managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         loadFlights($scope, $http);
+
+        $scope.createFlightModel = function () {
+            $scope.flight = {
+                'departureLocationId': '',
+                'arrivalLocationId': '',
+                'departureTime': '',
+                'arrivalTime': '',
+                'airplaneId': '',
+                'stewardIds': []
+            };
+        };
+
+        $scope.createFlightModel();
+
         $scope.goToFlightDetail = function (flightId) {
             $location.path('/flight/' + flightId);
         };
@@ -357,14 +371,7 @@ managerControllers.controller('FlightsCtrl',
             $scope.stewards = response.data._embedded.stewards;
         });
 
-        $scope.flight = {
-            'departureLocationId': '',
-            'arrivalLocationId': '',
-            'departureTime': '',
-            'arrivalTime': '',
-            'airplaneId': '',
-            'stewardIds': []
-        };
+        /** DateTimePicker */
 
         $scope.optionsDepartureTime = {
             useCurrent: true,
@@ -379,6 +386,11 @@ managerControllers.controller('FlightsCtrl',
             showClose: true,
             toolbarPlacement: 'top'
         };
+        /** */
+
+        $scope.onDateTimeChange = function () {
+
+        };
 
         $scope.createFlight = function (flight) {
             console.log(flight);
@@ -386,7 +398,8 @@ managerControllers.controller('FlightsCtrl',
                 method: 'POST',
                 url: '/pa165/api/flights/create',
                 data: flight
-            }).then(function success(response) {
+            }).then(
+                function success(response) {
                     var createdFlight = response.data;
                     $rootScope.successAlert = 'A new flight "' + createdFlight.id + '" was created';
                     loadFlights($scope, $http);
@@ -550,7 +563,7 @@ airportManagerApp.directive('datetimepicker', [
                 dpElement.on('dp.change', function (e) {
                     if (!isDateEqual(e.date, ngModel.$viewValue)) {
                         var newValue = e.date === false ? null : moment(e.date).add(1, "hours");
-                        ngModel.$setViewValue(newValue._d);
+                        ngModel.$setViewValue(newValue !== null ? newValue._d : null);
 
                         $timeout(function () {
                             if (typeof $scope.onChange === 'function') {
