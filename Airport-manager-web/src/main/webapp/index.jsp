@@ -66,7 +66,7 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="container" id="main">
 
     <div ng-app="airportManagerApp">
         <!-- Bootstrap-styled alerts, visible when $rootScope.xxxAlert is defined -->

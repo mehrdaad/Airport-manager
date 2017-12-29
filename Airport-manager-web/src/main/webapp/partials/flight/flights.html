@@ -46,7 +46,7 @@
                             <label for="departureLocationId" class="col-sm-2 control-label">Departure Location</label>
                             <div class="col-sm-10">
                                 <select id="departureLocationId" class="form-control"
-                                        ng-model="flight.departureLocationId" convert-to-int>
+                                        ng-model="flight.departureLocationId" convert-to-int ng-required="true">
                                     <option ng-repeat="departureLocation in destinations"
                                             value="{{departureLocation.id}}">
                                         {{departureLocation.city}}, {{departureLocation.country}}
@@ -98,7 +98,7 @@
                             <label for="airplaneId" class="col-sm-2 control-label">Airplane</label>
                             <div class="col-sm-10">
                                 <select id="airplaneId" class="form-control" ng-model="flight.airplaneId"
-                                        convert-to-int>
+                                        convert-to-int ng-required="true">
                                     <option ng-repeat="airplane in airplanes" value="{{airplane.id}}">
                                         {{airplane.name}}
                                     </option>

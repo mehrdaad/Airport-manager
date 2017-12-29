@@ -1,5 +1,12 @@
 .footer {
     text-align: left;
-    position: absolute;
+    position: fixed;
+    width: 100%;
     bottom: 0;
+    background: #eee;
+    padding-top: 0.5%;
+}
+
+#main {
+    padding-bottom: 2%;
 }

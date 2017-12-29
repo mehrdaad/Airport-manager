@@ -1,4 +1,5 @@
 'use strict';
+
 var airportManagerApp = angular.module('airportManagerApp', ['ngRoute', 'managerControllers']);
 var managerControllers = angular.module('managerControllers', []);
 
@@ -286,7 +287,7 @@ managerControllers.controller('StewardsCtrl',
             }, function error(response) {
                 console.log("Error during deleting steward!");
                 console.log(steward);
-                switch(response.data.code) {
+                switch (response.data.code) {
                     case 'PersistenceException':
                         $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
                         break;
@@ -294,7 +295,7 @@ managerControllers.controller('StewardsCtrl',
                         $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
                         break;
                     default:
-                        $rootScope.errorAlert = 'Cannot delete steward! Reason given by the server: '+ response.data.message;
+                        $rootScope.errorAlert = 'Cannot delete steward! Reason given by the server: ' + response.data.message;
                         break;
                 }
             });
@@ -341,7 +342,6 @@ managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         loadFlights($scope, $http);
         $scope.goToFlightDetail = function (flightId) {
-            console.log(flightId);
             $location.path('/flight/' + flightId);
         };
 
@@ -382,7 +382,6 @@ managerControllers.controller('FlightsCtrl',
 
         $scope.createFlight = function (flight) {
             console.log(flight);
-
             $http({
                 method: 'POST',
                 url: '/pa165/api/flights/create',
@@ -440,6 +439,18 @@ managerControllers.controller('FlightDetailCtrl',
     }
 );
 
+function loadFlights($scope, $http) {
+    $http.get('/pa165/api/flights').then(function (response) {
+        if (response.data._embedded !== undefined) {
+            $scope.flights = response.data._embedded.flights;
+            formatFlightsDates($scope.flights);
+        } else {
+            $scope.flights = [];
+        }
+
+    });
+}
+
 function formatFlightsDates(flights) {
     for (var i = 0; i < flights.length; ++i) {
         formatFlightDates(flights[i]);
@@ -496,18 +507,6 @@ managerControllers.directive('convertToInts', function () {
     };
 });
 
-function loadFlights($scope, $http) {
-    $http.get('/pa165/api/flights').then(function (response) {
-        console.log(response.data);
-        if (response.data._embedded !== undefined) {
-            $scope.flights = response.data._embedded.flights;
-            formatFlightsDates($scope.flights);
-        } else {
-            $scope.flights = [];
-        }
-
-    });
-}
 
 airportManagerApp.directive('datetimepicker', [
     '$timeout',
@@ -550,7 +549,7 @@ airportManagerApp.directive('datetimepicker', [
 
                 dpElement.on('dp.change', function (e) {
                     if (!isDateEqual(e.date, ngModel.$viewValue)) {
-                        var newValue = e.date === false ? null : e.date;
+                        var newValue = e.date === false ? null : moment(e.date).add(1, "hours");
                         ngModel.$setViewValue(newValue._d);
 
                         $timeout(function () {
