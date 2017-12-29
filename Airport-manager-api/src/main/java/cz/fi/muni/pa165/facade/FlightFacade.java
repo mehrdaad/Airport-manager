@@ -31,6 +31,13 @@ public interface FlightFacade {
     FlightDTO getFlight(Long id);
 
     /**
+     * Update flight.
+     *
+     * @param flightDTO Flight to be updated.
+     */
+    void updateFlight(FlightDTO flightDTO);
+
+    /**
      * Returns all created flights.
      *
      * @return the list of FlightDTO objects

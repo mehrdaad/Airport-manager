@@ -71,6 +71,20 @@ public class FlightsRestController {
         }
     }
 
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public final void updateSteward(@PathVariable("id") long id,
+                                    @RequestBody @Valid FlightDTO flightDTO,
+                                    BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            throw new InvalidRequestException("Failed validation");
+        }
+        if (id != flightDTO.getId()) {
+            throw new InvalidRequestException("Objects differ in ID");
+        }
+
+        flightFacade.updateFlight(flightDTO);
+    }
+
     @RequestMapping(value = "/current", method = RequestMethod.GET)
     public final HttpEntity<Resources<FlightResource>> getCurrentFlights() {
         List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(
