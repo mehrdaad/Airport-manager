@@ -35,7 +35,7 @@ airportManagerApp.config(['$routeProvider',
                 controller: 'AirplaneDetailCtrl'
             })
             .when('/destination', {
-                templateUrl: 'partials/destination.html',
+                templateUrl: 'partials/destination/destination.html',
                 controller: 'DestinationCtrl'
             })
             .otherwise({redirectTo: '/main'});
@@ -123,11 +123,25 @@ function loadDestinations($http, $scope) {
 
 
 managerControllers.controller('DestinationCtrl',
-    function ($scope, $rootScope, $routeParams, $http) {
+    function ($scope, $rootScope, $routeParams, $http, $location) {
         $scope.sortType = 'country';
         $scope.sortReverse = false;
         $scope.searchQuery = '';
         loadDestinations($http, $scope);
+
+
+        $scope.createDestination = function (destination) {
+            console.log(destination);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/destination/create',
+                data: destination
+            }).then(function (response) {
+                console.log(response);
+                get();
+            });
+            loadDestinations($http, $scope);
+        };
 
         $scope.newField = {};
         $scope.editing = false;
@@ -162,7 +176,6 @@ managerControllers.controller('DestinationCtrl',
                     //display confirmation alert
                     $rootScope.successAlert = 'Deleted destination "' + product.name + '"';
                     //load new list of all products
-                    loadAdminProducts($http, $scope);
                 },
                 function error(response) {
                     console.log("error when deleting destination");
@@ -180,37 +193,8 @@ managerControllers.controller('DestinationCtrl',
             loadDestinations($http, $scope);
         };
 
-        $scope.newDestination = {
-            'city': '',
-            'country': ''
-        };
 
 
-        $scope.create = function (newDestination) {
-            $http({
-                method: 'POST',
-                url: '/pa165/api/destination/create',
-                data: newDestination
-            }).then(function success(response) {
-                console.log('created destination');
-                var createdDestination = response.data;
-                //display confirmation alert
-                $rootScope.successAlert = 'Destination "' + createdDestination.country + '" was created';
-                //change view to list of products
-                $location.path("/pa165/destination");
-            }, function error(response) {
-                //display error
-                console.log("error when creating destination");
-                switch (response.data.code) {
-                    case 'InvalidRequestException':
-                        $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
-                        break;
-                    default:
-                        $rootScope.errorAlert = 'Cannot create destination ! Reason given by the server: ' + response.data.message;
-                        break;
-                }
-            });
-        };
 
         $scope.update = function (destination) {
             $http({
