@@ -289,6 +289,23 @@ public class FlightServiceTest extends BaseServiceTest{
         flightService.addSteward(flight, steward);
     }
 
+    @Test
+    public void getFlightsInTimeRange() {
+        LocalDateTime start = LocalDateTime.of(2000, 4, 1, 10, 30);
+        LocalDateTime end = LocalDateTime.of(2000, 4, 20, 10, 30);
+        when(flightDao.getAllFlights()).thenReturn(Arrays.asList(flight, flight2));
+
+        List<Flight> result = flightService.getFlightsInTimeRange(start, end);
+
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(flight, result.get(0));
+    }
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void getFlightsInTimeRangeNull() {
+        flightService.getFlightsInTimeRange(null, null);
+    }
+
     private void createFlight() {
 
         LocalDateTime time1 = LocalDateTime.of(2000, 4, 1, 10, 30);

@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -79,5 +80,16 @@ public class AirplanesRestController {
         Long id = airplaneFacade.addAirplane(airplaneDTO);
         AirplaneResource airplaneResource = airplaneResourceAssembler.toResource(airplaneFacade.findById(id));
         return new ResponseEntity<>(airplaneResource, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{start}&{end}", method = RequestMethod.GET)
+    public final HttpEntity<Resources<AirplaneResource>> getFreeAirplanesInTimeRange(@PathVariable("start") LocalDateTime start,
+                                                                                     @PathVariable("end") LocalDateTime end) {
+        List<AirplaneResource> freeAirplanes = airplaneResourceAssembler.toResources(airplaneFacade.getFreeAirplanesInTimeRange(start, end));
+
+        Resources<AirplaneResource> airplaneResources = new Resources<>(freeAirplanes,
+                linkTo(AirplanesRestController.class).withSelfRel(),
+                linkTo(AirplanesRestController.class).slash("/create").withRel("create"));
+        return new ResponseEntity<>(airplaneResources, HttpStatus.OK);
     }
 }

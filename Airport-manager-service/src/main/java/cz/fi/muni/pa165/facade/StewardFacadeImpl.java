@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.facade;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.dto.StewardDTO;
 import cz.fi.muni.pa165.entities.Steward;
+import cz.fi.muni.pa165.service.FlightService;
 import cz.fi.muni.pa165.service.MappingService;
 import cz.fi.muni.pa165.service.StewardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Autowired
     private StewardService stewardService;
+
+    @Autowired
+    private FlightService flightService;
 
     @Autowired
     private MappingService mappingService;
@@ -75,8 +79,9 @@ public class StewardFacadeImpl implements StewardFacade {
                 FlightDTO.class);
     }
 
-
-
-
+    @Override
+    public List<StewardDTO> getFreeStewardsInTimeRange(LocalDateTime start, LocalDateTime end) {
+        return mappingService.mapTo(stewardService.getFreeStewardsInTimeRange(start, end), StewardDTO.class);
+    }
 
 }

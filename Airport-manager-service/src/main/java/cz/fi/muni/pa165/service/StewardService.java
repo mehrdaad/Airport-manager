@@ -16,6 +16,7 @@ import java.util.List;
 public interface StewardService {
     /**
      * Get steward by id.
+     *
      * @param id Id identifying steward.
      * @return Steward with given id.
      */
@@ -40,7 +41,7 @@ public interface StewardService {
      * Create steward with name and surname.
      *
      * @param firstName Steward first name.
-     * @param surName Steward surname.
+     * @param surName   Steward surname.
      */
     Long createSteward(String firstName, String surName);
 
@@ -63,9 +64,9 @@ public interface StewardService {
      * Get all stewards flights in given time range. All departured flights in range are
      * included in result.
      *
-     * @param id Steward id.
+     * @param id        Steward id.
      * @param startTime Time to start searching from.
-     * @param stopTime Time to stop searching.
+     * @param stopTime  Time to stop searching.
      * @return All stewards flights in given time range. Empty list if not any.
      */
     List<Flight> getAllStewardFlightsInTimeRange(long id, LocalDateTime startTime, LocalDateTime stopTime);
@@ -95,5 +96,12 @@ public interface StewardService {
      */
     Flight getStewardFutureFlight(long id);
 
-
+    /**
+     * Get all stewards that are free in specified time range.
+     *
+     * @param start the date since when to find stewards
+     * @param end   the date until when find stewards
+     * @return All stewards that are free in the given time range
+     */
+    List<Steward> getFreeStewardsInTimeRange(LocalDateTime start, LocalDateTime end);
 }

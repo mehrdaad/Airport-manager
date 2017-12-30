@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -87,15 +88,15 @@ public class StewardRestController {
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Failed validation");
         }
-        if(id != stewardDTO.getId()) {
+        if (id != stewardDTO.getId()) {
             throw new InvalidRequestException("Objects differ in ID");
         }
         stewardFacade.updateSteward(stewardDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-        public final HttpEntity<StewardResource> createSteward(@RequestBody @Valid StewardCreateDTO stewardCreateDTO,
-                                                               BindingResult bindingResult) throws Exception {
+    public final HttpEntity<StewardResource> createSteward(@RequestBody @Valid StewardCreateDTO stewardCreateDTO,
+                                                           BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Failed validation");
         }
@@ -103,5 +104,16 @@ public class StewardRestController {
         Long id = stewardFacade.createSteward(stewardCreateDTO.getFirstname(), stewardCreateDTO.getSurname());
         StewardResource stewardResource = assembler.toResource(stewardFacade.getSteward(id));
         return new ResponseEntity<>(stewardResource, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{start}&{end}", method = RequestMethod.GET)
+    public final HttpEntity<Resources<StewardResource>> getFreeStewardsInTimeRange(@PathVariable("start") LocalDateTime start,
+                                                                                   @PathVariable("end") LocalDateTime end) {
+        List<StewardResource> freeStewards = assembler.toResources(stewardFacade.getFreeStewardsInTimeRange(start, end));
+
+        Resources<StewardResource> stewardResources = new Resources<>(freeStewards,
+                linkTo(AirplanesRestController.class).withSelfRel(),
+                linkTo(AirplanesRestController.class).slash("/create").withRel("create"));
+        return new ResponseEntity<>(stewardResources, HttpStatus.OK);
     }
 }

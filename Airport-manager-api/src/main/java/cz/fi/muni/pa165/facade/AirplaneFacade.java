@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165.facade;
 
 import cz.fi.muni.pa165.dto.AirplaneDTO;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,4 +32,6 @@ public interface AirplaneFacade {
     void deleteAirplane(Long id);
 
     void updateAirplane(AirplaneDTO airplane);
+
+    List<AirplaneDTO> getFreeAirplanesInTimeRange(LocalDateTime start, LocalDateTime end);
 }

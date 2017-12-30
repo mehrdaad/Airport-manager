@@ -13,16 +13,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author Jan Cakl
  */
 @Service
 public class AirplaneServiceImpl implements AirplaneService {
     @Autowired
     private AirplaneDao airplaneDao;
-    
+
     @Autowired
     private FlightService flightService;
 
@@ -62,18 +63,18 @@ public class AirplaneServiceImpl implements AirplaneService {
         } catch (Exception e) {
             throw new AirplaneDataAccessException("Exception while updating airplane: " + airplane, e);
         }
-        
+
     }
 
     @Override
-    public List<Airplane> findAll() { 
+    public List<Airplane> findAll() {
         try {
             return airplaneDao.findAll();
         } catch (Exception e) {
             throw new AirplaneDataAccessException("Exception while finding all airplanes.", e);
         }
     }
-    
+
     @Override
     public List<Airplane> findByName(String name) {
         try {
@@ -82,7 +83,7 @@ public class AirplaneServiceImpl implements AirplaneService {
             throw new AirplaneDataAccessException("Exception while finding airplane by name: " + name, e);
         }
     }
-    
+
     @Override
     public List<Airplane> findByType(String type) {
         try {
@@ -91,7 +92,7 @@ public class AirplaneServiceImpl implements AirplaneService {
             throw new AirplaneDataAccessException("Exception while finding airplane by type: " + type, e);
         }
     }
-    
+
     @Override
     public List<Airplane> findByCapacityMin(int capacity) {
         try {
@@ -100,7 +101,7 @@ public class AirplaneServiceImpl implements AirplaneService {
             throw new AirplaneDataAccessException("Exception while finding airplane by capacityMin: " + capacity, e);
         }
     }
-    
+
     @Override
     public List<Airplane> findByCapacityMax(int capacity) {
         try {
@@ -112,59 +113,76 @@ public class AirplaneServiceImpl implements AirplaneService {
 
     @Override
     public List<Airplane> findByUsedAfterDateTime(LocalDateTime sinceDateTime) {
-      try {
-        List<Flight> allFlightSince = flightService.getFlightsSince(sinceDateTime);
-        List<Airplane> allAirplanes = airplaneDao.findAll();
-        
-        if(allFlightSince.isEmpty()){
-            return Collections.emptyList();
-        }
-        
-        List<Airplane> allUsedAirPlanes = new ArrayList<>();
-                
-         for (Airplane airplane : allAirplanes) {
-            for (Flight flight : allFlightSince) {
-                if (flight.getAirplane() != null && flight.getAirplane().equals(airplane)) {
-                    allUsedAirPlanes.add(airplane);
-                    break;
+        try {
+            List<Flight> allFlightSince = flightService.getFlightsSince(sinceDateTime);
+            List<Airplane> allAirplanes = airplaneDao.findAll();
+
+            if (allFlightSince.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            List<Airplane> allUsedAirPlanes = new ArrayList<>();
+
+            for (Airplane airplane : allAirplanes) {
+                for (Flight flight : allFlightSince) {
+                    if (flight.getAirplane() != null && flight.getAirplane().equals(airplane)) {
+                        allUsedAirPlanes.add(airplane);
+                        break;
+                    }
                 }
             }
-        }
-        return allUsedAirPlanes;
-      }catch (Exception e) {
+            return allUsedAirPlanes;
+        } catch (Exception e) {
             throw new AirplaneDataAccessException("Exception while finding airplane by used after time: " + sinceDateTime, e);
         }
     }
 
     @Override
     public List<Airplane> findByFreeAfterDateTime(LocalDateTime sinceDateTime) {
-        try{
-        List<Flight> allFlightSince = flightService.getFlightsSince(sinceDateTime);
-        List<Airplane> allAirplanes = airplaneDao.findAll();
-        
-        if(allFlightSince.isEmpty()){
-            return allAirplanes;
-        }
-        
-        List<Airplane> allFreeAirPlanes = new ArrayList<>();
+        try {
+            List<Flight> allFlightSince = flightService.getFlightsSince(sinceDateTime);
+            List<Airplane> allAirplanes = airplaneDao.findAll();
 
-        for (Airplane airplane : allAirplanes) {
-            boolean used = false;
-            for (Flight flight : allFlightSince) {
-                if (flight.getAirplane() != null && flight.getAirplane().equals(airplane)) {
-                    used = true;
-                    break;
+            if (allFlightSince.isEmpty()) {
+                return allAirplanes;
+            }
+
+            List<Airplane> allFreeAirPlanes = new ArrayList<>();
+
+            for (Airplane airplane : allAirplanes) {
+                boolean used = false;
+                for (Flight flight : allFlightSince) {
+                    if (flight.getAirplane() != null && flight.getAirplane().equals(airplane)) {
+                        used = true;
+                        break;
+                    }
+                }
+
+                if (!used) {
+                    allFreeAirPlanes.add(airplane);
                 }
             }
-                    
-            if(!used){
-                allFreeAirPlanes.add(airplane);
-            }
-	}
 
-        return allFreeAirPlanes;
-        }catch (Exception e) {
+            return allFreeAirPlanes;
+        } catch (Exception e) {
             throw new AirplaneDataAccessException("Exception while finding airplane by free after time: " + sinceDateTime, e);
+        }
+    }
+
+    @Override
+    public List<Airplane> findFreeAirplanesInTimeRange(LocalDateTime start, LocalDateTime end) {
+        try {
+            List<Flight> flightsInRange = flightService.getFlightsInTimeRange(start, end);
+            Set<Airplane> assignedAirplanes = flightsInRange.stream()
+                    .map(Flight::getAirplane)
+                    .collect(Collectors.toSet());
+
+            List<Airplane> allAirplanes = new ArrayList<>(airplaneDao.findAll());
+            allAirplanes.removeAll(assignedAirplanes);
+
+            return allAirplanes;
+        } catch (Exception e) {
+            throw new AirplaneDataAccessException("Exception while finding airplanes in time range", e);
         }
     }
 }
