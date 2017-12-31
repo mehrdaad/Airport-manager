@@ -47,7 +47,8 @@
                             <label for="departureLocationId" class="col-sm-2 control-label">Departure Location</label>
                             <div class="col-sm-10">
                                 <select id="departureLocationId" class="form-control" name="departureLocation"
-                                        ng-model="flight.departureLocationId" convert-to-int ng-required="true">
+                                        ng-model="flight.departureLocationId" convert-to-int
+                                        ng-required="flight.departureLocationId !== undefined">
                                     <option ng-repeat="departureLocation in destinations"
                                             value="{{departureLocation.id}}">
                                         {{departureLocation.city}}, {{departureLocation.country}}
@@ -116,8 +117,9 @@
                                         {{airplane.name}}
                                     </option>
                                 </select>
-                                <p class="help-block" ng-show="form.airplane.$disabled">Set the dates</p>
-                                <p class="help-block" ng-show="form.airplane.$error.required">Airplane is
+                                <p class="help-block" ng-show="!areDatesSet">Set the departure and arrival times
+                                    first</p>
+                                <p class="help-block" ng-show="areDatesSet && form.airplane.$error.required">Airplane is
                                     required</p>
                             </div>
                         </div>
@@ -127,9 +129,11 @@
                                 <select id="stewardIds" class="form-control" ng-model="flight.stewardIds" multiple
                                         ng-multiple="true" convert-to-ints ng-disabled="!areDatesSet">
                                     <option ng-repeat="steward in stewards" value="{{steward.id}}">
-                                        {{steward.firstName}} {{steward.surname}}
+                                        {{steward.firstname}} {{steward.surname}}
                                     </option>
                                 </select>
+                                <p class="help-block" ng-show="!areDatesSet">Set the departure and arrival times
+                                    first</p>
                             </div>
                         </div>
                     </form>

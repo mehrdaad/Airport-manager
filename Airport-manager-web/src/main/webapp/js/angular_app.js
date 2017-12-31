@@ -344,11 +344,11 @@ managerControllers.controller('FlightsCtrl',
 
         $scope.createFlightModel = function () {
             $scope.flight = {
-                'departureLocationId': undefined,
-                'arrivalLocationId': undefined,
+                'departureLocationId': '',
+                'arrivalLocationId': '',
                 'departureTime': undefined,
                 'arrivalTime': undefined,
-                'airplaneId': undefined,
+                'airplaneId': '',
                 'stewardIds': []
             };
         };
@@ -409,6 +409,8 @@ managerControllers.controller('FlightsCtrl',
                 $scope.areDatesSet = true;
             } else {
                 $scope.areDatesSet = false;
+                $scope.stewards = [];
+                $scope.airplanes = [];
             }
         });
 
