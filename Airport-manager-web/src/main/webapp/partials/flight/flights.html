@@ -47,8 +47,7 @@
                             <label for="departureLocationId" class="col-sm-2 control-label">Departure Location</label>
                             <div class="col-sm-10">
                                 <select id="departureLocationId" class="form-control" name="departureLocation"
-                                        ng-model="flight.departureLocationId" convert-to-int
-                                        ng-required="flight.departureLocationId !== undefined">
+                                        ng-model="flight.departureLocationId" convert-to-int ng-required="true">
                                     <option ng-repeat="departureLocation in destinations"
                                             value="{{departureLocation.id}}">
                                         {{departureLocation.city}}, {{departureLocation.country}}
@@ -129,7 +128,7 @@
                                 <select id="stewardIds" class="form-control" ng-model="flight.stewardIds" multiple
                                         ng-multiple="true" convert-to-ints ng-disabled="!areDatesSet">
                                     <option ng-repeat="steward in stewards" value="{{steward.id}}">
-                                        {{steward.firstname}} {{steward.surname}}
+                                        {{steward.firstName}} {{steward.surname}}
                                     </option>
                                 </select>
                                 <p class="help-block" ng-show="!areDatesSet">Set the departure and arrival times

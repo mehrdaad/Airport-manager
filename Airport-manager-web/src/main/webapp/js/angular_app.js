@@ -262,7 +262,7 @@ managerControllers.controller('StewardsCtrl',
         };
         get();
         $scope.steward = {
-            'firstname': '',
+            'firstName': '',
             'surname': ''
         };
         $scope.createSteward = function (steward) {
@@ -320,7 +320,7 @@ managerControllers.controller('StewardDetailCtrl',
             console.log(steward);
             var karelFirstName = {
                 'id': steward.id,
-                'firstName': steward.firstname,
+                'firstName': steward.firstName,
                 'surname': steward.surname
             };
             $http({
@@ -406,6 +406,7 @@ managerControllers.controller('FlightsCtrl',
                 }).then(function (response) {
                     $scope.airplanes = response.data._embedded.airplanes;
                 });
+
                 $scope.areDatesSet = true;
             } else {
                 $scope.areDatesSet = false;
@@ -414,7 +415,7 @@ managerControllers.controller('FlightsCtrl',
             }
         });
 
-        /** */
+        /** DateTimePicker - end */
 
         $scope.createFlight = function (flight) {
             console.log(flight);
@@ -468,11 +469,7 @@ managerControllers.controller('FlightDetailCtrl',
     function ($scope, $routeParams, $http) {
         var flightId = $routeParams.flightId;
         $http.get('/pa165/api/flights/' + flightId).then(function (response) {
-            console.log(response.data);
             var flight = response.data;
-            formatFlightDates(flight);
-            $scope.flight = flight;
-
             $scope.flightToUpdate = {
                 'departureLocationId': flight.departureLocation.id,
                 'arrivalLocationId': flight.arrivalLocation.id,
@@ -481,30 +478,90 @@ managerControllers.controller('FlightDetailCtrl',
                 'airplaneId': flight.airplane.id,
                 'stewardIds': []
             };
+
+            flight.stewards.forEach(function (value) {
+                $scope.flightToUpdate.stewardIds.push(value.id);
+            });
+
+            $http.get('/pa165/api/destination').then(function (response) {
+                $scope.destinations = response.data._embedded.destinations;
+            });
+
+            /** DateTimePicker */
+
+            $scope.areDatesSet = false;
+
+            $scope.optionsDepartureTime = {
+                defaultDate: moment(flight.departureTime),
+                maxDate: moment(flight.arrivalTime),
+                showClear: true,
+                showClose: true,
+                format: "DD.MM.YYYY - h:mm A",
+                toolbarPlacement: 'top'
+            };
+
+            $scope.optionsArrivalTime = {
+                defaultDate: moment(flight.arrivalTime),
+                minDate: moment(flight.departureTime),
+                showClear: true,
+                showClose: true,
+                format: "DD.MM.YYYY - h:mm A",
+                toolbarPlacement: 'top'
+            };
+
+            formatFlightDates(flight);
+            $scope.flight = flight;
+
+            $scope.$watchGroup(['flightToUpdate.departureTime', 'flightToUpdate.arrivalTime'], function (newVal, oldVal) {
+                if (newVal[0] !== undefined && newVal[1] !== undefined) {
+                    $http({
+                        url: '/pa165/api/stewards/free',
+                        method: 'GET',
+                        params: {
+                            start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                            end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                        }
+                    }).then(function (response) {
+                        $scope.stewards = response.data._embedded.stewards;
+                        $scope.flight.stewards.forEach(function (value) {
+                            var check = function (steward) {
+                                return steward.id === value.id;
+                            };
+                            if ($scope.stewards.find(check) === undefined) {
+                                $scope.stewards.unshift(value);
+                            }
+                        });
+                    });
+
+                    $http({
+                        url: '/pa165/api/airplanes/free',
+                        method: 'GET',
+                        params: {
+                            start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                            end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                        }
+                    }).then(function (response) {
+                        $scope.airplanes = response.data._embedded.airplanes;
+                        var check = function (airplane) {
+                            return airplane.id === $scope.flight.airplane.id;
+                        };
+                        if ($scope.airplanes.find(check) === undefined) {
+                            $scope.airplanes.unshift($scope.flight.airplane);
+                        }
+                    });
+                    $scope.areDatesSet = true;
+                } else {
+                    $scope.areDatesSet = false;
+                    $scope.stewards = [];
+                    $scope.airplanes = [];
+                }
+            });
+
+            /** DateTimePicker - end */
+
         });
 
-
-        /** DateTimePicker */
-
-        $scope.areDatesSet = false;
-
-        $scope.optionsDepartureTime = {
-            useCurrent: true,
-            showClear: true,
-            showClose: true,
-            toolbarPlacement: 'top'
-        };
-
-        $scope.optionsArrivalTime = {
-            useCurrent: false,
-            showClear: true,
-            showClose: true,
-            toolbarPlacement: 'top'
-        };
-        /** */
-
         $scope.updateFlight = function (flight) {
-            console.log(flight);
             $http({
                 method: 'POST',
                 url: '/pa165/api/flights/' + flight.id + '/update/',
@@ -557,9 +614,11 @@ managerControllers.directive('convertToInt', function () {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             ngModel.$parsers.push(function (val) {
+                if (val === undefined) return;
                 return parseInt(val, 10);
             });
             ngModel.$formatters.push(function (val) {
+                if (val === undefined) return;
                 return '' + val;
             });
         }
@@ -571,6 +630,7 @@ managerControllers.directive('convertToInts', function () {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             ngModel.$parsers.push(function (val) {
+                if (val === undefined) return;
                 var parsed = [];
                 for (var i = 0; i < val.length; ++i) {
                     parsed.push(parseInt(val[i], 10))
@@ -578,6 +638,7 @@ managerControllers.directive('convertToInts', function () {
                 return parsed;
             });
             ngModel.$formatters.push(function (val) {
+                if (val === undefined) return;
                 var formatted = [];
                 for (var i = 0; i < val.length; ++i) {
                     formatted.push('' + val[i])
