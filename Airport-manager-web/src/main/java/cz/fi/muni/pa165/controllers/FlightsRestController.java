@@ -2,9 +2,11 @@ package cz.fi.muni.pa165.controllers;
 
 import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
+import cz.fi.muni.pa165.dto.FlightUpdateDTO;
 import cz.fi.muni.pa165.exceptions.FlightDataAccessException;
 import cz.fi.muni.pa165.exceptions.InvalidRequestException;
 import cz.fi.muni.pa165.exceptions.ResourceNotFoundException;
+import cz.fi.muni.pa165.exceptions.ServerException;
 import cz.fi.muni.pa165.facade.FlightFacade;
 import cz.fi.muni.pa165.hateoas.FlightResource;
 import cz.fi.muni.pa165.hateoas.FlightResourceAssembler;
@@ -64,7 +66,6 @@ public class FlightsRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public final void deleteFlight(@PathVariable("id") long id) throws Exception {
         try {
-            logger.warn(Long.toString(id));
             flightFacade.deleteFlight(id);
         } catch (FlightDataAccessException e) {
             // TODO error handling
@@ -72,17 +73,22 @@ public class FlightsRestController {
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public final void updateSteward(@PathVariable("id") long id,
-                                    @RequestBody @Valid FlightDTO flightDTO,
-                                    BindingResult bindingResult) throws Exception {
+    public final void updateFlight(@PathVariable("id") long id,
+                                   @RequestBody @Valid FlightUpdateDTO flightUpdateDTO,
+                                   BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Failed validation");
         }
-        if (id != flightDTO.getId()) {
+        if (id != flightUpdateDTO.getId()) {
             throw new InvalidRequestException("Objects differ in ID");
         }
+        logger.warn(flightUpdateDTO.toString());
 
-        flightFacade.updateFlight(flightDTO);
+        try {
+            flightFacade.updateFlight(flightUpdateDTO);
+        } catch (FlightDataAccessException e) {
+            throw new ServerException("Server Exception", e);
+        }
     }
 
     @RequestMapping(value = "/current", method = RequestMethod.GET)
@@ -105,7 +111,6 @@ public class FlightsRestController {
         }
 
         Long id = flightFacade.createFlight(flightCreateDTO);
-        logger.warn(id.toString());
         FlightResource flightResource = flightResourceAssembler.toResource(flightFacade.getFlight(id));
         return new ResponseEntity<>(flightResource, HttpStatus.OK);
     }

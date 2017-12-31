@@ -466,11 +466,12 @@ managerControllers.controller('FlightsCtrl',
 );
 
 managerControllers.controller('FlightDetailCtrl',
-    function ($scope, $routeParams, $http) {
+    function ($scope, $routeParams, $http, $rootScope, $route, $timeout) {
         var flightId = $routeParams.flightId;
         $http.get('/pa165/api/flights/' + flightId).then(function (response) {
             var flight = response.data;
             $scope.flightToUpdate = {
+                'id': flight.id,
                 'departureLocationId': flight.departureLocation.id,
                 'arrivalLocationId': flight.arrivalLocation.id,
                 'departureTime': flight.departureTime,
@@ -567,8 +568,11 @@ managerControllers.controller('FlightDetailCtrl',
                 url: '/pa165/api/flights/' + flight.id + '/update/',
                 data: flight
             }).then(function success(response) {
-                console.log(response);
                 $rootScope.successAlert = 'Flight was successfully updated.';
+                $timeout(function () {
+                    $route.reload();
+                }, 1000);
+
             }, function error(response) {
                 console.log(response);
                 $rootScope.errorAlert = 'Error during updating flight.';

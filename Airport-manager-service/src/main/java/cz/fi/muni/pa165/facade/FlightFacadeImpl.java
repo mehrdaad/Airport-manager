@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.facade;
 
 import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
+import cz.fi.muni.pa165.dto.FlightUpdateDTO;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.service.*;
@@ -54,8 +55,19 @@ public class FlightFacadeImpl implements FlightFacade {
     }
 
     @Override
-    public void updateFlight(FlightDTO flightDTO) {
-        flightService.updateFlight(mappingService.mapTo(flightDTO, Flight.class));
+    public void updateFlight(FlightUpdateDTO flightUpdateDTO) {
+        Flight flight = new Flight();
+        flight.setId(flightUpdateDTO.getId());
+        flight.setDepartureTime(flightUpdateDTO.getDepartureTime());
+        flight.setArrivalTime(flightUpdateDTO.getArrivalTime());
+        flight.setDepartureLocation(destinationService.getDestinationById(flightUpdateDTO.getDepartureLocationId()));
+        flight.setArrivalLocation(destinationService.getDestinationById(flightUpdateDTO.getArrivalLocationId()));
+        flight.setAirplane(airplaneService.findById(flightUpdateDTO.getAirplaneId()));
+        for (Long stewardId : flightUpdateDTO.getStewardIds()) {
+            flight.addSteward(stewardService.getSteward(stewardId));
+        }
+
+        flightService.updateFlight(flight);
     }
 
     @Override

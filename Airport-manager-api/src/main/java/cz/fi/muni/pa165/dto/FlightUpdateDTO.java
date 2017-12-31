@@ -4,10 +4,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * @author Robert Duriancik
- */
-public class FlightCreateDTO {
+public class FlightUpdateDTO {
+    @NotNull
+    private Long id;
     @NotNull
     private Long departureLocationId;
     @NotNull
@@ -19,6 +18,14 @@ public class FlightCreateDTO {
     @NotNull
     private Long airplaneId;
     private List<Long> stewardIds;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getDepartureLocationId() {
         return departureLocationId;
@@ -52,14 +59,6 @@ public class FlightCreateDTO {
         this.arrivalTime = arrivalTime;
     }
 
-    public List<Long> getStewardIds() {
-        return stewardIds;
-    }
-
-    public void setStewardIds(List<Long> stewardIds) {
-        this.stewardIds = stewardIds;
-    }
-
     public Long getAirplaneId() {
         return airplaneId;
     }
@@ -68,40 +67,55 @@ public class FlightCreateDTO {
         this.airplaneId = airplaneId;
     }
 
+    public List<Long> getStewardIds() {
+        return stewardIds;
+    }
+
+    public void setStewardIds(List<Long> stewardIds) {
+        this.stewardIds = stewardIds;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FlightCreateDTO that = (FlightCreateDTO) o;
+        FlightUpdateDTO that = (FlightUpdateDTO) o;
 
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (departureLocationId != null ? !departureLocationId.equals(that.departureLocationId) : that.departureLocationId != null)
             return false;
         if (arrivalLocationId != null ? !arrivalLocationId.equals(that.arrivalLocationId) : that.arrivalLocationId != null)
             return false;
         if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
             return false;
-        return airplaneId != null ? airplaneId.equals(that.airplaneId) : that.airplaneId == null;
+        if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
+        if (airplaneId != null ? !airplaneId.equals(that.airplaneId) : that.airplaneId != null) return false;
+        return stewardIds != null ? stewardIds.equals(that.stewardIds) : that.stewardIds == null;
     }
 
     @Override
     public int hashCode() {
-        int result = departureLocationId != null ? departureLocationId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (departureLocationId != null ? departureLocationId.hashCode() : 0);
         result = 31 * result + (arrivalLocationId != null ? arrivalLocationId.hashCode() : 0);
         result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
+        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
         result = 31 * result + (airplaneId != null ? airplaneId.hashCode() : 0);
+        result = 31 * result + (stewardIds != null ? stewardIds.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "FlightCreateDTO{" +
-                "departureLocationId=" + departureLocationId +
+        return "FlightUpdateDTO{" +
+                "id=" + id +
+                ", departureLocationId=" + departureLocationId +
                 ", arrivalLocationId=" + arrivalLocationId +
                 ", departureTime=" + departureTime +
                 ", arrivalTime=" + arrivalTime +
-                ", stewardIds=" + stewardIds +
                 ", airplaneId=" + airplaneId +
+                ", stewardIds=" + stewardIds +
                 '}';
     }
 }

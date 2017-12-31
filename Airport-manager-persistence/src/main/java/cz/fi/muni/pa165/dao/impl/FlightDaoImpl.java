@@ -55,7 +55,7 @@ public class FlightDaoImpl implements FlightDao {
         Flight flightFromDb = getFlight(flight.getId());
 
         try {
-            em.merge(flightFromDb);
+            em.merge(flight); // TODO fix
         } catch (PersistenceException e){
             throw new DataIntegrityViolationException("Error while updating data in database");
         }

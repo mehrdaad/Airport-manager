@@ -75,7 +75,7 @@ public class FlightFacadeTest extends BaseFacadeTest {
 //        when(mappingService.mapTo(flightCreateDTO, Flight.class)).thenReturn(flight);
 //        flightFacade.createFlight(flightCreateDTO);
 //        verify(flightService).addFlight(flight);
-//    } TODO FIX
+//    } TODO FIX + UPDATE flight
 
     @Test
     public void testGetFlight() {
