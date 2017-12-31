@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="flight in flights track by $index">
-            <th>{{flight.c}}</th>
+            <th>{{flight.id}}</th>
             <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
             <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>
             <td>{{flight.departureTime}}</td>
