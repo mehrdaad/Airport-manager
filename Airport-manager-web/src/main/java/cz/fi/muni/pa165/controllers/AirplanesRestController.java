@@ -10,6 +10,7 @@ import cz.fi.muni.pa165.hateoas.AirplaneResourceAssembler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -82,9 +83,13 @@ public class AirplanesRestController {
         return new ResponseEntity<>(airplaneResource, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{start}&{end}", method = RequestMethod.GET)
-    public final HttpEntity<Resources<AirplaneResource>> getFreeAirplanesInTimeRange(@PathVariable("start") LocalDateTime start,
-                                                                                     @PathVariable("end") LocalDateTime end) {
+    @RequestMapping(value = "/free", method = RequestMethod.GET)
+    public final HttpEntity<Resources<AirplaneResource>> getFreeAirplanesInTimeRange(@RequestParam("start")
+                                                                                     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                                                                                             LocalDateTime start,
+                                                                                     @RequestParam("end")
+                                                                                     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                                                                                             LocalDateTime end) {
         List<AirplaneResource> freeAirplanes = airplaneResourceAssembler.toResources(airplaneFacade.getFreeAirplanesInTimeRange(start, end));
 
         Resources<AirplaneResource> airplaneResources = new Resources<>(freeAirplanes,

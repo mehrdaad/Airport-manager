@@ -11,6 +11,7 @@ import cz.fi.muni.pa165.hateoas.FlightResourceAssembler;
 import cz.fi.muni.pa165.hateoas.StewardResource;
 import cz.fi.muni.pa165.hateoas.StewardResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -106,9 +107,13 @@ public class StewardRestController {
         return new ResponseEntity<>(stewardResource, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{start}&{end}", method = RequestMethod.GET)
-    public final HttpEntity<Resources<StewardResource>> getFreeStewardsInTimeRange(@PathVariable("start") LocalDateTime start,
-                                                                                   @PathVariable("end") LocalDateTime end) {
+    @RequestMapping(value = "/free", method = RequestMethod.GET)
+    public final HttpEntity<Resources<StewardResource>> getFreeStewardsInTimeRange(@RequestParam("start")
+                                                                                   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                                                                                           LocalDateTime start,
+                                                                                   @RequestParam("end")
+                                                                                   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                                                                                           LocalDateTime end) {
         List<StewardResource> freeStewards = assembler.toResources(stewardFacade.getFreeStewardsInTimeRange(start, end));
 
         Resources<StewardResource> stewardResources = new Resources<>(freeStewards,

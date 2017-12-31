@@ -111,11 +111,12 @@
                             <label for="airplaneId" class="col-sm-2 control-label">Airplane</label>
                             <div class="col-sm-10">
                                 <select id="airplaneId" class="form-control" ng-model="flight.airplaneId"
-                                        convert-to-int ng-required="true" name="airplane">
+                                        convert-to-int ng-required="true" name="airplane" ng-disabled="!areDatesSet">
                                     <option ng-repeat="airplane in airplanes" value="{{airplane.id}}">
                                         {{airplane.name}}
                                     </option>
                                 </select>
+                                <p class="help-block" ng-show="form.airplane.$disabled">Set the dates</p>
                                 <p class="help-block" ng-show="form.airplane.$error.required">Airplane is
                                     required</p>
                             </div>
@@ -124,7 +125,7 @@
                             <label for="stewardIds" class="col-sm-2 control-label">Stewards</label>
                             <div class="col-sm-10">
                                 <select id="stewardIds" class="form-control" ng-model="flight.stewardIds" multiple
-                                        ng-multiple="true" convert-to-ints>
+                                        ng-multiple="true" convert-to-ints ng-disabled="!areDatesSet">
                                     <option ng-repeat="steward in stewards" value="{{steward.id}}">
                                         {{steward.firstName}} {{steward.surname}}
                                     </option>

@@ -344,11 +344,11 @@ managerControllers.controller('FlightsCtrl',
 
         $scope.createFlightModel = function () {
             $scope.flight = {
-                'departureLocationId': '',
-                'arrivalLocationId': '',
-                'departureTime': '',
-                'arrivalTime': '',
-                'airplaneId': '',
+                'departureLocationId': undefined,
+                'arrivalLocationId': undefined,
+                'departureTime': undefined,
+                'arrivalTime': undefined,
+                'airplaneId': undefined,
                 'stewardIds': []
             };
         };
@@ -359,22 +359,17 @@ managerControllers.controller('FlightsCtrl',
             $location.path('/flight/' + flightId);
         };
 
-        $http.get('/pa165/api/airplanes').then(function (response) {
-            $scope.airplanes = response.data._embedded.airplanes;
-        });
-
         $http.get('/pa165/api/destination').then(function (response) {
             $scope.destinations = response.data._embedded.destinations;
         });
 
-        $http.get('/pa165/api/stewards').then(function (response) {
-            $scope.stewards = response.data._embedded.stewards;
-        });
-
         /** DateTimePicker */
+
+        $scope.areDatesSet = false;
 
         $scope.optionsDepartureTime = {
             useCurrent: true,
+            format: "DD.MM.YYYY - h:mm A",
             showClear: true,
             showClose: true,
             toolbarPlacement: 'top'
@@ -382,15 +377,42 @@ managerControllers.controller('FlightsCtrl',
 
         $scope.optionsArrivalTime = {
             useCurrent: false,
+            format: "DD.MM.YYYY - h:mm A",
             showClear: true,
             showClose: true,
             toolbarPlacement: 'top'
         };
+
+        $scope.$watchGroup(['flight.departureTime', 'flight.arrivalTime'], function (newVal, oldVal) {
+            if (newVal[0] !== undefined && newVal[1] !== undefined) {
+                $http({
+                    url: '/pa165/api/stewards/free',
+                    method: 'GET',
+                    params: {
+                        start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                        end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                    }
+                }).then(function (response) {
+                    $scope.stewards = response.data._embedded.stewards;
+                });
+
+                $http({
+                    url: '/pa165/api/airplanes/free',
+                    method: 'GET',
+                    params: {
+                        start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                        end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                    }
+                }).then(function (response) {
+                    $scope.airplanes = response.data._embedded.airplanes;
+                });
+                $scope.areDatesSet = true;
+            } else {
+                $scope.areDatesSet = false;
+            }
+        });
+
         /** */
-
-        $scope.onDateTimeChange = function () {
-
-        };
 
         $scope.createFlight = function (flight) {
             console.log(flight);
@@ -448,7 +470,51 @@ managerControllers.controller('FlightDetailCtrl',
             var flight = response.data;
             formatFlightDates(flight);
             $scope.flight = flight;
+
+            $scope.flightToUpdate = {
+                'departureLocationId': flight.departureLocation.id,
+                'arrivalLocationId': flight.arrivalLocation.id,
+                'departureTime': flight.departureTime,
+                'arrivalTime': flight.arrivalTime,
+                'airplaneId': flight.airplane.id,
+                'stewardIds': []
+            };
         });
+
+
+        /** DateTimePicker */
+
+        $scope.areDatesSet = false;
+
+        $scope.optionsDepartureTime = {
+            useCurrent: true,
+            showClear: true,
+            showClose: true,
+            toolbarPlacement: 'top'
+        };
+
+        $scope.optionsArrivalTime = {
+            useCurrent: false,
+            showClear: true,
+            showClose: true,
+            toolbarPlacement: 'top'
+        };
+        /** */
+
+        $scope.updateFlight = function (flight) {
+            console.log(flight);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/flights/' + flight.id + '/update/',
+                data: flight
+            }).then(function success(response) {
+                console.log(response);
+                $rootScope.successAlert = 'Flight was successfully updated.';
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Error during updating flight.';
+            });
+        }
     }
 );
 
