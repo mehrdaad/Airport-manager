@@ -27,7 +27,9 @@ import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
-
+/**
+ * @author Robert Duriancik
+ */
 @RestController
 @RequestMapping("/flights")
 public class FlightsRestController {
@@ -67,8 +69,17 @@ public class FlightsRestController {
     public final void deleteFlight(@PathVariable("id") long id) throws Exception {
         try {
             flightFacade.deleteFlight(id);
-        } catch (FlightDataAccessException e) {
-            // TODO error handling
+        } catch (Throwable e) {
+            Throwable rootCause = e;
+            while ((e = e.getCause()) != null) {
+                rootCause = e;
+            }
+
+            if (rootCause instanceof IllegalArgumentException) {
+                throw new ResourceNotFoundException("Flight " + id + " not found");
+            } else {
+                throw new ServerException(rootCause);
+            }
         }
     }
 
@@ -82,7 +93,6 @@ public class FlightsRestController {
         if (id != flightUpdateDTO.getId()) {
             throw new InvalidRequestException("Objects differ in ID");
         }
-        logger.warn(flightUpdateDTO.toString());
 
         try {
             flightFacade.updateFlight(flightUpdateDTO);

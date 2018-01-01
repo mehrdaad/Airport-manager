@@ -2,13 +2,12 @@ package cz.fi.muni.pa165.facade;
 
 import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
+import cz.fi.muni.pa165.dto.FlightUpdateDTO;
 import cz.fi.muni.pa165.entities.Airplane;
+import cz.fi.muni.pa165.entities.Destination;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
-import cz.fi.muni.pa165.service.AirplaneService;
-import cz.fi.muni.pa165.service.FlightService;
-import cz.fi.muni.pa165.service.MappingService;
-import cz.fi.muni.pa165.service.StewardService;
+import cz.fi.muni.pa165.service.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -44,6 +43,9 @@ public class FlightFacadeTest extends BaseFacadeTest {
 
     @Mock
     private MappingService mappingService;
+    @Mock
+
+    private DestinationService destinationService;
 
     @Mock
     private Flight flight;
@@ -61,6 +63,9 @@ public class FlightFacadeTest extends BaseFacadeTest {
     @Mock
     private FlightCreateDTO flightCreateDTO;
 
+    @Mock
+    private FlightUpdateDTO flightUpdateDTO;
+
     @Autowired
     @InjectMocks
     private FlightFacadeImpl flightFacade;
@@ -70,12 +75,35 @@ public class FlightFacadeTest extends BaseFacadeTest {
         Mockito.reset(mappingService, flightService);
     }
 
-//    @Test
-//    public void testCreateFlight() {
-//        when(mappingService.mapTo(flightCreateDTO, Flight.class)).thenReturn(flight);
-//        flightFacade.createFlight(flightCreateDTO);
-//        verify(flightService).addFlight(flight);
-//    } TODO FIX + UPDATE flight
+    @Test
+    public void testCreateFlight() {
+        when(flightCreateDTO.getAirplaneId()).thenReturn(1L);
+        when(flightCreateDTO.getArrivalLocationId()).thenReturn(1L);
+        when(flightCreateDTO.getArrivalTime()).thenReturn(LocalDateTime.now());
+        when(flightCreateDTO.getDepartureTime()).thenReturn(LocalDateTime.now());
+        when(flightCreateDTO.getDepartureLocationId()).thenReturn(1L);
+        when(destinationService.getDestinationById(1L)).thenReturn(new Destination());
+        when(airplaneService.findById(1L)).thenReturn(new Airplane());
+        when(stewardService.getSteward(1L)).thenReturn(new Steward());
+
+        flightFacade.createFlight(flightCreateDTO);
+        verify(flightService).addFlight(any(Flight.class));
+    }
+
+    @Test
+    public void testUpdateFlight() throws Exception {
+        when(flightUpdateDTO.getAirplaneId()).thenReturn(1L);
+        when(flightUpdateDTO.getArrivalLocationId()).thenReturn(1L);
+        when(flightUpdateDTO.getArrivalTime()).thenReturn(LocalDateTime.now());
+        when(flightUpdateDTO.getDepartureTime()).thenReturn(LocalDateTime.now());
+        when(flightUpdateDTO.getDepartureLocationId()).thenReturn(1L);
+        when(destinationService.getDestinationById(1L)).thenReturn(new Destination());
+        when(airplaneService.findById(1L)).thenReturn(new Airplane());
+        when(stewardService.getSteward(1L)).thenReturn(new Steward());
+
+        flightFacade.updateFlight(flightUpdateDTO);
+        verify(flightService).updateFlight(any(Flight.class));
+    }
 
     @Test
     public void testGetFlight() {
