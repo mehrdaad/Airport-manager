@@ -295,8 +295,8 @@ managerControllers.controller('StewardDetailCtrl',
     function ($scope, $routeParams, $http, $rootScope) {
         var stewardId = $routeParams.stewardId;
         $http.get('/pa165/api/stewards/' + stewardId).then(function (response) {
-            var steward = response.data;
-            $scope.steward = steward;
+            $scope.steward = response.data;
+            $scope.stewardConst = angular.copy($scope.steward);
         });
         $http.get('/pa165/api/stewards/' + stewardId + '/flights').then(function (response) {
             console.log(response);
@@ -306,7 +306,7 @@ managerControllers.controller('StewardDetailCtrl',
         });
         $scope.updateSteward = function (steward) {
             console.log(steward);
-            var karelFirstName = {
+            var stewardData = {
                 'id': steward.id,
                 'firstName': steward.firstName,
                 'surname': steward.surname
@@ -314,10 +314,11 @@ managerControllers.controller('StewardDetailCtrl',
             $http({
                 method: 'POST',
                 url: '/pa165/api/stewards/' + steward.id + '/update/',
-                data: karelFirstName
+                data: stewardData
             }).then(function success(response) {
                 console.log(response);
                 $rootScope.successAlert = 'Steward was successfully updated.';
+                $scope.stewardConst = angular.copy($scope.steward);
             }, function error(response) {
                 console.log(response);
                 $rootScope.errorAlert = 'Error during updating steward.';
