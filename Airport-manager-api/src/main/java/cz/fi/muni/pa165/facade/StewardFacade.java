@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- *
  * @author Karel Jiranek
  */
 public interface StewardFacade {
@@ -45,7 +44,7 @@ public interface StewardFacade {
      * Create steward.
      *
      * @param firstName First steward name.
-     * @param surName Second steward name.
+     * @param surName   Second steward name.
      */
     Long createSteward(String firstName, String surName);
 
@@ -53,9 +52,9 @@ public interface StewardFacade {
      * Get all stewards flights in given time range. All departured flights in range are
      * included in result.
      *
-     * @param id Steward id.
+     * @param id        Steward id.
      * @param startTime Time to start searching from.
-     * @param stopTime Time to stop searching.
+     * @param stopTime  Time to stop searching.
      * @return All stewards flights in given time range. Empty list if not any.
      */
     List<FlightDTO> getAllStewardsFlightsInTimeRange(long id, LocalDateTime startTime, LocalDateTime stopTime);
@@ -75,4 +74,13 @@ public interface StewardFacade {
      * @return All stewards flights in given time range. Empty list if not any.
      */
     List<FlightDTO> getAllStewardFlights(long id);
+
+    /**
+     * Get all stewards that are free in specified time range.
+     *
+     * @param start the date since when to find stewards
+     * @param end   the date until when find stewards
+     * @return All stewards that are free in the given time range
+     */
+    List<StewardDTO> getFreeStewardsInTimeRange(LocalDateTime start, LocalDateTime end);
 }

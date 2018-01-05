@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.facade;
 
 import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
+import cz.fi.muni.pa165.dto.FlightUpdateDTO;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -29,6 +30,13 @@ public interface FlightFacade {
      * @return flight or null if there is no flight with the specified id
      */
     FlightDTO getFlight(Long id);
+
+    /**
+     * Update flight.
+     *
+     * @param flightUpdateDTO Flight to be updated.
+     */
+    void updateFlight(FlightUpdateDTO flightUpdateDTO);
 
     /**
      * Returns all created flights.

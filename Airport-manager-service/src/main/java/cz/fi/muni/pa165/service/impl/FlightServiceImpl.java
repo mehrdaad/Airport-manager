@@ -104,6 +104,30 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
+    public List<Flight> getFlightsInTimeRange(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) {
+            throw new NullPointerException("Start or end date is null");
+        }
+
+        List<Flight> flights = getAllFlights();
+        List<Flight> flightsInRange = flights.stream()
+                .filter(flight -> {
+                    LocalDateTime arrivalTime = flight.getArrivalTime();
+                    LocalDateTime departureTime = flight.getDepartureTime();
+
+                    boolean isDepartureInRange = (departureTime.isAfter(start) || departureTime.isEqual(start)) &&
+                            (departureTime.isBefore(end) || departureTime.isEqual(end));
+                    boolean isArrivalInRange = (arrivalTime.isAfter(start) || arrivalTime.isEqual(start)) &&
+                            (arrivalTime.isBefore(end) || arrivalTime.isEqual(end));
+
+                    return isDepartureInRange || isArrivalInRange;
+                })
+                .collect(Collectors.toList());
+
+        return flightsInRange;
+    }
+
+    @Override
     public List<Flight> getCurrentFlights(LocalDateTime now) {
         if (now == null) {
             throw new NullPointerException("now cannot be null");

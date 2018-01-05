@@ -1,4 +1,5 @@
 'use strict';
+
 var airportManagerApp = angular.module('airportManagerApp', ['ngRoute', 'managerControllers']);
 var managerControllers = angular.module('managerControllers', []);
 
@@ -116,6 +117,7 @@ managerControllers.controller('AirplaneDetailCtrl',
     }
 );
 
+/* Controllers */
 managerControllers.controller('DestinationDetailCtrl',
     function ($scope, $routeParams, $http, $rootScope) {
         var tempDestination = {
@@ -141,12 +143,12 @@ managerControllers.controller('DestinationDetailCtrl',
             $scope.outgoingFlights = response.data._embedded.flights;
         });
 
-        $scope.saveTempDestination = function (destination){
+        $scope.saveTempDestination = function (destination) {
             tempDestination.country = destination.country;
             tempDestination.city = destination.city;
         };
 
-        $scope.loadTempDestination = function (){
+        $scope.loadTempDestination = function () {
             $scope.destination.country = tempDestination.country;
             $scope.destination.city = tempDestination.city;
         };
@@ -181,7 +183,11 @@ managerControllers.controller('DestinationCtrl',
 
         var get = function () {
             $http.get('/pa165/api/destinations').then(function (response) {
-                $scope.destinations = response.data._embedded.destinations;
+                if (response.data._embedded !== undefined) {
+                    $scope.destinations = response.data._embedded.destinations;
+                } else {
+                    $scope.destinations = [];
+                }
                 $scope.goToDestinationDetail = function (destinationId) {
                     $location.path('/destinations/' + destinationId);
                 }
@@ -224,7 +230,6 @@ managerControllers.controller('DestinationCtrl',
                 }
             });
         };
-
     }
 );
 
@@ -232,7 +237,12 @@ managerControllers.controller('StewardsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         var get = function () {
             $http.get('/pa165/api/stewards').then(function (response) {
-                $scope.stewards = response.data._embedded.stewards;
+                if (response.data._embedded !== undefined) {
+                    $scope.stewards = response.data._embedded.stewards;
+                } else {
+                    $scope.stewards = [];
+                }
+
                 $scope.goToStewardDetail = function (stewardId) {
                     $location.path('/steward/' + stewardId);
                 }
@@ -240,7 +250,7 @@ managerControllers.controller('StewardsCtrl',
         };
         get();
         $scope.steward = {
-            'firstname': '',
+            'firstName': '',
             'surname': ''
         };
         $scope.createSteward = function (steward) {
@@ -265,7 +275,7 @@ managerControllers.controller('StewardsCtrl',
             }, function error(response) {
                 console.log("Error during deleting steward!");
                 console.log(steward);
-                switch(response.data.code) {
+                switch (response.data.code) {
                     case 'PersistenceException':
                         $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
                         break;
@@ -273,7 +283,7 @@ managerControllers.controller('StewardsCtrl',
                         $rootScope.errorAlert = 'Steward has assigned flights. Cannot be deleted.';
                         break;
                     default:
-                        $rootScope.errorAlert = 'Cannot delete steward! Reason given by the server: '+ response.data.message;
+                        $rootScope.errorAlert = 'Cannot delete steward! Reason given by the server: ' + response.data.message;
                         break;
                 }
             });
@@ -298,7 +308,7 @@ managerControllers.controller('StewardDetailCtrl',
             console.log(steward);
             var karelFirstName = {
                 'id': steward.id,
-                'firstName': steward.firstname,
+                'firstName': steward.firstName,
                 'surname': steward.surname
             };
             $http({
@@ -319,34 +329,35 @@ managerControllers.controller('StewardDetailCtrl',
 managerControllers.controller('FlightsCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         loadFlights($scope, $http);
+
+        $scope.createFlightModel = function () {
+            $scope.flight = {
+                'departureLocationId': '',
+                'arrivalLocationId': '',
+                'departureTime': undefined,
+                'arrivalTime': undefined,
+                'airplaneId': '',
+                'stewardIds': []
+            };
+        };
+
+        $scope.createFlightModel();
+
         $scope.goToFlightDetail = function (flightId) {
-            console.log(flightId);
             $location.path('/flight/' + flightId);
         };
 
-        $http.get('/pa165/api/airplanes').then(function (response) {
-            $scope.airplanes = response.data._embedded.airplanes;
-        });
-
-        $http.get('/pa165/api/destinations').then(function (response) {
+        $http.get('/pa165/api/destination').then(function (response) {
             $scope.destinations = response.data._embedded.destinations;
         });
 
-        $http.get('/pa165/api/stewards').then(function (response) {
-            $scope.stewards = response.data._embedded.stewards;
-        });
+        /** DateTimePicker */
 
-        $scope.flight = {
-            'departureLocationId': '',
-            'arrivalLocationId': '',
-            'departureTime': '',
-            'arrivalTime': '',
-            'airplaneId': '',
-            'stewardIds': []
-        };
+        $scope.areDatesSet = false;
 
         $scope.optionsDepartureTime = {
             useCurrent: true,
+            format: "DD.MM.YYYY - h:mm A",
             showClear: true,
             showClose: true,
             toolbarPlacement: 'top'
@@ -354,10 +365,45 @@ managerControllers.controller('FlightsCtrl',
 
         $scope.optionsArrivalTime = {
             useCurrent: false,
+            format: "DD.MM.YYYY - h:mm A",
             showClear: true,
             showClose: true,
             toolbarPlacement: 'top'
         };
+
+        $scope.$watchGroup(['flight.departureTime', 'flight.arrivalTime'], function (newVal, oldVal) {
+            if (newVal[0] !== undefined && newVal[1] !== undefined) {
+                $http({
+                    url: '/pa165/api/stewards/free',
+                    method: 'GET',
+                    params: {
+                        start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                        end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                    }
+                }).then(function (response) {
+                    $scope.stewards = response.data._embedded.stewards;
+                });
+
+                $http({
+                    url: '/pa165/api/airplanes/free',
+                    method: 'GET',
+                    params: {
+                        start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                        end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                    }
+                }).then(function (response) {
+                    $scope.airplanes = response.data._embedded.airplanes;
+                });
+
+                $scope.areDatesSet = true;
+            } else {
+                $scope.areDatesSet = false;
+                $scope.stewards = [];
+                $scope.airplanes = [];
+            }
+        });
+
+        /** DateTimePicker - end */
 
         $scope.createFlight = function (flight) {
             console.log(flight);
@@ -366,7 +412,8 @@ managerControllers.controller('FlightsCtrl',
                 method: 'POST',
                 url: '/pa165/api/flights/create',
                 data: flight
-            }).then(function success(response) {
+            }).then(
+                function success(response) {
                     var createdFlight = response.data;
                     $rootScope.successAlert = 'A new flight "' + createdFlight.id + '" was created';
                     loadFlights($scope, $http);
@@ -389,6 +436,7 @@ managerControllers.controller('FlightsCtrl',
             $http.delete(flight._links.delete.href).then(
                 function success(response) {
                     $rootScope.successAlert = 'Deleted Flight "' + flight.id + '"';
+                    loadFlights($scope, $http);
                 },
                 function error(response) {
                     switch (response.data.code) {
@@ -407,16 +455,132 @@ managerControllers.controller('FlightsCtrl',
 );
 
 managerControllers.controller('FlightDetailCtrl',
-    function ($scope, $routeParams, $http) {
+    function ($scope, $routeParams, $http, $rootScope, $route, $timeout) {
         var flightId = $routeParams.flightId;
         $http.get('/pa165/api/flights/' + flightId).then(function (response) {
-            console.log(response.data);
             var flight = response.data;
+            $scope.flightToUpdate = {
+                'id': flight.id,
+                'departureLocationId': flight.departureLocation.id,
+                'arrivalLocationId': flight.arrivalLocation.id,
+                'departureTime': flight.departureTime,
+                'arrivalTime': flight.arrivalTime,
+                'airplaneId': flight.airplane.id,
+                'stewardIds': []
+            };
+
+            flight.stewards.forEach(function (value) {
+                $scope.flightToUpdate.stewardIds.push(value.id);
+            });
+
+            $http.get('/pa165/api/destination').then(function (response) {
+                $scope.destinations = response.data._embedded.destinations;
+            });
+
+            /** DateTimePicker */
+
+            $scope.areDatesSet = false;
+
+            $scope.optionsDepartureTime = {
+                defaultDate: moment(flight.departureTime),
+                maxDate: moment(flight.arrivalTime),
+                showClear: true,
+                showClose: true,
+                format: "DD.MM.YYYY - h:mm A",
+                toolbarPlacement: 'top'
+            };
+
+            $scope.optionsArrivalTime = {
+                defaultDate: moment(flight.arrivalTime),
+                minDate: moment(flight.departureTime),
+                showClear: true,
+                showClose: true,
+                format: "DD.MM.YYYY - h:mm A",
+                toolbarPlacement: 'top'
+            };
+
             formatFlightDates(flight);
             $scope.flight = flight;
+
+            $scope.$watchGroup(['flightToUpdate.departureTime', 'flightToUpdate.arrivalTime'], function (newVal, oldVal) {
+                if (newVal[0] !== undefined && newVal[1] !== undefined) {
+                    $http({
+                        url: '/pa165/api/stewards/free',
+                        method: 'GET',
+                        params: {
+                            start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                            end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                        }
+                    }).then(function (response) {
+                        $scope.stewards = response.data._embedded.stewards;
+                        $scope.flight.stewards.forEach(function (value) {
+                            var check = function (steward) {
+                                return steward.id === value.id;
+                            };
+                            if ($scope.stewards.find(check) === undefined) {
+                                $scope.stewards.unshift(value);
+                            }
+                        });
+                    });
+
+                    $http({
+                        url: '/pa165/api/airplanes/free',
+                        method: 'GET',
+                        params: {
+                            start: moment(newVal[0]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss"),
+                            end: moment(newVal[1]).subtract(1, "hours").format("YYYY-MM-DDTHH:mm:ss")
+                        }
+                    }).then(function (response) {
+                        $scope.airplanes = response.data._embedded.airplanes;
+                        var check = function (airplane) {
+                            return airplane.id === $scope.flight.airplane.id;
+                        };
+                        if ($scope.airplanes.find(check) === undefined) {
+                            $scope.airplanes.unshift($scope.flight.airplane);
+                        }
+                    });
+                    $scope.areDatesSet = true;
+                } else {
+                    $scope.areDatesSet = false;
+                    $scope.stewards = [];
+                    $scope.airplanes = [];
+                }
+            });
+
+            /** DateTimePicker - end */
+
         });
+
+        $scope.updateFlight = function (flight) {
+            $http({
+                method: 'POST',
+                url: '/pa165/api/flights/' + flight.id + '/update/',
+                data: flight
+            }).then(function success(response) {
+                $rootScope.successAlert = 'Flight was successfully updated.';
+                $timeout(function () {
+                    $route.reload();
+                }, 1000);
+
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Error during updating flight.';
+            });
+        }
     }
 );
+
+function loadFlights($scope, $http) {
+    $http.get('/pa165/api/flights').then(function (response) {
+        if (response.data._embedded !== undefined) {
+            $scope.flights = response.data._embedded.flights;
+            formatFlightsDates($scope.flights);
+        } else {
+            $scope.flights = [];
+        }
+
+    });
+}
 
 function formatFlightsDates(flights) {
     for (var i = 0; i < flights.length; ++i) {
@@ -443,9 +607,11 @@ managerControllers.directive('convertToInt', function () {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             ngModel.$parsers.push(function (val) {
+                if (val === undefined) return;
                 return parseInt(val, 10);
             });
             ngModel.$formatters.push(function (val) {
+                if (val === undefined) return;
                 return '' + val;
             });
         }
@@ -457,6 +623,7 @@ managerControllers.directive('convertToInts', function () {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             ngModel.$parsers.push(function (val) {
+                if (val === undefined) return;
                 var parsed = [];
                 for (var i = 0; i < val.length; ++i) {
                     parsed.push(parseInt(val[i], 10))
@@ -464,6 +631,7 @@ managerControllers.directive('convertToInts', function () {
                 return parsed;
             });
             ngModel.$formatters.push(function (val) {
+                if (val === undefined) return;
                 var formatted = [];
                 for (var i = 0; i < val.length; ++i) {
                     formatted.push('' + val[i])
@@ -474,30 +642,6 @@ managerControllers.directive('convertToInts', function () {
     };
 });
 
-function loadFlights($scope, $http) {
-    $http.get('/pa165/api/flights').then(function (response) {
-        console.log(response.data);
-        $scope.flights = response.data._embedded.flights;
-        formatFlightsDates($scope.flights);
-    });
-}
-
-function formatFlightsDates(flights) {
-    for (var i = 0; i < flights.length; ++i) {
-        formatFlightDates(flights[i]);
-    }
-}
-
-function formatFlightDates(flight) {
-    var rawDepartureDate = flight.departureTime;
-    var rawArrivalDate = flight.arrivalTime;
-    flight.departureTime = formatDate(rawDepartureDate);
-    flight.arrivalTime = formatDate(rawArrivalDate);
-}
-
-function formatDate(date) {
-    return moment(date).format("DD.MM.YYYY - h:mm A");
-}
 
 airportManagerApp.directive('datetimepicker', [
     '$timeout',
@@ -540,8 +684,8 @@ airportManagerApp.directive('datetimepicker', [
 
                 dpElement.on('dp.change', function (e) {
                     if (!isDateEqual(e.date, ngModel.$viewValue)) {
-                        var newValue = e.date === false ? null : e.date;
-                        ngModel.$setViewValue(newValue._d);
+                        var newValue = e.date === false ? null : moment(e.date).add(1, "hours");
+                        ngModel.$setViewValue(newValue !== null ? newValue._d : null);
 
                         $timeout(function () {
                             if (typeof $scope.onChange === 'function') {

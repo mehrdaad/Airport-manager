@@ -1,6 +1,5 @@
 package cz.fi.muni.pa165.service;
 
-import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.dao.StewardDao;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Destination;
@@ -20,11 +19,12 @@ import org.testng.annotations.Test;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.*;
 
 /**
  *
@@ -50,7 +50,7 @@ public class StewardServiceTest extends BaseServiceTest{
     private StewardDao stewardDao;
     
     @Mock
-    private FlightDao flightDao;
+    private FlightService flightService;
 
     @Autowired
     @InjectMocks
@@ -69,7 +69,7 @@ public class StewardServiceTest extends BaseServiceTest{
     @BeforeMethod
     public void resetMock() {
         Mockito.reset(stewardDao);
-        Mockito.reset(flightDao);
+        Mockito.reset(flightService);
     }
     
     private void createSteward() {
@@ -179,7 +179,7 @@ public class StewardServiceTest extends BaseServiceTest{
     
     @Test
     public void getStewardNoExistingTest() {
-        when(flightDao.getFlight(steward.getId())).thenReturn(null);
+        when(flightService.getFlight(steward.getId())).thenReturn(null);
         Steward tmp = stewardService.getSteward(steward.getId());
 
         Assert.assertTrue(tmp == null);
@@ -233,7 +233,7 @@ public class StewardServiceTest extends BaseServiceTest{
         flights.add(flight1);
 
         when(stewardDao.getSteward(steward1.getId())).thenReturn(steward1);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertEquals(stewardService.getAllStewardFlights(steward1.getId()),flights_expected_steward1);
 
@@ -241,7 +241,7 @@ public class StewardServiceTest extends BaseServiceTest{
         flights_expected_steward.add(flight3);
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertEquals(stewardService.getAllStewardFlights(steward.getId()),flights_expected_steward);
         
@@ -251,7 +251,7 @@ public class StewardServiceTest extends BaseServiceTest{
         flights_without_steward.add(flight1);
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights_without_steward);
+        when(flightService.getAllFlights()).thenReturn(flights_without_steward);
         
         assertEquals(stewardService.getAllStewardFlights(steward.getId()),new ArrayList<>());
     }
@@ -281,19 +281,19 @@ public class StewardServiceTest extends BaseServiceTest{
         flights.add(flight1);
         
         when(stewardDao.getSteward(steward1.getId())).thenReturn(steward1);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
 
         assertEquals(stewardService.getStewardCurrentFlight(steward1.getId()),flight1);
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
 
         assertNull(stewardService.getStewardCurrentFlight(steward.getId()));
         
         List<Flight> flights_empty = new ArrayList<>();
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights_empty);
+        when(flightService.getAllFlights()).thenReturn(flights_empty);
         
         assertNull(stewardService.getStewardCurrentFlight(steward.getId()));
     }
@@ -336,19 +336,19 @@ public class StewardServiceTest extends BaseServiceTest{
         flights.add(flight1);
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertEquals(flight3,stewardService.getStewardFutureFlight(steward.getId()));
         
         List<Flight> flights_empty = new ArrayList<>();
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights_empty);
+        when(flightService.getAllFlights()).thenReturn(flights_empty);
         
         assertNull(stewardService.getStewardCurrentFlight(steward.getId()));
         
         when(stewardDao.getSteward(steward1.getId())).thenReturn(steward1);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertNull(stewardService.getStewardCurrentFlight(steward1.getId()));
     }
@@ -401,7 +401,7 @@ public class StewardServiceTest extends BaseServiceTest{
         flights.add(flight1);
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertEquals(stewardService.getAllStewardFlightsInTimeRange(steward.getId(), startTime, stopTime), flight);
         
@@ -409,17 +409,17 @@ public class StewardServiceTest extends BaseServiceTest{
         flight_steward1.add(flight3);
         
         when(stewardDao.getSteward(steward1.getId())).thenReturn(steward1);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertEquals(stewardService.getAllStewardFlightsInTimeRange(steward1.getId(), startTime, stopTime), flight_steward1);
         
         when(stewardDao.getSteward(steward3.getId())).thenReturn(steward3);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertEquals(stewardService.getAllStewardFlightsInTimeRange(steward3.getId(), startTime, stopTime), new ArrayList<>());
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(new ArrayList<>());
+        when(flightService.getAllFlights()).thenReturn(new ArrayList<>());
         
         assertEquals(stewardService.getAllStewardFlightsInTimeRange(steward.getId(), startTime, stopTime),new ArrayList<>());
     }
@@ -459,8 +459,72 @@ public class StewardServiceTest extends BaseServiceTest{
         flights.add(flight1);
         
         when(stewardDao.getSteward(steward.getId())).thenReturn(steward);
-        when(flightDao.getAllFlights()).thenReturn(flights);
+        when(flightService.getAllFlights()).thenReturn(flights);
         
         assertEquals(stewardService.getStewardLastFlight(steward.getId()), flight3);
+    }
+
+    @Test
+    public void getFreeStewardsInTimeRangeTest2() {
+        Steward steward3 = new Steward();
+        steward3.setId(3L);
+        steward3.setFirstName("Name33");
+        steward3.setSurname("Surname33");
+
+        Flight flight1 = new Flight();
+        flight1.setAirplane(airplane);
+        flight1.setDepartureTime(departureTime_past);
+        flight1.setArrivalTime(arrivalTime_past);
+        flight1.setDepartureLocation(new Destination());
+        flight1.addSteward(steward);
+        flight1.addSteward(steward1);
+
+        Flight flight2 = new Flight();
+        flight2.setAirplane(airplane);
+        flight2.setDepartureTime(departureTime_future1);
+        flight2.setArrivalTime(arrivalTime_future1);
+        flight2.setDepartureLocation(new Destination());
+        flight2.addSteward(steward1);
+        flight2.addSteward(steward3);
+
+        when(flightService.getFlightsInTimeRange(departureTime_past, arrivalTime_past)).thenReturn(Collections.singletonList(flight1));
+        when(stewardDao.listAllStewards()).thenReturn(Arrays.asList(steward, steward1, steward3));
+
+        List<Steward> result = stewardService.getFreeStewardsInTimeRange(departureTime_past, arrivalTime_past);
+
+        assertEquals(result.size(), 1);
+        assertTrue(result.contains(steward3));
+    }
+
+    @Test
+    public void getFreeStewardsInTimeRangeTest() {
+        Flight flight1 = new Flight();
+        flight1.setAirplane(airplane);
+        flight1.setDepartureTime(departureTime_past);
+        flight1.setArrivalTime(arrivalTime_past);
+        flight1.setDepartureLocation(new Destination());
+        flight1.addSteward(steward);
+
+        Flight flight2 = new Flight();
+        flight2.setAirplane(airplane);
+        flight2.setDepartureTime(departureTime_future1);
+        flight2.setArrivalTime(arrivalTime_future1);
+        flight2.setDepartureLocation(new Destination());
+        flight2.addSteward(steward1);
+
+        Steward steward3 = new Steward();
+        steward3.setId(3L);
+        steward3.setFirstName("Name33");
+        steward3.setSurname("Surname33");
+
+
+        when(flightService.getFlightsInTimeRange(departureTime_past, arrivalTime_past)).thenReturn(Collections.singletonList(flight1));
+        when(stewardDao.listAllStewards()).thenReturn(Arrays.asList(steward, steward1, steward3));
+
+        List<Steward> result = stewardService.getFreeStewardsInTimeRange(departureTime_past, arrivalTime_past);
+
+        assertEquals(result.size(), 2);
+        assertTrue(result.contains(steward1));
+        assertTrue(result.contains(steward3));
     }
 }

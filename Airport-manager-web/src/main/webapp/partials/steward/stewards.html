@@ -16,7 +16,7 @@
         <tbody>
         <tr ng-repeat="steward in stewards | orderBy : 'id' track by $index">
             <td>{{steward.id}}</td>
-            <td>{{steward.firstname}}</td>
+            <td>{{steward.firstName}}</td>
             <td>{{steward.surname}}</td>
             <td align="right">
                 <button ng-click="goToStewardDetail(steward.id)" type="submit" class="btn btn-primary">Detail</button>
@@ -38,10 +38,12 @@
                 <div class="modal-body">
                     <form name="form" class="form-horizontal">
                         <div class="form-group">
-                            <label for="firstname" class="col-sm-2 control-label">Firstname</label>
+                            <label for="firstName" class="col-sm-2 control-label">Firstname</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="firstname" id="firstname" ng-model="steward.firstname" required>
-                                <p class="help-block" ng-show="form.firstname.$error.required">firstname cannot be empty</p>
+                                <input type="text" class="form-control" name="firstName" id="firstName"
+                                       ng-model="steward.firstName" required>
+                                <p class="help-block" ng-show="form.firstName.$error.required">firstname cannot be
+                                    empty</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -56,7 +58,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-click="createSteward(steward)" data-dismiss="modal"  ng-disabled="form.surname.$error.required || form.firstname.$error.required">Save changes</button>
+                    <button type="button" class="btn btn-primary" ng-click="createSteward(steward)" data-dismiss="modal"
+                            ng-disabled="form.surname.$error.required || form.firstName.$error.required">Save changes
+                    </button>
                 </div>
             </div>
         </div>

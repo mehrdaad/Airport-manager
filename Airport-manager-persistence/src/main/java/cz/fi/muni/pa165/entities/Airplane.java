@@ -2,11 +2,7 @@ package cz.fi.muni.pa165.entities;
 
 import org.hibernate.annotations.Check;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
@@ -103,7 +99,6 @@ public class Airplane implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + Objects.hashCode(this.id);
         result = prime * result + this.capacity;
         result = prime * result + Objects.hashCode(this.name);
         result = prime * result + Objects.hashCode(this.type);
