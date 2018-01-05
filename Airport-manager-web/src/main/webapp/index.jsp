@@ -40,7 +40,7 @@
 
     <script src="${pageContext.request.contextPath}/js/angular_app.js"></script>
 </head>
-<body ng-app="airportManagerApp">
+<body ng-app="airportManagerApp" ng-controller="ApplicationController">
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
@@ -61,7 +61,10 @@
                 <li><a href="#!/airplanes">Airplanes</a></li>
                 <li><a href="#!/destinations">Destinations</a></li>
             </ul>
-            <a role="button" class="btn btn-default navbar-btn navbar-right" href="#!/login">Sign in</a>
+            <a role="button" class="btn btn-default navbar-btn navbar-right" href="#!/login" ng-if="!currentUser">Sign
+                in</a>
+            <a role="button" class="btn btn-default navbar-btn navbar-right" ng-click="logout()" ng-if="currentUser">Sign
+                out</a>
         </div>
     </div>
 </nav>

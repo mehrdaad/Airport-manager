@@ -51,15 +51,6 @@ airportManagerApp.config(['$routeProvider',
     }
 ]);
 
-airportManagerApp.constant('AUTH_EVENTS', {
-    loginSuccess: 'auth-login-success',
-    loginFailed: 'auth-login-failed',
-    logoutSuccess: 'auth-logout-success',
-    sessionTimeout: 'auth-session-timeout',
-    notAuthenticated: 'auth-not-authenticated',
-    notAuthorized: 'auth-not-authorized'
-});
-
 airportManagerApp.constant('USER_ROLES', {
     admin: 'admin',
     user: 'user',
@@ -83,6 +74,21 @@ airportManagerApp.run(function ($rootScope) {
 });
 
 /* Controllers */
+
+managerControllers.controller('ApplicationController',
+    function ($scope, USER_ROLES, AuthService, Session) {
+        $scope.currentUser = null;
+        $scope.userRoles = USER_ROLES;
+        $scope.isAuthorized = AuthService.isAuthorized;
+
+        $scope.setCurrentUser = function (user) {
+            $scope.currentUser = user;
+        };
+
+        $scope.logout = AuthService.logout;
+    }
+);
+
 managerControllers.controller('MainCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
         $http.get('/pa165/api/flights/current').then(function (response) {
@@ -94,19 +100,21 @@ managerControllers.controller('MainCtrl',
 
 
 managerControllers.controller('LoginCtrl',
-    function ($scope, $rootScope, $routeParams, $http, $location) {
+    function ($scope, $rootScope, $routeParams, $http, $location, AuthService) {
         $scope.credentials = {
             username: '',
             password: ''
         };
 
+        $scope.fail = false;
+
         $scope.login = function (credentials) {
-            // AuthService.login(credentials).then(function (user) {
-            //     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-            //     $scope.setCurrentUser(user);
-            // }, function () {
-            //     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-            // });
+            AuthService.login(credentials).then(function (user) {
+                $scope.setCurrentUser(user);
+                $location.path('/main');
+            }, function () {
+                $scope.fail = true;
+            });
         };
     });
 
@@ -255,7 +263,7 @@ managerControllers.controller('DestinationCtrl',
                 console.log("Error during deleting destination!");
                 console.log(steward);
                 $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                switch(response.data.code) {
+                switch (response.data.code) {
                     case 'PersistenceException':
                         $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
                         break;
@@ -263,7 +271,7 @@ managerControllers.controller('DestinationCtrl',
                         $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
                         break;
                     default:
-                        $rootScope.errorAlert = 'Cannot delete destination! Reason given by the server: '+ response.data.message;
+                        $rootScope.errorAlert = 'Cannot delete destination! Reason given by the server: ' + response.data.message;
                         break;
                 }
             });
@@ -748,3 +756,56 @@ airportManagerApp.directive('datetimepicker', [
         };
     }
 ]);
+
+airportManagerApp.factory('AuthService', function ($http, Session, USER_ROLES) {
+    var authService = {};
+
+    authService.login = function (credentials) {
+        return $http({
+            method: 'POST',
+            url: '/pa165/api/login',
+            data: credentials
+        }).then(function (res) {
+            if (res.data._embedded !== undefined) {
+                var user = res.data._embedded.user;
+                var role = user.isAdmin ? USER_ROLES.admin : USER_ROLES.user;
+                Session.create(user.id, user.name, user.surname, role);
+            }
+
+        });
+    };
+
+    authService.isAuthenticated = function () {
+        return !!Session.userId;
+    };
+
+    authService.isAuthorized = function (authorizedRoles) {
+        if (!angular.isArray(authorizedRoles)) {
+            authorizedRoles = [authorizedRoles];
+        }
+        return (authService.isAuthenticated() &&
+            authorizedRoles.indexOf(Session.userRole) !== -1);
+    };
+
+    authService.logout = function () {
+        Session.destroy();
+    };
+
+    return authService;
+});
+
+airportManagerApp.service('Session', function () {
+    this.create = function (userId, username, userSurname, userRole) {
+        this.userId = userId;
+        this.username = username;
+        this.userSurname = userSurname;
+        this.userRole = userRole;
+    };
+
+    this.destroy = function () {
+        this.userId = null;
+        this.username = null;
+        this.userSurname = null;
+        this.userRole = null;
+    };
+});
