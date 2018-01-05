@@ -763,7 +763,7 @@ airportManagerApp.factory('AuthService', function ($http, Session, USER_ROLES) {
     authService.login = function (credentials) {
         return $http({
             method: 'POST',
-            url: '/pa165/api/login',
+            url: '/pa165/api/user',
             data: credentials
         }).then(function (res) {
             if (res.data._embedded !== undefined) {
