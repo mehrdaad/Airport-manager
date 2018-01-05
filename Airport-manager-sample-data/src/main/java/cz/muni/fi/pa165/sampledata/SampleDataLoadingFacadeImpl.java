@@ -46,11 +46,11 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         userService.addUser(admin, "heslo");
 
         User steward1 = new User();
-        admin.setAdmin(false);
-        admin.setEmail("steward.oliver@gmail.com");
-        admin.setName("Oliver");
-        admin.setSurname("Smith");
-        admin.setRegistered(LocalDateTime.now().minusYears(1));
+        steward1.setAdmin(false);
+        steward1.setEmail("steward.oliver@gmail.com");
+        steward1.setName("Oliver");
+        steward1.setSurname("Smith");
+        steward1.setRegistered(LocalDateTime.now().minusYears(1));
         userService.addUser(steward1, "heslo");
 
         Destination boston = destination("USA", "Boston");
