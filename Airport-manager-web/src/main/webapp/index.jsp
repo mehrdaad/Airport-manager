@@ -40,7 +40,7 @@
 
     <script src="${pageContext.request.contextPath}/js/angular_app.js"></script>
 </head>
-<body>
+<body ng-app="airportManagerApp">
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
@@ -61,14 +61,14 @@
                 <li><a href="#!/airplanes">Airplanes</a></li>
                 <li><a href="#!/destinations">Destinations</a></li>
             </ul>
-            <button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>
+            <a role="button" class="btn btn-default navbar-btn navbar-right" href="#!/login">Sign in</a>
         </div>
     </div>
 </nav>
 
 <div class="container" id="main">
 
-    <div ng-app="airportManagerApp">
+    <div>
         <!-- Bootstrap-styled alerts, visible when $rootScope.xxxAlert is defined -->
         <div ng-show="warningAlert" class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close" aria-label="Close" ng-click="hideWarningAlert()"><span
