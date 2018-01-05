@@ -2,11 +2,11 @@
 
 [![Build Status](https://travis-ci.org/karel947/Airport-manager.svg?branch=master)](https://travis-ci.org/karel947/Airport-manager)
 
-Repozitáø vytvoøenı v rámci projektu PB165
+RepozitÃ¡Å™ vytvoÅ™enÃ½ v rÃ¡mci projektu PB165. [REST layer manual](https://github.com/karel947/Airport-manager/tree/master/Airport-manager-rest)
 
 Info:
-* Branch master je natavena jako protected, co znamená, e do ní lze pøidávat jen pomocí pull requestu (nelze pushovat). Vıvoj je veden v ostatních branèích.
-* Kadı pull request musí bıt schválen alespoò jedním dalším spolupracovníkem (mùeme zmìnit, kdyby nám to nebude vyhovovat).
-* Pull request musí mít øádnì vyplnìnı komentáø!
-* Kód v branch master musí bıt za kadıch okolností zkopilovatelnı a spustilenı  zodpovídá autor kódu. 
-* Do repozitáøe nepatøí ádné spustitelné nebo znovu vygenerovatelné soubory, napø.: .jar. Pozor na soubory a sloky vytváøené prostøedími jako jsou NetBeans nebo IDEA!
+* Branch master je natavena jako protected, coÅ¾ znamenÃ¡, Å¾e do nÃ­ lze pÅ™idÃ¡vat jen pomocÃ­ pull requestu (nelze pushovat). VÃ½voj je veden v ostatnÃ­ch branÄÃ­ch.
+* KaÅ¾dÃ½ pull request musÃ­ bÃ½t schvÃ¡len alespoÅˆ jednÃ­m dalÅ¡Ã­m spolupracovnÃ­kem (mÅ¯Å¾eme zmÄ›nit, kdyby nÃ¡m to nebude vyhovovat).
+* Pull request musÃ­ mÃ­t Å™Ã¡dnÄ› vyplnÄ›nÃ½ komentÃ¡Å™!
+* KÃ³d v branch master musÃ­ bÃ½t za kaÅ¾dÃ½ch okolnostÃ­ zkopilovatelnÃ½ a spustilenÃ½  zodpovÃ­dÃ¡ autor kÃ³du. 
+* Do repozitÃ¡Å™e nepatÅ™Ã­ Å¾Ã¡dnÃ© spustitelnÃ© nebo znovu vygenerovatelnÃ© soubory, napÅ™.: .jar. Pozor na soubory a sloÅ¾ky vytvÃ¡Å™enÃ© prostÅ™edÃ­mi jako jsou NetBeans nebo IDEA!

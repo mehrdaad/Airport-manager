@@ -4,11 +4,13 @@
         <table class="table">
             <tr>
                 <th>Departure Location</th>
-                <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
+                <td><a href="#!/destinations/{{flight.departureLocation.id}}">{{flight.departureLocation.city}},
+                    {{flight.departureLocation.country}}</a></td>
             </tr>
             <tr>
                 <th>Arrival Location</th>
-                <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>
+                <td><a href="#!/destinations/{{flight.arrivalLocation.id}}">{{flight.arrivalLocation.city}},
+                    {{flight.arrivalLocation.country}}</a></td>
             </tr>
             <tr>
                 <th>Departure Time</th>
