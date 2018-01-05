@@ -66,7 +66,7 @@
     </div>
 </nav>
 
-<div class="container" id="main">
+<div class="container" id="main" ng-cloak>
 
     <div>
         <!-- Bootstrap-styled alerts, visible when $rootScope.xxxAlert is defined -->
