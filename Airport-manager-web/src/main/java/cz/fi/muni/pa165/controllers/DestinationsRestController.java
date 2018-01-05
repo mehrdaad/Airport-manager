@@ -2,7 +2,6 @@ package cz.fi.muni.pa165.controllers;
 
 
 import cz.fi.muni.pa165.dto.DestinationDTO;
-import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.exceptions.InvalidRequestException;
 import cz.fi.muni.pa165.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.facade.DestinationFacade;
@@ -10,6 +9,7 @@ import cz.fi.muni.pa165.facade.FlightFacade;
 import cz.fi.muni.pa165.hateoas.DestinationResource;
 import cz.fi.muni.pa165.hateoas.DestinationResourceAssembler;
 import cz.fi.muni.pa165.hateoas.FlightResource;
+import cz.fi.muni.pa165.hateoas.FlightResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
@@ -30,27 +30,30 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
  */
 @RestController
 @ExposesResourceFor(DestinationDTO.class)
-@RequestMapping("/destination")
-public class DestinationController {
+@RequestMapping("/destinations")
+public class DestinationsRestController {
 
     private FlightFacade flightFacade;
-    private  DestinationResourceAssembler destinationResourceAssembler;
+    private DestinationResourceAssembler destinationResourceAssembler;
     private DestinationFacade destinationFacade;
+    private FlightResourceAssembler flightResourceAssembler;
 
     /**
-     * Create DestinationController
+     * Create DestinationsRestController
      * @param destinationFacade Destination facade.
      * @param destinationResourceAssembler Destination Resource Assembler.
      */
-    public DestinationController(
+    public DestinationsRestController(
             @Autowired DestinationFacade destinationFacade,
             @Autowired FlightFacade flightFacade,
             @SuppressWarnings("SpringJavaAutowiringInspection")
-            @Autowired DestinationResourceAssembler destinationResourceAssembler
-    ) {
+            @Autowired DestinationResourceAssembler destinationResourceAssembler,
+            @Autowired FlightResourceAssembler flightResourceAssembler)
+     {
         this.destinationFacade = destinationFacade;
         this.destinationResourceAssembler = destinationResourceAssembler;
         this.flightFacade = flightFacade;
+        this.flightResourceAssembler = flightResourceAssembler;
     }
 
 
@@ -64,8 +67,8 @@ public class DestinationController {
         List<DestinationDTO> allDestinations = destinationFacade.getAllDestinations();
         Resources<DestinationResource> destinationResources = new Resources<>(
                 destinationResourceAssembler.toResources(allDestinations),
-                linkTo(DestinationController.class).withSelfRel(),
-                linkTo(DestinationController.class).slash("/create").withRel("create"));
+                linkTo(DestinationsRestController.class).withSelfRel(),
+                linkTo(DestinationsRestController.class).slash("/create").withRel("create"));
         return new ResponseEntity<>(destinationResources, HttpStatus.OK);
     }
 
@@ -90,15 +93,17 @@ public class DestinationController {
         * @return Updated destination.
         * @throws Exception if something goes wrong
         */
-    @RequestMapping(value = "/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public final HttpEntity<DestinationResource> updateDestination(@RequestBody @Valid DestinationDTO destinationDTO,
-                                                                   BindingResult bindingResult)  throws Exception {
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public final void updateDestination(@PathVariable("id") long id,
+                                    @RequestBody @Valid DestinationDTO destinationDTO,
+                                    BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Failed validation");
         }
+        if(id != destinationDTO.getId()) {
+            throw new InvalidRequestException("Objects differ in ID");
+        }
         destinationFacade.updateDestination(destinationDTO);
-        DestinationResource resource = destinationResourceAssembler.toResource(destinationFacade.getDestinationById(destinationDTO.getId()));
-        return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
 
@@ -145,8 +150,8 @@ public class DestinationController {
         if (destinationDTOS == null) throw new ResourceNotFoundException("Destinations with country" + country + " not found");
         Resources<DestinationResource> destinationResources = new Resources<>(
                 destinationResourceAssembler.toResources(destinationDTOS),
-                linkTo(DestinationController.class).withSelfRel(),
-                linkTo(DestinationController.class).slash("/create").withRel("create"));
+                linkTo(DestinationsRestController.class).withSelfRel(),
+                linkTo(DestinationsRestController.class).slash("/create").withRel("create"));
         return new ResponseEntity<>(destinationResources, HttpStatus.OK);
     }
 
@@ -162,8 +167,8 @@ public class DestinationController {
         if (destinationDTOS == null) throw new ResourceNotFoundException("Destinations with city" + city + " not found");
         Resources<DestinationResource> destinationResources = new Resources<>(
                 destinationResourceAssembler.toResources(destinationDTOS),
-                linkTo(DestinationController.class).withSelfRel(),
-                linkTo(DestinationController.class).slash("/create").withRel("create"));
+                linkTo(DestinationsRestController.class).withSelfRel(),
+                linkTo(DestinationsRestController.class).slash("/create").withRel("create"));
         return new ResponseEntity<>(destinationResources, HttpStatus.OK);
     }
 
@@ -178,14 +183,9 @@ public class DestinationController {
     public final HttpEntity<Resources<FlightResource>> incomingFlights(@PathVariable("id") long id) throws Exception {
         DestinationDTO destinationById = destinationFacade.getDestinationById(id);
         if (destinationById == null) throw new ResourceNotFoundException("Destinations with id" + id + " not found");
-        List<FlightDTO> allIncomingFlights = destinationFacade.getAllIncomingFlights(destinationById);
-        if (allIncomingFlights == null) throw new ResourceNotFoundException("No incoming flights to" +
-                destinationById.getCity() + " " + destinationById.getCountry());
-        // TODO return flight resources
-        /*Resources<FlightResource> destinationResources = new Resources<>(
-                destinationResourceAssembler.toResources(destinationDTOS));
-        return new ResponseEntity<>(destinationResources, HttpStatus.OK);*/
-        return  null;
+        List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(destinationFacade.getAllIncomingFlights(destinationById));
+        Resources<FlightResource> flightResources = new Resources<>(resourcesCollection);
+        return new ResponseEntity<>(flightResources, HttpStatus.OK);
     }
 
     /**
@@ -196,17 +196,12 @@ public class DestinationController {
      * @throws Exception If something went wrong.
      */
     @RequestMapping(value = "/{id}/outgoingFlights", method = RequestMethod.GET)
-    public final HttpEntity<Resources<DestinationResource>> outgoingFlights (@PathVariable("id") long id) throws Exception {
+    public final HttpEntity<Resources<FlightResource>> outgoingFlights (@PathVariable("id") long id) throws Exception {
         DestinationDTO destinationById = destinationFacade.getDestinationById(id);
         if (destinationById == null) throw new ResourceNotFoundException("Destinations with id" + id + " not found");
-        List<FlightDTO> allOutgoingFlights = destinationFacade.getAllOutgoingFlights(destinationById);
-        if (allOutgoingFlights == null) throw new ResourceNotFoundException("No outgoing flights to" +
-                destinationById.getCity() + " " + destinationById.getCountry());
-        // TODO return flight resources
-        /*Resources<FlightResource> destinationResources = new Resources<>(
-                destinationResourceAssembler.toResources(destinationDTOS));
-        return new ResponseEntity<>(destinationResources, HttpStatus.OK);*/
-        return  null;
+        List<FlightResource> resourcesCollection = flightResourceAssembler.toResources(destinationFacade.getAllOutgoingFlights(destinationById));
+        Resources<FlightResource> flightResources = new Resources<>(resourcesCollection);
+        return new ResponseEntity<>(flightResources, HttpStatus.OK);
     }
 
 

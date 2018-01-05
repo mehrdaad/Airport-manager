@@ -34,9 +34,13 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/airplane/airplane_detail.html',
                 controller: 'AirplaneDetailCtrl'
             })
-            .when('/destination', {
-                templateUrl: 'partials/destination.html',
+            .when('/destinations', {
+                templateUrl: 'partials/destination/destination.html',
                 controller: 'DestinationCtrl'
+            })
+            .when('/destinations/:destinationId', {
+                templateUrl: 'partials/destination/destination_detail.html',
+                controller: 'DestinationDetailCtrl'
             })
             .otherwise({redirectTo: '/main'});
     }
@@ -112,131 +116,115 @@ managerControllers.controller('AirplaneDetailCtrl',
     }
 );
 
-/* Controllers */
+managerControllers.controller('DestinationDetailCtrl',
+    function ($scope, $routeParams, $http, $rootScope) {
+        var tempDestination = {
+            'id': "",
+            'country': "",
+            'city': ""
+        };
 
-/* Destination controller*/
-function loadDestinations($http, $scope) {
-    $http.get('/pa165/api/destination/').then(function (response) {
-        $scope.destinations = response.data._embedded.destinations;
-    });
-}
+        var destinationId = $routeParams.destinationId;
+        $http.get('/pa165/api/destinations/' + destinationId).then(function (response) {
+            console.log(response.data);
+            //formatFlightDates(flight);
+            $scope.destination = response.data;
+        });
 
+        $http.get('/pa165/api/destinations/' + destinationId + "/incomingFlights").then(function (response) {
+            console.log(response.data);
+            $scope.incomingFlights = response.data._embedded.flights;
+        });
 
+        $http.get('/pa165/api/destinations/' + destinationId + "/outgoingFlights").then(function (response) {
+            console.log(response.data);
+            $scope.outgoingFlights = response.data._embedded.flights;
+        });
+
+        $scope.saveTempDestination = function (destination){
+            tempDestination.country = destination.country;
+            tempDestination.city = destination.city;
+        };
+
+        $scope.loadTempDestination = function (){
+            $scope.destination.country = tempDestination.country;
+            $scope.destination.city = tempDestination.city;
+        };
+
+        $scope.updateDestination = function (destination) {
+            console.log(destination);
+            var data = {
+                'id': destination.id,
+                'country': destination.country,
+                'city': destination.city
+            };
+            $http({
+                method: 'POST',
+                url: '/pa165/api/destinations/' + destination.id + '/update',
+                data: data
+            }).then(function success(response) {
+                console.log(response);
+                $rootScope.successAlert = 'Destination was successfully updated.';
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Error during updating steward.';
+            });
+        }
+    }
+);
 managerControllers.controller('DestinationCtrl',
-    function ($scope, $rootScope, $routeParams, $http) {
+    function ($scope, $rootScope, $routeParams, $http, $location) {
         $scope.sortType = 'country';
         $scope.sortReverse = false;
         $scope.searchQuery = '';
-        loadDestinations($http, $scope);
-
-        $scope.newField = {};
-        $scope.editing = false;
 
 
-        $scope.editAppKey = function (field) {
-            $scope.editing = $scope.appkeys.indexOf(field);
-            $scope.newField = angular.copy(field);
+        var get = function () {
+            $http.get('/pa165/api/destinations').then(function (response) {
+                $scope.destinations = response.data._embedded.destinations;
+                $scope.goToDestinationDetail = function (destinationId) {
+                    $location.path('/destinations/' + destinationId);
+                }
+            });
+        };
+        get();
+
+        $scope.createDestination = function (destination) {
+            console.log(destination);
+            $http({
+                method: 'POST',
+                url: '/pa165/api/destinations/create',
+                data: destination
+            }).then(function (response) {
+                console.log(response);
+                get();
+            });
+
         };
 
-        $scope.saveField = function (index) {
-            if ($scope.editing !== false) {
-                $scope.appkeys[$scope.editing] = $scope.newField;
-                $scope.editing = false;
-            }
-        };
-
-        $scope.cancel = function (index) {
-            if ($scope.editing !== false) {
-                $scope.appkeys[$scope.editing] = $scope.newField;
-                $scope.editing = false;
-            }
-        };
 
         $scope.deleteDestination = function (destination) {
-            console.log("deleting destination with id=" + destination.id);
-            $http.delete('/pa165/api/' + destination.id).then(function (response) {
-                $scope.destinations = response.data._embedded.destinations;
-            }.then(
-                function success(response) {
-                    console.log('deleted destination ' + product.id + ' on server');
-                    //display confirmation alert
-                    $rootScope.successAlert = 'Deleted destination "' + product.name + '"';
-                    //load new list of all products
-                    loadAdminProducts($http, $scope);
-                },
-                function error(response) {
-                    console.log("error when deleting destination");
-                    console.log(response);
-                    switch (response.data.code) {
-                        case 'ResourceNotFoundException':
-                            $rootScope.errorAlert = 'Cannot delete non-existent destination ! ';
-                            break;
-                        default:
-                            $rootScope.errorAlert = 'Cannot delete destination ! Reason given by the server: ' + response.data.message;
-                            break;
-                    }
-                }
-            ));
-            loadDestinations($http, $scope);
-        };
-
-        $scope.newDestination = {
-            'city': '',
-            'country': ''
-        };
-
-
-        $scope.create = function (newDestination) {
-            $http({
-                method: 'POST',
-                url: '/pa165/api/destination/create',
-                data: newDestination
-            }).then(function success(response) {
-                console.log('created destination');
-                var createdDestination = response.data;
-                //display confirmation alert
-                $rootScope.successAlert = 'Destination "' + createdDestination.country + '" was created';
-                //change view to list of products
-                $location.path("/pa165/destination");
+            $http.delete('/pa165/api/destinations/' + destination).then(function success(response) {
+                $rootScope.successAlert = 'Destination was successfully deleted.';
+                get();
             }, function error(response) {
-                //display error
-                console.log("error when creating destination");
-                switch (response.data.code) {
-                    case 'InvalidRequestException':
-                        $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
+                console.log("Error during deleting destination!");
+                console.log(steward);
+                $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
+                switch(response.data.code) {
+                    case 'PersistenceException':
+                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
+                        break;
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
                         break;
                     default:
-                        $rootScope.errorAlert = 'Cannot create destination ! Reason given by the server: ' + response.data.message;
+                        $rootScope.errorAlert = 'Cannot delete destination! Reason given by the server: '+ response.data.message;
                         break;
                 }
             });
         };
 
-        $scope.update = function (destination) {
-            $http({
-                method: 'POST',
-                url: '/pa165/api/destination/update',
-                data: destination
-            }).then(function success(response) {
-                console.log('created destination');
-                var createdDestination = response.data;
-                //display confirmation alert
-                $rootScope.successAlert = 'Destination "' + createdDestination.country + '" was updated';
-                //change view to list of products
-                $location.path("/pa165/destination");
-            }, function error(response) {
-                //display error
-                console.log("error when creating destination");
-                switch (response.data.code) {
-                    case 'InvalidRequestException':
-                        $rootScope.errorAlert = 'Sent data were found to be invalid by server ! ';
-                        break;
-                    default:
-                        $rootScope.errorAlert = 'Cannot update destination ! Reason given by the server: ' + response.data.message;
-                        break;
-                }
-            });
-        };
     }
 );
 
@@ -340,7 +328,7 @@ managerControllers.controller('FlightsCtrl',
             $scope.airplanes = response.data._embedded.airplanes;
         });
 
-        $http.get('/pa165/api/destination').then(function (response) {
+        $http.get('/pa165/api/destinations').then(function (response) {
             $scope.destinations = response.data._embedded.destinations;
         });
 
