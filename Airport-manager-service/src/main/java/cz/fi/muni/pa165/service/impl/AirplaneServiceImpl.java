@@ -124,7 +124,7 @@ public class AirplaneServiceImpl implements AirplaneService {
                 
          for (Airplane airplane : allAirplanes) {
             for (Flight flight : allFlightSince) {
-                if (flight.getAirPlane() != null && flight.getAirPlane().equals(airplane)) {
+                if (flight.getAirplane() != null && flight.getAirplane().equals(airplane)) {
                     allUsedAirPlanes.add(airplane);
                     break;
                 }
@@ -151,7 +151,7 @@ public class AirplaneServiceImpl implements AirplaneService {
         for (Airplane airplane : allAirplanes) {
             boolean used = false;
             for (Flight flight : allFlightSince) {
-        	if (flight.getAirPlane() != null && flight.getAirPlane().equals(airplane)) {
+                if (flight.getAirplane() != null && flight.getAirplane().equals(airplane)) {
                     used = true;
                     break;
                 }

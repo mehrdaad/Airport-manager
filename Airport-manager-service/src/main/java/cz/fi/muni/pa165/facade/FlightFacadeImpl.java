@@ -4,10 +4,9 @@ import cz.fi.muni.pa165.dto.FlightCreateDTO;
 import cz.fi.muni.pa165.dto.FlightDTO;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.entities.Flight;
-import cz.fi.muni.pa165.service.AirplaneService;
-import cz.fi.muni.pa165.service.FlightService;
-import cz.fi.muni.pa165.service.MappingService;
-import cz.fi.muni.pa165.service.StewardService;
+import cz.fi.muni.pa165.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,24 +25,37 @@ import java.util.List;
 @Transactional
 public class FlightFacadeImpl implements FlightFacade {
 
+    private Logger logger = LoggerFactory.getLogger(FlightFacadeImpl.class);
+
     @Inject
     private FlightService flightService;
     @Inject
     private StewardService stewardService;
     @Inject
     private AirplaneService airplaneService;
+    @Inject
+    private DestinationService destinationService;
 
     @Inject
     private MappingService mappingService;
 
     @Override
     public Long createFlight(FlightCreateDTO flightCreateDTO) {
-        Flight mappedFlight = mappingService.mapTo(flightCreateDTO, Flight.class);
-        return flightService.addFlight(mappedFlight);
+        Flight flight = new Flight();
+        flight.setArrivalTime(flightCreateDTO.getArrivalTime());
+        flight.setDepartureTime(flightCreateDTO.getDepartureTime());
+        flight.setDepartureLocation(destinationService.getDestinationById(flightCreateDTO.getDepartureLocationId()));
+        flight.setArrivalLocation(destinationService.getDestinationById(flightCreateDTO.getArrivalLocationId()));
+        flight.setAirplane(airplaneService.findById(flightCreateDTO.getAirplaneId()));
+        for (Long stewardId : flightCreateDTO.getStewardIds()) {
+            flight.addSteward(stewardService.getSteward(stewardId));
+        }
+        return flightService.addFlight(flight);
     }
 
     @Override
     public FlightDTO getFlight(Long id) {
+        logger.error("getFLight()");
         Flight flight = flightService.getFlight(id);
         return flight == null ? null : mappingService.mapTo(flight, FlightDTO.class);
     }
@@ -51,6 +63,11 @@ public class FlightFacadeImpl implements FlightFacade {
     @Override
     public List<FlightDTO> getFlightsSince(LocalDateTime sinceDateTime) {
         return mappingService.mapTo(flightService.getFlightsSince(sinceDateTime), FlightDTO.class);
+    }
+
+    @Override
+    public List<FlightDTO> getCurrentFlights(LocalDateTime now) {
+        return mappingService.mapTo(flightService.getCurrentFlights(now), FlightDTO.class);
     }
 
     @Override
@@ -66,6 +83,7 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public void deleteFlight(Long flightId) {
+        logger.error("deleteFlight()");
         flightService.deleteFlight(flightService.getFlight(flightId));
     }
 
@@ -94,7 +112,7 @@ public class FlightFacadeImpl implements FlightFacade {
         Flight flight = flightService.getFlight(flightId);
         Airplane airplane = airplaneService.findById(airplaneId);
 
-        flight.setAirPlane(airplane);
+        flight.setAirplane(airplane);
         flightService.updateFlight(flight);
     }
 }

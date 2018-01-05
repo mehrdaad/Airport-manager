@@ -1,0 +1,36 @@
+<h1>Flight #{{flight.id}}</h1>
+<div class="row">
+    <div class="col-xs-6">
+        <table class="table">
+            <tr>
+                <th>Departure Location</th>
+                <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
+            </tr>
+            <tr>
+                <th>Arrival Location</th>
+                <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>
+            </tr>
+            <tr>
+                <th>Departure Time</th>
+                <td>{{flight.departureTime}}</td>
+            </tr>
+            <tr>
+                <th>Arrival Time</th>
+                <td>{{flight.arrivalTime}}</td>
+            </tr>
+            <tr>
+                <th>Airplane</th>
+                <td><a href="#!/airplane/{{flight.airplane.id}}">{{flight.airplane.name}}</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-xs-6"> <!--TODO show only if there are some stewards-->
+        <div class="panel panel-info">
+            <div class="panel-heading">Stewards</div>
+            <div class="list-group">
+                <a ng-repeat="steward in flight.stewards" href="#!/steward/{{steward.id}}"
+                   class="list-group-item">{{steward.firstName}} {{steward.surname}}</a>
+            </div>
+        </div>
+    </div>
+</div>

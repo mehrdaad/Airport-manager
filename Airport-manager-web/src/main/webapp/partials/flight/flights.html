@@ -1,0 +1,128 @@
+<div>
+    <h1>Flights</h1>
+    <br/>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Record flight
+    </button>
+    <table class="table table-condensed table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Departure Location</th>
+            <th>Arrival Location</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="flight in flights track by $index">
+            <th>{{flight.id}}</th>
+            <td>{{flight.departureLocation.city}}, {{flight.departureLocation.country}}</td>
+            <td>{{flight.arrivalLocation.city}}, {{flight.arrivalLocation.country}}</td>
+            <td>{{flight.departureTime}}</td>
+            <td>{{flight.arrivalTime}}</td>
+            <td>
+                <button ng-click="goToFlightDetail(flight.id)" type="submit" class="btn btn-primary">Detail</button>
+                <button ng-click="deleteFlight(flight)" type="submit" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Record flight</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="form" class="form-horizontal" novalidate>
+                        <div class="form-group">
+                            <label for="departureLocationId" class="col-sm-2 control-label">Departure Location</label>
+                            <div class="col-sm-10">
+                                <select id="departureLocationId" class="form-control"
+                                        ng-model="flight.departureLocationId" convert-to-int>
+                                    <option ng-repeat="departureLocation in destinations"
+                                            value="{{departureLocation.id}}">
+                                        {{departureLocation.city}}, {{departureLocation.country}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="arrivalLocationId" class="col-sm-2 control-label">Arrival Location</label>
+                            <div class="col-sm-10">
+                                <select id="arrivalLocationId" class="form-control" ng-model="flight.arrivalLocationId"
+                                        convert-to-int>
+                                    <option ng-repeat="arrivalLocation in destinations  "
+                                            value="{{arrivalLocation.id}}">
+                                        {{arrivalLocation.city}}, {{arrivalLocation.country}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="departureTime" class="col-sm-2 control-label">Departure Time</label>
+                            <div class="col-sm-10">
+                                <div class='input-group date' datetimepicker id='departureTime'
+                                     ng-model="flight.departureTime"
+                                     options="optionsDepartureTime"
+                                     on-change="optionsArrivalTime.minDate = flight.departureTime">
+                                    <input type='text' class="form-control"/>
+                                    <span class="input-group-addon">
+                     <span class="glyphicon glyphicon-calendar"></span>
+             </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="arrivalTime" class="col-sm-2 control-label">Arrival Time</label>
+                            <div class="col-sm-10">
+                                <div class='input-group date' datetimepicker id='arrivalTime'
+                                     ng-model="flight.arrivalTime"
+                                     options="optionsArrivalTime"
+                                     on-change="optionsDepartureTime.maxDate = flight.arrivalTime">
+                                    <input id="arrivalTimeInput" type='text' class="form-control"/>
+                                    <span class="input-group-addon">
+                     <span class="glyphicon glyphicon-calendar"></span>
+             </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="airplaneId" class="col-sm-2 control-label">Airplane</label>
+                            <div class="col-sm-10">
+                                <select id="airplaneId" class="form-control" ng-model="flight.airplaneId"
+                                        convert-to-int>
+                                    <option ng-repeat="airplane in airplanes" value="{{airplane.id}}">
+                                        {{airplane.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="stewardIds" class="col-sm-2 control-label">Stewards</label>
+                            <div class="col-sm-10">
+                                <select id="stewardIds" class="form-control" ng-model="flight.stewardIds" multiple
+                                        ng-multiple="true" convert-to-ints>
+                                    <option ng-repeat="steward in stewards" value="{{steward.id}}">
+                                        {{steward.firstName}} {{steward.surname}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="createFlight(flight)" data-dismiss="modal"
+                            ng-disabled="!form.$valid">Save changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

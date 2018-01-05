@@ -70,6 +70,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         Steward jessica = steward("Jessica", "Green");
         Steward chloe = steward("Chloe", "Fletcher");
         Steward sara = steward("Sara", "Jenkins");
+        Steward deleteTest = steward("Delete", "Test");
 
         List<Steward> stewards1 = new ArrayList<>();
         List<Steward> stewards2 = new ArrayList<>();
@@ -131,7 +132,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
     private Flight flight(Airplane airplane, List<Steward> stewards, Destination departure,
                           Destination arrival, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         Flight flight = new Flight();
-        flight.setAirPlane(airplane);
+        flight.setAirplane(airplane);
         flight.setStewards(stewards);
         flight.setDepartureLocation(departure);
         flight.setArrivalLocation(arrival);

@@ -46,6 +46,14 @@ public interface FlightFacade {
     List<FlightDTO> getFlightsSince(LocalDateTime sinceDateTime);
 
     /**
+     * Returns the list of current flights.
+     *
+     * @param now the current date
+     * @return the list of FlightDTO objects
+     */
+    List<FlightDTO> getCurrentFlights(LocalDateTime now);
+
+    /**
      * Returns the duration of the flight represented by {@link Duration} object.
      *
      * @param flightDTO representation of the flight
