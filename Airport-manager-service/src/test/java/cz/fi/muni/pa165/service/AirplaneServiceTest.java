@@ -328,5 +328,40 @@ public class AirplaneServiceTest extends BaseServiceTest {
         Assert.assertEquals(returnedAirplanes, Collections.emptyList());
     }
 
+    @Test
+    public void testFindFreeAirplanesInTimeRange() throws Exception {
+        LocalDateTime testTime = LocalDateTime.now();
+
+        Airplane airplane2 = new Airplane();
+        airplane2.setId(3L);
+        airplane2.setName("AirBus");
+        airplane2.setType("Tryskac");
+        airplane2.setCapacity(5);
+
+        Flight flight1 = new Flight();
+        flight1.setId(1L);
+        flight1.setDepartureLocation(new Destination("PK", "PKCity"));
+        flight1.setArrivalLocation(new Destination("LK", "LKCity"));
+        flight1.setDepartureTime(testTime.plusDays(1));
+        flight1.setArrivalTime(testTime.plusDays(1).plusHours(1));
+        flight1.setAirplane(airplane);
+
+        Flight flight2 = new Flight();
+        flight2.setId(2L);
+        flight2.setDepartureLocation(new Destination("MK", "MKCity"));
+        flight2.setArrivalLocation(new Destination("FK", "FKCity"));
+        flight2.setDepartureTime(testTime.minusMonths(1));
+        flight2.setArrivalTime(testTime.minusMonths(1).plusHours(1));
+        flight2.setAirplane(airplane2);
+
+        List<Airplane> testedAirplanes = Arrays.asList(airplane, airplane2);
+        when(flightService.getFlightsInTimeRange(testTime, testTime.plusDays(2))).thenReturn(Arrays.asList(flight1));
+        when(airplaneDao.findAll()).thenReturn(testedAirplanes);
+
+        List<Airplane> result = airplaneService.findFreeAirplanesInTimeRange(testTime, testTime.plusDays(2));
+
+        Assert.assertEquals(result.size(), 1);
+        Assert.assertEquals(result.get(0), airplane2);
+    }
 
 }

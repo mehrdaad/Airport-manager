@@ -1,11 +1,11 @@
 package cz.fi.muni.pa165.service.impl;
 
 
-import cz.fi.muni.pa165.dao.FlightDao;
 import cz.fi.muni.pa165.dao.StewardDao;
 import cz.fi.muni.pa165.entities.Flight;
 import cz.fi.muni.pa165.entities.Steward;
 import cz.fi.muni.pa165.exceptions.StewardDataAccessException;
+import cz.fi.muni.pa165.service.FlightService;
 import cz.fi.muni.pa165.service.StewardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link StewardService}. This class is part of the service
@@ -28,7 +30,7 @@ public class StewardServiceImpl implements StewardService{
     private StewardDao stewardDao;
 
     @Autowired
-    private FlightDao flightDao;
+    private FlightService flightService;
 
     /**
      * Get steward by id.
@@ -126,7 +128,7 @@ public class StewardServiceImpl implements StewardService{
     @Override
     public Flight getStewardFutureFlight(long id){
         Steward steward = stewardDao.getSteward(id);
-        List<Flight> allFlights = flightDao.getAllFlights();
+        List<Flight> allFlights = flightService.getAllFlights();
 
         // No flights found
         if (allFlights == null){
@@ -163,7 +165,7 @@ public class StewardServiceImpl implements StewardService{
         Steward steward = stewardDao.getSteward(id);
         List<Flight> allStewardFlightsAfter = new ArrayList<>();
 
-        for (Flight flight : flightDao.getAllFlights()) {
+        for (Flight flight : flightService.getAllFlights()) {
             List<Steward> flightStewards = flight.getStewards();
             LocalDateTime departureTime = flight.getDepartureTime();
             if (flightStewards.contains(steward) &&
@@ -184,7 +186,7 @@ public class StewardServiceImpl implements StewardService{
     @Override
     public Flight getStewardLastFlight(long id){
         Steward steward = stewardDao.getSteward(id);
-        List<Flight> allFlights = flightDao.getAllFlights();
+        List<Flight> allFlights = flightService.getAllFlights();
 
         // No flights found
         if (allFlights == null){
@@ -217,7 +219,7 @@ public class StewardServiceImpl implements StewardService{
     public Flight getStewardCurrentFlight(long id){
         Steward steward = stewardDao.getSteward(id);
 
-        for (Flight flight : flightDao.getAllFlights()) {
+        for (Flight flight : flightService.getAllFlights()) {
             List<Steward> flightStewards = flight.getStewards();
             if (flightStewards.contains(steward) &&
                     flight.getDepartureTime().isBefore(LocalDateTime.now()) &&
@@ -226,6 +228,18 @@ public class StewardServiceImpl implements StewardService{
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Steward> getFreeStewardsInTimeRange(LocalDateTime start, LocalDateTime end) {
+        List<Flight> flights = flightService.getFlightsInTimeRange(start, end);
+        Set<Steward> assignedStewards = flights.stream()
+                .flatMap(flight -> flight.getStewards().stream())
+                .collect(Collectors.toSet());
+
+        List<Steward> allStewards = new ArrayList<>(stewardDao.listAllStewards());
+        allStewards.removeAll(assignedStewards);
+        return allStewards;
     }
 
 }

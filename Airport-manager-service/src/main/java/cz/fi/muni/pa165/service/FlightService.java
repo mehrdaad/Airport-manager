@@ -77,6 +77,17 @@ public interface FlightService {
 
     /**
      * Find all instances of the {@link Flight} entity in the persistence storage
+     * which flew between the specified time range.
+     *
+     * @param start the date since when to find flights
+     * @param end   the date until when find flights
+     * @return list of {@link Flight} entities since sinceDateTime
+     * @throws NullPointerException if the start or end parameter is null
+     */
+    List<Flight> getFlightsInTimeRange(LocalDateTime start, LocalDateTime end);
+
+    /**
+     * Find all instances of the {@link Flight} entity in the persistence storage
      * which are currently in the sky.
      *
      * @param now the current date

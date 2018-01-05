@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -194,6 +195,19 @@ public class AirplaneFacadeTest extends BaseFacadeTest {
 
         Assert.assertEquals(returnedAirplaneDTOS, Collections.singletonList(airplaneDTO));
         verify(airplaneService).findByFreeAfterDateTime(testTime);
+    }
+
+    @Test
+    public void testGetFreeAirplanesInTimeRange() throws Exception {
+        when(airplaneService.findFreeAirplanesInTimeRange(any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(Collections.singletonList(airplane));
+        when(mappingService.mapTo(Collections.singletonList(airplane), AirplaneDTO.class))
+                .thenReturn(Collections.singletonList(airplaneDTO));
+
+        List<AirplaneDTO> returnedAirplanes = airplaneFacade.getFreeAirplanesInTimeRange(LocalDateTime.now(), LocalDateTime.now().plusDays(1));
+
+        Assert.assertEquals(returnedAirplanes.size(), 1);
+        Assert.assertEquals(returnedAirplanes.get(0), airplaneDTO);
     }
 
 }

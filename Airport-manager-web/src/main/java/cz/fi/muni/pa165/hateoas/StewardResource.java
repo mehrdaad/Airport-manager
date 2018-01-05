@@ -14,12 +14,12 @@ public class StewardResource extends ResourceSupport {
     @JsonProperty("id")
     private Long dtoId;
 
-    private String firstname;
+    private String firstName;
     private String surname;
 
     public StewardResource(StewardDTO stewardDTO) {
         dtoId = stewardDTO.getId();
-        firstname = stewardDTO.getFirstName();
+        firstName = stewardDTO.getFirstName();
         surname = stewardDTO.getSurname();
     }
 
@@ -27,8 +27,8 @@ public class StewardResource extends ResourceSupport {
         return dtoId;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
     public String getSurname() {

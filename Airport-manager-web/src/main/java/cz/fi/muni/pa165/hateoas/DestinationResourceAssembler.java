@@ -1,6 +1,6 @@
 package cz.fi.muni.pa165.hateoas;
 
-import cz.fi.muni.pa165.controllers.DestinationController;
+import cz.fi.muni.pa165.controllers.DestinationsRestController;
 import cz.fi.muni.pa165.dto.DestinationDTO;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class DestinationResourceAssembler extends ResourceAssemblerSupport<DestinationDTO, DestinationResource> {
 
     public DestinationResourceAssembler() {
-        super(DestinationController.class, DestinationResource.class);
+        super(DestinationsRestController.class, DestinationResource.class);
     }
 
     @Override
@@ -24,9 +24,9 @@ public class DestinationResourceAssembler extends ResourceAssemblerSupport<Desti
         long id = destinationDTO.getId();
         DestinationResource productResource = new DestinationResource(destinationDTO);
         try {
-            productResource.add(linkTo(DestinationController.class).slash(destinationDTO.getId()).withSelfRel());
+            productResource.add(linkTo(DestinationsRestController.class).slash(destinationDTO.getId()).withSelfRel());
 
-            Method removeDestination = DestinationController.class.getMethod("removeDestination", long.class);
+            Method removeDestination = DestinationsRestController.class.getMethod("removeDestination", long.class);
             productResource.add(linkTo(removeDestination.getDeclaringClass(),removeDestination, id).withRel("delete"));
         } catch (Exception ex) {
         }

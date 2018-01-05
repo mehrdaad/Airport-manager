@@ -4,11 +4,12 @@ import cz.fi.muni.pa165.dto.AirplaneDTO;
 import cz.fi.muni.pa165.entities.Airplane;
 import cz.fi.muni.pa165.service.AirplaneService;
 import cz.fi.muni.pa165.service.MappingService;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -78,6 +79,11 @@ public class AirplaneFacadeImpl implements AirplaneFacade {
 
     @Override
     public List<AirplaneDTO> findByFreeAfterDateTime(LocalDateTime sinceDateTime) {
-        return mappingService.mapTo(airplaneService.findByFreeAfterDateTime(sinceDateTime),AirplaneDTO.class); 
-    }   
+        return mappingService.mapTo(airplaneService.findByFreeAfterDateTime(sinceDateTime),AirplaneDTO.class);
+    }
+
+    @Override
+    public List<AirplaneDTO> getFreeAirplanesInTimeRange(LocalDateTime start, LocalDateTime end) {
+        return mappingService.mapTo(airplaneService.findFreeAirplanesInTimeRange(start, end), AirplaneDTO.class);
+    }
 }

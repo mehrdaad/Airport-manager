@@ -13,6 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Airport Manager</title>
 
+    <link rel="stylesheet" href="css/style.css"/>
+
     <%--BOOTSTRAP--%>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -57,14 +59,14 @@
                 <li><a href="#!/flights">Flights</a></li>
                 <li><a href="#!/stewards">Stewards</a></li>
                 <li><a href="#!/airplanes">Airplanes</a></li>
-                <li><a href="#!/destination">Destinations</a></li>
+                <li><a href="#!/destinations">Destinations</a></li>
             </ul>
             <button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>
         </div>
     </div>
 </nav>
 
-<div class="container">
+<div class="container" id="main">
 
     <div ng-app="airportManagerApp">
         <!-- Bootstrap-styled alerts, visible when $rootScope.xxxAlert is defined -->
@@ -87,11 +89,13 @@
         <div ng-view></div>
 
     </div>
-
-    <footer class="footer">
-        <p>&copy;&nbsp;Masaryk University</p>
-    </footer>
 </div>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy;&nbsp;Masaryk University</p>
+    </div>
+</footer>
 
 </body>
 </html>

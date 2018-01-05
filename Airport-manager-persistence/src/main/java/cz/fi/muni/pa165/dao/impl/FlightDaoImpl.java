@@ -24,12 +24,12 @@ public class FlightDaoImpl implements FlightDao {
 
     @Override
     public void addFlight(Flight flight) {
-        if (flight == null){
+        if (flight == null) {
             throw new NullPointerException("Cannot create null flight");
         }
         try {
             em.persist(flight);
-        } catch (PersistenceException e){
+        } catch (PersistenceException e) {
             throw new DataIntegrityViolationException("Error while persisting flight.");
         }
     }
@@ -39,25 +39,36 @@ public class FlightDaoImpl implements FlightDao {
         if (flight == null) {
             throw new NullPointerException("Cannot delete null flight");
         }
-        try {
-            em.remove(em.merge(flight));
-        } catch (PersistenceException e) {
-            throw new DataIntegrityViolationException("Error while delete data in database");
+
+        Flight flightFromDb = getFlight(flight.getId());
+
+        if (flightFromDb != null) {
+            try {
+                em.remove(em.merge(flight));
+            } catch (PersistenceException e) {
+                throw new DataIntegrityViolationException("Error while delete data in database");
+            }
+        } else {
+            throw new IllegalArgumentException("Flight: " + flight + " not in the persistence storage.");
         }
     }
 
 
     @Override
     public void updateFlight(Flight flight) {
-        if (flight == null){
+        if (flight == null) {
             throw new NullPointerException("Cannot update null flight");
         }
         Flight flightFromDb = getFlight(flight.getId());
 
-        try {
-            em.merge(flightFromDb);
-        } catch (PersistenceException e){
-            throw new DataIntegrityViolationException("Error while updating data in database");
+        if (flightFromDb != null) {
+            try {
+                em.merge(flight);
+            } catch (PersistenceException e) {
+                throw new DataIntegrityViolationException("Error while updating data in database");
+            }
+        } else {
+            throw new IllegalArgumentException("Flight: " + flight + " not in the persistence storage.");
         }
     }
 
