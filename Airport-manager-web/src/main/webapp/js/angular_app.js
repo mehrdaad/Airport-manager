@@ -98,34 +98,6 @@ managerControllers.controller('MainCtrl',
     }
 );
 
-managerControllers.controller('LoginCtrl',
-    function ($scope, $rootScope, $routeParams, $http, $location, AuthService) {
-        $scope.credentials = {
-            email: '',
-            password: ''
-        };
-
-        $scope.users = [
-            {email: "admin@gmail.com", password: "heslo", role: "Admin"},
-            {email: "steward.oliver@gmail.com", password: "heslo", role: "Steward"} ];
-
-        $scope.useAccount = function(user){
-            $scope.credentials.email = user.email;
-            $scope.credentials.password = user.password;
-        };
-
-        $scope.fail = false;
-
-        $scope.login = function (credentials) {
-            AuthService.login(credentials).then(function (user) {
-                $scope.setCurrentUser(user);
-                $location.path('/main');
-            }, function error(reason) {
-                $scope.fail = true;
-            });
-        };
-    });
-
 managerControllers.controller('AirplanesCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         var get = function () {
