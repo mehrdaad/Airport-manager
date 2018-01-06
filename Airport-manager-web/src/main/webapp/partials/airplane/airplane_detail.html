@@ -1,21 +1,67 @@
 
 <!-- Author: Jan Cakl -->
-<h1>Airplane #{{airplane.id}}</h1>
+<h1>Airplane #{{airplaneConst.id}}</h1>
 <div class="row">
     <div class="col-xs-6">
         <table class="table">
             <tr>
                 <th>Name</th>
-                <td>{{airplane.name}}</td>
+                <td>{{airplaneConst.name}}</td>
             </tr>
             <tr>
                 <th>Type</th>
-                <td>{{airplane.type}}</td>
+                <td>{{airplaneConst.type}}</td>
             </tr>
             <tr>
                 <th>Capacity</th>
-                <td>{{airplane.capacity}}</td>
+                <td>{{airplaneConst.capacity}}</td>
             </tr>
         </table>
+    </div>
+</div>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myUpdateModal"
+        ng-if="isAuthorized(userRoles.admin)">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Update airplane
+</button>
+<div class="modal fade" id="myUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Update airplane with ID {{airplane.id}}</h4>
+            </div>
+            <div class="modal-body">
+                <form name="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" value="airplane.name" class="form-control" name="name"
+                                   id="name" ng-model="airplane.name" required>
+                            <p class="help-block" ng-show="form.name.$error.required">Name cannot be empty</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="type" class="col-sm-2 control-label">Type</label>
+                        <div class="col-sm-10">
+                            <input type="text" value="airplane.type" class="form-control" name="type"
+                                   id="type" ng-model="airplane.type" required>
+                            <p class="help-block" ng-show="form.type.$error.required">Type cannot be empty</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="capacity" class="col-sm-2 control-label">Capacity</label>
+                        <div class="col-sm-10">
+                            <input type="number" value="airplane.capacity" class="form-control" name="capacity"
+                                   id="capacity" ng-model="airplane.capacity" required>
+                            <p class="help-block" ng-show="form.capacity.$error.required">Capacity cannot be empty</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="updateAirplane(airplane)" data-dismiss="modal"  ng-disabled="form.name.$error.required || form.type.$error.required || form.capacity.$error.required">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>

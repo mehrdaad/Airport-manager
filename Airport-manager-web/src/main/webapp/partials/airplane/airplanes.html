@@ -4,7 +4,8 @@
     <h1>Airplanes</h1>
     <br/>
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
+            ng-if="isAuthorized(userRoles.admin)">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New airplane
     </button>
 
@@ -28,7 +29,8 @@
 
                 <button ng-click="goToAirplaneDetail(airplane.id)" type="submit" class="btn btn-primary">Detail</button>
 
-                <button ng-click="deleteAirplane(airplane)" type="submit" class="btn btn-danger">Delete</button>
+                <button ng-click="deleteAirplane(airplane)" type="submit" class="btn btn-danger"
+                        ng-if="isAuthorized(userRoles.admin)">Delete</button>
 
             </td>
         </tr>
@@ -61,7 +63,7 @@
                         <div class="form-group">
                             <label for="capacity" class="col-sm-2 control-label">Capacity</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" name="type" id="capacity" ng-model="airplane.capacity" required>
+                                <input type="number" class="form-control" name="capacity" id="capacity" ng-model="airplane.capacity" required>
                                 <p class="help-block" ng-show="form.capacity.$error.required">capacity cannot be empty</p>
 
                             </div>

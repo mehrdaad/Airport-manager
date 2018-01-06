@@ -4,11 +4,12 @@ import cz.fi.muni.pa165.controllers.AirplanesRestController;
 import cz.fi.muni.pa165.dto.AirplaneDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityLinks;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Method;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 
 /**
@@ -20,13 +21,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class AirplaneResourceAssembler extends ResourceAssemblerSupport<AirplaneDTO, AirplaneResource>  {
 
-    private EntityLinks entityLinks;
     private final static Logger logger = LoggerFactory.getLogger(AirplaneResourceAssembler.class);
 
-    public AirplaneResourceAssembler(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-                                   @Autowired EntityLinks entityLinks) {
+    public AirplaneResourceAssembler() {
         super(AirplanesRestController.class, AirplaneResource.class);
-        this.entityLinks = entityLinks;
     }
 
     @Override
@@ -34,8 +32,9 @@ public class AirplaneResourceAssembler extends ResourceAssemblerSupport<Airplane
         long id = airplaneDTO.getId();
         AirplaneResource airplaneResource = new AirplaneResource(airplaneDTO);
         try {
-            Link self = entityLinks.linkToSingleResource(AirplaneDTO.class, id).withSelfRel();
-            airplaneResource.add(self);
+            airplaneResource.add(linkTo(AirplanesRestController.class).slash(airplaneDTO.getId()).withSelfRel());
+            Method deleteAirplane = AirplanesRestController.class.getMethod("deleteAirplane", long.class);
+            airplaneResource.add(linkTo(deleteAirplane.getDeclaringClass(), deleteAirplane, id).withRel("delete"));
         } catch (Exception e) {
             logger.error("Airplane resource error", e);
         }

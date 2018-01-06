@@ -98,6 +98,33 @@ managerControllers.controller('MainCtrl',
     }
 );
 
+managerControllers.controller('LoginCtrl',
+    function ($scope, $rootScope, $routeParams, $http, $location, AuthService) {
+        $scope.credentials = {
+            email: '',
+            password: ''
+        };
+
+        $scope.users = [
+            {email: "admin@gmail.com", password: "heslo", role: "Admin"},
+            {email: "steward.oliver@gmail.com", password: "heslo", role: "Steward"} ];
+
+        $scope.useAccount = function(user){
+            $scope.credentials.email = user.email;
+            $scope.credentials.password = user.password;
+        };
+
+        $scope.fail = false;
+
+        $scope.login = function (credentials) {
+            AuthService.login(credentials).then(function (user) {
+                $scope.setCurrentUser(user);
+                $location.path('/main');
+            }, function error(reason) {
+                $scope.fail = true;
+            });
+        };
+    });
 
 managerControllers.controller('AirplanesCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
@@ -127,19 +154,40 @@ managerControllers.controller('AirplanesCtrl',
                 console.log(response);
                 get();
             });
-        }
-
+        };
     }
 );
 
 managerControllers.controller('AirplaneDetailCtrl',
-    function ($scope, $routeParams, $http) {
+    function ($scope, $rootScope, $routeParams, $http) {
         var airplaneId = $routeParams.airplaneId;
         $http.get('/pa165/api/airplanes/' + airplaneId).then(function (response) {
             console.log(response.data);
-            var airplane = response.data;
-            $scope.airplane = airplane;
+            $scope.airplane = response.data;
+            $scope.airplaneConst = angular.copy($scope.airplane);
         });
+
+        $scope.updateAirplane = function (airplane) {
+            console.log(airplane);
+            var airplaneData = {
+                'id': airplane.id,
+                'name': airplane.name,
+                'type': airplane.type,
+                'capacity': airplane.capacity
+            };
+            $http({
+                method: 'POST',
+                url: '/pa165/api/airplanes/' + airplane.id + '/update/',
+                data: airplaneData
+            }).then(function success(response) {
+                console.log(response);
+                $rootScope.successAlert = 'Airplane was successfully updated.';
+                $scope.airplaneConst = angular.copy($scope.airplane);
+            }, function error(response) {
+                console.log(response);
+                $rootScope.errorAlert = 'Error during updating airplane.';
+            });
+        }
     }
 );
 
@@ -235,25 +283,14 @@ managerControllers.controller('DestinationCtrl',
         };
 
 
-        $scope.deleteDestination = function (destination) {
-            $http.delete('/pa165/api/destinations/' + destination).then(function success(response) {
+        $scope.deleteDestination = function (destinationId) {
+            $http.delete('/pa165/api/destinations/' + destinationId).then(function success(response) {
                 $rootScope.successAlert = 'Destination was successfully deleted.';
                 get();
             }, function error(response) {
                 console.log("Error during deleting destination!");
-                console.log(steward);
+                console.log(destinationId);
                 $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                switch (response.data.code) {
-                    case 'PersistenceException':
-                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                        break;
-                    case 'JpaSystemException':
-                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                        break;
-                    default:
-                        $rootScope.errorAlert = 'Cannot delete destination! Reason given by the server: ' + response.data.message;
-                        break;
-                }
             });
         };
     }
