@@ -97,4 +97,17 @@ public class AirplanesRestController {
                 linkTo(AirplanesRestController.class).slash("/create").withRel("create"));
         return new ResponseEntity<>(airplaneResources, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public final void updateAirplane(@PathVariable("id") long id,
+                                    @RequestBody @Valid AirplaneDTO airplaneDTO,
+                                    BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            throw new InvalidRequestException("Failed validation");
+        }
+        if (id != airplaneDTO.getId()) {
+            throw new InvalidRequestException("Objects differ in ID");
+        }
+        airplaneFacade.updateAirplane(airplaneDTO);
+    }
 }
