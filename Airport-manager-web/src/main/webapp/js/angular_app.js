@@ -76,7 +76,7 @@ airportManagerApp.run(function ($rootScope) {
 /* Controllers */
 
 managerControllers.controller('ApplicationController',
-    function ($scope, USER_ROLES, AuthService, Session) {
+    function ($scope, USER_ROLES, AuthService) {
         $scope.currentUser = null;
         $scope.userRoles = USER_ROLES;
         $scope.isAuthorized = AuthService.isAuthorized;
@@ -85,7 +85,10 @@ managerControllers.controller('ApplicationController',
             $scope.currentUser = user;
         };
 
-        $scope.logout = AuthService.logout;
+        $scope.logout = function () {
+            $scope.currentUser = null;
+            AuthService.logout();
+        };
     }
 );
 
@@ -102,7 +105,7 @@ managerControllers.controller('MainCtrl',
 managerControllers.controller('LoginCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location, AuthService) {
         $scope.credentials = {
-            username: '',
+            email: '',
             password: ''
         };
 
@@ -112,7 +115,7 @@ managerControllers.controller('LoginCtrl',
             AuthService.login(credentials).then(function (user) {
                 $scope.setCurrentUser(user);
                 $location.path('/main');
-            }, function () {
+            }, function error(reason) {
                 $scope.fail = true;
             });
         };
@@ -394,7 +397,7 @@ managerControllers.controller('FlightsCtrl',
             $location.path('/flight/' + flightId);
         };
 
-        $http.get('/pa165/api/destination').then(function (response) {
+        $http.get('/pa165/api/destinations').then(function (response) {
             $scope.destinations = response.data._embedded.destinations;
         });
 
@@ -520,7 +523,7 @@ managerControllers.controller('FlightDetailCtrl',
                 $scope.flightToUpdate.stewardIds.push(value.id);
             });
 
-            $http.get('/pa165/api/destination').then(function (response) {
+            $http.get('/pa165/api/destinations').then(function (response) {
                 $scope.destinations = response.data._embedded.destinations;
             });
 
@@ -761,15 +764,20 @@ airportManagerApp.factory('AuthService', function ($http, Session, USER_ROLES) {
     var authService = {};
 
     authService.login = function (credentials) {
+        console.log(credentials);
         return $http({
             method: 'POST',
             url: '/pa165/api/user',
             data: credentials
         }).then(function (res) {
-            if (res.data._embedded !== undefined) {
-                var user = res.data._embedded.user;
-                var role = user.isAdmin ? USER_ROLES.admin : USER_ROLES.user;
+            console.log("here");
+            console.log(res);
+            if (res.data !== undefined) {
+                var user = res.data;
+                console.log(user);
+                var role = user.admin ? USER_ROLES.admin : USER_ROLES.user;
                 Session.create(user.id, user.name, user.surname, role);
+                return user;
             }
 
         });

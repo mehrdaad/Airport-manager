@@ -62,4 +62,17 @@ public class UserResource extends ResourceSupport {
     public boolean isAdmin() {
         return isAdmin;
     }
+
+    @Override
+    public String toString() {
+        return "UserResource{" +
+                "dtoId=" + dtoId +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", registered=" + registered +
+                ", isAdmin=" + isAdmin +
+                '}';
+    }
 }

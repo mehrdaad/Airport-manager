@@ -7,6 +7,8 @@ import cz.fi.muni.pa165.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.facade.UserFacade;
 import cz.fi.muni.pa165.hateoas.UserResource;
 import cz.fi.muni.pa165.hateoas.UserResourceAssembler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -26,12 +28,14 @@ public class UserRestController {
 
     private UserFacade userFacade;
     private UserResourceAssembler userResourceAssembler;
+    Logger logger = LoggerFactory.getLogger(UserRestController.class);
 
     public UserRestController(
             @Autowired UserFacade userFacade,
             @Autowired UserResourceAssembler userResourceAssembler
     ) {
         this.userFacade = userFacade;
+        this.userResourceAssembler = userResourceAssembler;
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

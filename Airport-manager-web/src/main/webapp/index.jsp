@@ -56,10 +56,10 @@
 
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#!/flights">Flights</a></li>
-                <li><a href="#!/stewards">Stewards</a></li>
-                <li><a href="#!/airplanes">Airplanes</a></li>
-                <li><a href="#!/destinations">Destinations</a></li>
+                <li><a href="#!/flights" ng-if="currentUser">Flights</a></li>
+                <li><a href="#!/stewards" ng-if="currentUser">Stewards</a></li>
+                <li><a href="#!/airplanes" ng-if="currentUser">Airplanes</a></li>
+                <li><a href="#!/destinations" ng-if="currentUser">Destinations</a></li>
             </ul>
             <a role="button" class="btn btn-default navbar-btn navbar-right" href="#!/login" ng-if="!currentUser">Sign
                 in</a>
