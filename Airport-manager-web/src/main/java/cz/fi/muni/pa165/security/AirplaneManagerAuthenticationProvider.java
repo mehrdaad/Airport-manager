@@ -28,8 +28,8 @@ public class AirplaneManagerAuthenticationProvider implements AuthenticationProv
         String password = (String) authentication.getCredentials();
 
         UserAuthenticateDTO authenticateDTO = new UserAuthenticateDTO();
-        authenticateDTO.setEmail(email);
-        authenticateDTO.setPassword(password);
+        authenticateDTO.setEmail(email.trim());
+        authenticateDTO.setPassword(password.trim());
 
         if (userFacade.authenticate(authenticateDTO)) {
             UserDTO userDTO = userFacade.getUserByEmail(authenticateDTO.getEmail());

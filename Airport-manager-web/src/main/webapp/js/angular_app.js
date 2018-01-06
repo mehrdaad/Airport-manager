@@ -282,7 +282,6 @@ managerControllers.controller('DestinationCtrl',
 
         };
 
-
         $scope.deleteDestination = function (destinationId) {
             $http.delete('/pa165/api/destinations/' + destinationId).then(function success(response) {
                 $rootScope.successAlert = 'Destination was successfully deleted.';
