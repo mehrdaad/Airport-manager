@@ -4,7 +4,8 @@
     <h1>Airplanes</h1>
     <br/>
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
+            ng-if="isAuthorized(userRoles.admin)">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New airplane
     </button>
 
@@ -28,7 +29,8 @@
 
                 <button ng-click="goToAirplaneDetail(airplane.id)" type="submit" class="btn btn-primary">Detail</button>
 
-                <button ng-click="deleteAirplane(airplane)" type="submit" class="btn btn-danger">Delete</button>
+                <button ng-click="deleteAirplane(airplane)" type="submit" class="btn btn-danger"
+                        ng-if="isAuthorized(userRoles.admin)">Delete</button>
 
             </td>
         </tr>
