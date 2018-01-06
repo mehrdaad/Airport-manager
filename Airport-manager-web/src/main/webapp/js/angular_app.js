@@ -11,10 +11,6 @@ airportManagerApp.config(['$routeProvider',
                 templateUrl: 'partials/main.html',
                 controller: "MainCtrl"
             })
-            .when('/login', {
-                templateUrl: 'partials/login.html',
-                controller: 'LoginCtrl'
-            })
             .when('/stewards', {
                 templateUrl: 'partials//steward/stewards.html',
                 controller: 'StewardsCtrl'
@@ -61,7 +57,7 @@ airportManagerApp.constant('USER_ROLES', {
 /*
  * alert closing functions defined in root scope to be available in every template
  */
-airportManagerApp.run(function ($rootScope) {
+airportManagerApp.run(function ($rootScope, USER_ROLES, AuthService) {
     $rootScope.hideSuccessAlert = function () {
         $rootScope.successAlert = undefined;
     };
@@ -71,26 +67,27 @@ airportManagerApp.run(function ($rootScope) {
     $rootScope.hideErrorAlert = function () {
         $rootScope.errorAlert = undefined;
     };
+
+    AuthService.getUser()
+        .then(function (user) {
+                $rootScope.setCurrentUser(user);
+            }, function (reason) {
+                console.log("An error occurred when getting the logged user.");
+                console.log(reason);
+            }
+        );
+
+    $rootScope.currentUser = null;
+    $rootScope.setCurrentUser = function (user) {
+        $rootScope.currentUser = user;
+    };
+
+    $rootScope.userRoles = USER_ROLES;
+    $rootScope.isAuthorized = AuthService.isAuthorized;
+
 });
 
 /* Controllers */
-
-managerControllers.controller('ApplicationController',
-    function ($scope, USER_ROLES, AuthService) {
-        $scope.currentUser = null;
-        $scope.userRoles = USER_ROLES;
-        $scope.isAuthorized = AuthService.isAuthorized;
-
-        $scope.setCurrentUser = function (user) {
-            $scope.currentUser = user;
-        };
-
-        $scope.logout = function () {
-            $scope.currentUser = null;
-            AuthService.logout();
-        };
-    }
-);
 
 managerControllers.controller('MainCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
@@ -100,7 +97,6 @@ managerControllers.controller('MainCtrl',
         })
     }
 );
-
 
 managerControllers.controller('LoginCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location, AuthService) {
@@ -129,7 +125,6 @@ managerControllers.controller('LoginCtrl',
             });
         };
     });
-
 
 managerControllers.controller('AirplanesCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
@@ -782,14 +777,9 @@ airportManagerApp.directive('datetimepicker', [
 airportManagerApp.factory('AuthService', function ($http, Session, USER_ROLES) {
     var authService = {};
 
-    authService.login = function (credentials) {
+    authService.getUser = function (credentials) {
         console.log(credentials);
-        return $http({
-            method: 'POST',
-            url: '/pa165/api/user',
-            data: credentials
-        }).then(function (res) {
-            console.log("here");
+        return $http.get("/pa165/api/user").then(function (res) {
             console.log(res);
             if (res.data !== undefined) {
                 var user = res.data;
@@ -814,10 +804,6 @@ airportManagerApp.factory('AuthService', function ($http, Session, USER_ROLES) {
             authorizedRoles.indexOf(Session.userRole) !== -1);
     };
 
-    authService.logout = function () {
-        Session.destroy();
-    };
-
     return authService;
 });
 
@@ -827,12 +813,5 @@ airportManagerApp.service('Session', function () {
         this.username = username;
         this.userSurname = userSurname;
         this.userRole = userRole;
-    };
-
-    this.destroy = function () {
-        this.userId = null;
-        this.username = null;
-        this.userSurname = null;
-        this.userRole = null;
     };
 });
