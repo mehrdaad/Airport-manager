@@ -109,6 +109,15 @@ managerControllers.controller('LoginCtrl',
             password: ''
         };
 
+        $scope.users = [
+            {email: "admin@gmail.com", password: "heslo", role: "Admin"},
+            {email: "steward.oliver@gmail.com", password: "heslo", role: "Steward"} ];
+
+        $scope.useAccount = function(user){
+            $scope.credentials.email = user.email;
+            $scope.credentials.password = user.password;
+        };
+
         $scope.fail = false;
 
         $scope.login = function (credentials) {
