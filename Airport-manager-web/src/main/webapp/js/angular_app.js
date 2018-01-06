@@ -267,25 +267,14 @@ managerControllers.controller('DestinationCtrl',
         };
 
 
-        $scope.deleteDestination = function (destination) {
-            $http.delete('/pa165/api/destinations/' + destination).then(function success(response) {
+        $scope.deleteDestination = function (destinationId) {
+            $http.delete('/pa165/api/destinations/' + destinationId).then(function success(response) {
                 $rootScope.successAlert = 'Destination was successfully deleted.';
                 get();
             }, function error(response) {
                 console.log("Error during deleting destination!");
-                console.log(steward);
+                console.log(destinationId);
                 $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                switch (response.data.code) {
-                    case 'PersistenceException':
-                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                        break;
-                    case 'JpaSystemException':
-                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                        break;
-                    default:
-                        $rootScope.errorAlert = 'Cannot delete destination! Reason given by the server: ' + response.data.message;
-                        break;
-                }
             });
         };
     }
