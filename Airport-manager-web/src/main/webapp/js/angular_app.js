@@ -779,10 +779,8 @@ airportManagerApp.factory('AuthService', function ($http, Session, USER_ROLES) {
     authService.getUser = function (credentials) {
         console.log(credentials);
         return $http.get("/pa165/api/user").then(function (res) {
-            console.log(res);
             if (res.data !== undefined) {
                 var user = res.data;
-                console.log(user);
                 var role = user.admin ? USER_ROLES.admin : USER_ROLES.user;
                 Session.create(user.id, user.name, user.surname, role);
                 return user;
