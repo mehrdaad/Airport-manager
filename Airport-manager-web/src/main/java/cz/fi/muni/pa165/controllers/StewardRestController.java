@@ -102,7 +102,7 @@ public class StewardRestController {
             throw new InvalidRequestException("Failed validation");
         }
 
-        Long id = stewardFacade.createSteward(stewardCreateDTO.getFirstname(), stewardCreateDTO.getSurname());
+        Long id = stewardFacade.createSteward(stewardCreateDTO.getFirstName(), stewardCreateDTO.getSurname());
         StewardResource stewardResource = assembler.toResource(stewardFacade.getSteward(id));
         return new ResponseEntity<>(stewardResource, HttpStatus.OK);
     }

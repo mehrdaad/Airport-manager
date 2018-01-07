@@ -20,7 +20,7 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(userDTO.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER"));
+        return Collections.singleton(new SimpleGrantedAuthority(userDTO.isAdmin() ? SecurityRoles.ROLE_ADMIN : SecurityRoles.ROLE_USER));
     }
 
     @Override

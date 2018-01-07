@@ -8,17 +8,17 @@ import javax.validation.constraints.NotNull;
 public class StewardCreateDTO {
 
     @NotNull
-    private String firstname;
+    private String firstName;
 
     @NotNull
     private String surname;
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getSurname() {

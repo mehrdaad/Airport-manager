@@ -44,7 +44,7 @@
                                 <div class="col-sm-10">
                                     <input type="text" value="steward.firstName" class="form-control" name="firstName"
                                            id="firstName" ng-model="steward.firstName" required>
-                                    <p class="help-block" ng-show="form.firstName.$error.required">firstname cannot be
+                                    <p class="help-block" ng-show="form.firstName.$error.required">firstName cannot be
                                         empty</p>
                                 </div>
                             </div>
@@ -59,7 +59,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-click="updateSteward(steward)" data-dismiss="modal"  ng-disabled="form.surname.$error.required || form.firstname.$error.required">Save changes</button>
+                        <button type="button" class="btn btn-primary" ng-click="updateSteward(steward)"
+                                data-dismiss="modal"
+                                ng-disabled="form.surname.$error.required || form.firstName.$error.required">Save
+                            changes
+                        </button>
                     </div>
                 </div>
             </div>

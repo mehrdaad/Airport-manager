@@ -70,12 +70,15 @@ airportManagerApp.run(function ($rootScope, USER_ROLES, AuthService) {
 
     AuthService.getUser()
         .then(function (user) {
-                $rootScope.setCurrentUser(user);
-            }, function (reason) {
+            $rootScope.setCurrentUser(user);
+        }, function (reason) {
+            if (reason.status === 404) {
+                console.log("No user logged in");
+            } else {
                 console.log("An error occurred when getting the logged user.");
                 console.log(reason);
             }
-        );
+        });
 
     $rootScope.currentUser = null;
     $rootScope.setCurrentUser = function (user) {
@@ -218,7 +221,7 @@ managerControllers.controller('DestinationDetailCtrl',
 
         $http.get('/pa165/api/destinations/' + destinationId + "/incomingFlights").then(function (response) {
             console.log(response.data);
-            if(Object.keys(response.data).length === 0) {
+            if (Object.keys(response.data).length === 0) {
                 console.log("Its empty.")
             } else {
                 $scope.incomingFlights = response.data._embedded.flights;
@@ -227,7 +230,7 @@ managerControllers.controller('DestinationDetailCtrl',
 
         $http.get('/pa165/api/destinations/' + destinationId + "/outgoingFlights").then(function (response) {
             console.log(response.data);
-            if(Object.keys(response.data).length === 0) {
+            if (Object.keys(response.data).length === 0) {
                 console.log("Its empty.")
             } else {
                 $scope.outgoingFlights = response.data._embedded.flights;

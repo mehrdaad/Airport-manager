@@ -1,9 +1,9 @@
 package cz.fi.muni.pa165.controllers;
 
 import cz.fi.muni.pa165.dto.UserDTO;
-import cz.fi.muni.pa165.facade.UserFacade;
 import cz.fi.muni.pa165.hateoas.UserResource;
 import cz.fi.muni.pa165.hateoas.UserResourceAssembler;
+import cz.fi.muni.pa165.security.SecurityRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -23,26 +23,26 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserRestController {
 
-    private UserFacade userFacade;
     private UserResourceAssembler userResourceAssembler;
 
     public UserRestController(
-            @Autowired UserFacade userFacade,
             @Autowired UserResourceAssembler userResourceAssembler
     ) {
-        this.userFacade = userFacade;
         this.userResourceAssembler = userResourceAssembler;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public final HttpEntity<UserResource> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal().equals(SecurityRoles.ROLE_ANONYMOUS_USER)) {
+            return new ResponseEntity<>(new UserResource(new UserDTO()), HttpStatus.NOT_FOUND);
+        }
 
         UserDTO userDTO = new UserDTO();
         List<?> authorities = new ArrayList<>(authentication.getAuthorities());
         SimpleGrantedAuthority authority = (SimpleGrantedAuthority) authorities.get(0);
 
-        if (authority.getAuthority().equals("ROLE_ADMIN")) {
+        if (authority.getAuthority().equals(SecurityRoles.ROLE_ADMIN)) {
             userDTO.setAdmin(true);
         } else {
             userDTO.setAdmin(false);

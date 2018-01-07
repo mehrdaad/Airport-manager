@@ -42,10 +42,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/js/**").permitAll()
+                .antMatchers("/css/**").permitAll()
                 .antMatchers("/partials/**").permitAll()
                 .antMatchers("/index.jsp").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/flights/current").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/user").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/airplanes").hasRole(SecurityRoles.ROLE_ADMIN)
+                .antMatchers(HttpMethod.DELETE, "/api/airplanes").hasRole(SecurityRoles.ROLE_ADMIN)
+                .antMatchers(HttpMethod.POST, "/api/destinations").hasRole(SecurityRoles.ROLE_ADMIN)
+                .antMatchers(HttpMethod.DELETE, "/api/destinations").hasRole(SecurityRoles.ROLE_ADMIN)
+                .antMatchers(HttpMethod.POST, "/api/flights").hasRole(SecurityRoles.ROLE_ADMIN)
+                .antMatchers(HttpMethod.DELETE, "/api/flights").hasRole(SecurityRoles.ROLE_ADMIN)
+                .antMatchers(HttpMethod.POST, "/api/stewards").hasRole(SecurityRoles.ROLE_ADMIN)
+                .antMatchers(HttpMethod.DELETE, "/api/stewards").hasRole(SecurityRoles.ROLE_ADMIN)
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -62,5 +71,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout().logoutUrl("/logout.html").logoutSuccessUrl("/index.jsp").permitAll()
                 .and()
                 .csrf().disable();
+
     }
 }
