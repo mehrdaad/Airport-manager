@@ -127,6 +127,27 @@ managerControllers.controller('AirplanesCtrl',
                 get();
             });
         };
+
+        $scope.deleteAirplane = function (airplaneId) {
+            $http.delete('/pa165/api/airplanes/' + airplaneId).then(function success(response) {
+                $rootScope.successAlert = 'Airplane was successfully deleted.';
+                get();
+            }, function error(response) {
+                console.log("Error during deleting airplane!");
+                console.log(airplaneId);
+                switch (response.data.code) {
+                    case 'PersistenceException':
+                        $rootScope.errorAlert = 'Airplane has assigned flights. Cannot be deleted.';
+                        break;
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Airplane has assigned flights. Cannot be deleted.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot delete airplane! Reason given by the server: ' + response.data.message;
+                        break;
+                }
+            });
+        }
     }
 );
 

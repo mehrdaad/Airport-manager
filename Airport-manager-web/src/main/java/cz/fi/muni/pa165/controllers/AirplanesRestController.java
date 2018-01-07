@@ -66,7 +66,8 @@ public class AirplanesRestController {
         try {
             airplaneFacade.deleteAirplane(id);
         } catch (AirplaneDataAccessException e) {
-            // TODO error handling
+            System.out.println("Exception: " + e);
+            e.printStackTrace();
         }
     }
 
