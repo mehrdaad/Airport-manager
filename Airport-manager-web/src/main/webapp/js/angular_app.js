@@ -202,12 +202,20 @@ managerControllers.controller('DestinationDetailCtrl',
 
         $http.get('/pa165/api/destinations/' + destinationId + "/incomingFlights").then(function (response) {
             console.log(response.data);
-            $scope.incomingFlights = response.data._embedded.flights;
+            if(Object.keys(response.data).length === 0) {
+                console.log("Its empty.")
+            } else {
+                $scope.incomingFlights = response.data._embedded.flights;
+            }
         });
 
         $http.get('/pa165/api/destinations/' + destinationId + "/outgoingFlights").then(function (response) {
             console.log(response.data);
-            $scope.outgoingFlights = response.data._embedded.flights;
+            if(Object.keys(response.data).length === 0) {
+                console.log("Its empty.")
+            } else {
+                $scope.outgoingFlights = response.data._embedded.flights;
+            }
         });
 
         $scope.saveTempDestination = function (destination) {
