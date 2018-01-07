@@ -122,9 +122,18 @@ managerControllers.controller('AirplanesCtrl',
                 method: 'POST',
                 url: '/pa165/api/airplanes/create',
                 data: airplane
-            }).then(function (response) {
+            }).then(function success(response) {
                 console.log(response);
                 get();
+            }, function error(response) {
+                switch (response.data.code) {
+                    case 'AirplaneDataAccessException':
+                        $rootScope.errorAlert = 'Capacity must be positive.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot create airplane! Reason given by the server: ' + response.data.message;
+                        break;
+                }
             });
         };
 
@@ -178,7 +187,14 @@ managerControllers.controller('AirplaneDetailCtrl',
                 $scope.airplaneConst = angular.copy($scope.airplane);
             }, function error(response) {
                 console.log(response);
-                $rootScope.errorAlert = 'Error during updating airplane.';
+                switch (response.data.code) {
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Capacity must be positive.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot update airplane! Reason given by the server: ' + response.data.message;
+                        break;
+                }
             });
         }
     }
