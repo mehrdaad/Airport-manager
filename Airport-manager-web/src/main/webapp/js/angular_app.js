@@ -98,34 +98,6 @@ managerControllers.controller('MainCtrl',
     }
 );
 
-managerControllers.controller('LoginCtrl',
-    function ($scope, $rootScope, $routeParams, $http, $location, AuthService) {
-        $scope.credentials = {
-            email: '',
-            password: ''
-        };
-
-        $scope.users = [
-            {email: "admin@gmail.com", password: "heslo", role: "Admin"},
-            {email: "steward.oliver@gmail.com", password: "heslo", role: "Steward"} ];
-
-        $scope.useAccount = function(user){
-            $scope.credentials.email = user.email;
-            $scope.credentials.password = user.password;
-        };
-
-        $scope.fail = false;
-
-        $scope.login = function (credentials) {
-            AuthService.login(credentials).then(function (user) {
-                $scope.setCurrentUser(user);
-                $location.path('/main');
-            }, function error(reason) {
-                $scope.fail = true;
-            });
-        };
-    });
-
 managerControllers.controller('AirplanesCtrl',
     function ($scope, $rootScope, $routeParams, $http, $location) {
         var get = function () {
@@ -155,6 +127,27 @@ managerControllers.controller('AirplanesCtrl',
                 get();
             });
         };
+
+        $scope.deleteAirplane = function (airplaneId) {
+            $http.delete('/pa165/api/airplanes/' + airplaneId).then(function success(response) {
+                $rootScope.successAlert = 'Airplane was successfully deleted.';
+                get();
+            }, function error(response) {
+                console.log("Error during deleting airplane!");
+                console.log(airplaneId);
+                switch (response.data.code) {
+                    case 'PersistenceException':
+                        $rootScope.errorAlert = 'Airplane has assigned flights. Cannot be deleted.';
+                        break;
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Airplane has assigned flights. Cannot be deleted.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot delete airplane! Reason given by the server: ' + response.data.message;
+                        break;
+                }
+            });
+        }
     }
 );
 
