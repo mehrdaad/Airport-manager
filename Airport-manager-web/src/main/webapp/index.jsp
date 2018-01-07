@@ -25,7 +25,6 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
@@ -40,7 +39,7 @@
 
     <script src="${pageContext.request.contextPath}/js/angular_app.js"></script>
 </head>
-<body>
+<body ng-app="airportManagerApp">
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
@@ -56,19 +55,22 @@
 
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#!/flights">Flights</a></li>
-                <li><a href="#!/stewards">Stewards</a></li>
-                <li><a href="#!/airplanes">Airplanes</a></li>
-                <li><a href="#!/destinations">Destinations</a></li>
+                <li><a href="#!/flights" ng-if="currentUser">Flights</a></li>
+                <li><a href="#!/stewards" ng-if="currentUser">Stewards</a></li>
+                <li><a href="#!/airplanes" ng-if="currentUser">Airplanes</a></li>
+                <li><a href="#!/destinations" ng-if="currentUser">Destinations</a></li>
             </ul>
-            <button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>
+            <a role="button" class="btn btn-default navbar-btn navbar-right" href="login.html" ng-if="!currentUser">Sign
+                in</a>
+            <a role="button" class="btn btn-default navbar-btn navbar-right" href="logout.html" ng-if="currentUser">Sign
+                out</a>
         </div>
     </div>
 </nav>
 
-<div class="container" id="main">
+<div class="container" id="main" ng-cloak>
 
-    <div ng-app="airportManagerApp">
+    <div>
         <!-- Bootstrap-styled alerts, visible when $rootScope.xxxAlert is defined -->
         <div ng-show="warningAlert" class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close" aria-label="Close" ng-click="hideWarningAlert()"><span

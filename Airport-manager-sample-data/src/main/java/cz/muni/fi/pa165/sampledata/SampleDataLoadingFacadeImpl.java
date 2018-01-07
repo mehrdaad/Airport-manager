@@ -1,13 +1,7 @@
 package cz.muni.fi.pa165.sampledata;
 
-import cz.fi.muni.pa165.entities.Airplane;
-import cz.fi.muni.pa165.entities.Destination;
-import cz.fi.muni.pa165.entities.Flight;
-import cz.fi.muni.pa165.entities.Steward;
-import cz.fi.muni.pa165.service.AirplaneService;
-import cz.fi.muni.pa165.service.DestinationService;
-import cz.fi.muni.pa165.service.FlightService;
-import cz.fi.muni.pa165.service.StewardService;
+import cz.fi.muni.pa165.entities.*;
+import cz.fi.muni.pa165.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +30,28 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
     @Autowired
     private FlightService flightService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     @SuppressWarnings("unused")
     public void loadData() {
+
+        User admin = new User();
+        admin.setAdmin(true);
+        admin.setEmail("admin@gmail.com");
+        admin.setName("Tonda");
+        admin.setSurname("Admin");
+        admin.setRegistered(LocalDateTime.now().minusYears(2));
+        userService.addUser(admin, "heslo");
+
+        User steward1 = new User();
+        steward1.setAdmin(false);
+        steward1.setEmail("steward.oliver@gmail.com");
+        steward1.setName("Oliver");
+        steward1.setSurname("Smith");
+        steward1.setRegistered(LocalDateTime.now().minusYears(1));
+        userService.addUser(steward1, "heslo");
 
         Destination boston = destination("USA", "Boston");
         Destination berlin = destination("Germany", "Berlin");

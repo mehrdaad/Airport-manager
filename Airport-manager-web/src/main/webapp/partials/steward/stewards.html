@@ -1,7 +1,8 @@
 <div>
     <h1>Stewards</h1>
     <br/>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
+            ng-if="isAuthorized(userRoles.admin)">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New steward
     </button>
 
@@ -20,7 +21,8 @@
             <td>{{steward.surname}}</td>
             <td align="right">
                 <button ng-click="goToStewardDetail(steward.id)" type="submit" class="btn btn-primary">Detail</button>
-                <button type="button" class="btn btn-danger" ng-click="deleteSteward(steward.id)">
+                <button ng-click="deleteSteward(steward.id)" type="submit" class="btn btn-danger"
+                        ng-if="isAuthorized(userRoles.admin)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
                 </button>
             </td>
@@ -42,7 +44,7 @@
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="firstName" id="firstName"
                                        ng-model="steward.firstName" required>
-                                <p class="help-block" ng-show="form.firstName.$error.required">firstname cannot be
+                                <p class="help-block" ng-show="form.firstName.$error.required">firstName cannot be
                                     empty</p>
                             </div>
                         </div>

@@ -1,8 +1,10 @@
 <div class="jumbotron">
     <h1>Welcome to Airport Manager!</h1>
-    <p>The information system for managing flight records at an airport. <br/> If you want to use it, please sign in.
+    <p>The information system for managing flight records at an airport. <br/>
+        <span ng-if="!currentUser">If you want to use it, please sign in.</span>
+        <span ng-if="currentUser">You are signed in as {{ currentUser.name }} {{ currentUser.surname }}</span>
     </p>
-    <p><a class="btn btn-primary btn-lg" href="#" role="button">Sign In</a></p>
+    <p><a class="btn btn-primary btn-lg" href="login.html" role="button" ng-if="!currentUser">Sign In</a></p>
 </div>
 <div class="panel panel-primary">
     <div class="panel-heading"><b>Current flights</b></div>

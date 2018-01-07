@@ -47,11 +47,17 @@ airportManagerApp.config(['$routeProvider',
     }
 ]);
 
+airportManagerApp.constant('USER_ROLES', {
+    admin: 'admin',
+    user: 'user',
+    guest: 'guest'
+});
+
 
 /*
  * alert closing functions defined in root scope to be available in every template
  */
-airportManagerApp.run(function ($rootScope) {
+airportManagerApp.run(function ($rootScope, USER_ROLES, AuthService) {
     $rootScope.hideSuccessAlert = function () {
         $rootScope.successAlert = undefined;
     };
@@ -61,9 +67,31 @@ airportManagerApp.run(function ($rootScope) {
     $rootScope.hideErrorAlert = function () {
         $rootScope.errorAlert = undefined;
     };
+
+    AuthService.getUser()
+        .then(function (user) {
+            $rootScope.setCurrentUser(user);
+        }, function (reason) {
+            if (reason.status === 404) {
+                console.log("No user logged in");
+            } else {
+                console.log("An error occurred when getting the logged user.");
+                console.log(reason);
+            }
+        });
+
+    $rootScope.currentUser = null;
+    $rootScope.setCurrentUser = function (user) {
+        $rootScope.currentUser = user;
+    };
+
+    $rootScope.userRoles = USER_ROLES;
+    $rootScope.isAuthorized = AuthService.isAuthorized;
+
 });
 
 /* Controllers */
+
 managerControllers.controller('MainCtrl',
     function ($scope, $rootScope, $routeParams, $http) {
         $http.get('/pa165/api/flights/current').then(function (response) {
@@ -97,23 +125,81 @@ managerControllers.controller('AirplanesCtrl',
                 method: 'POST',
                 url: '/pa165/api/airplanes/create',
                 data: airplane
-            }).then(function (response) {
+            }).then(function success(response) {
                 console.log(response);
                 get();
+            }, function error(response) {
+                switch (response.data.code) {
+                    case 'AirplaneDataAccessException':
+                        $rootScope.errorAlert = 'Capacity must be positive.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot create airplane! Reason given by the server: ' + response.data.message;
+                        break;
+                }
+            });
+        };
+
+        $scope.deleteAirplane = function (airplaneId) {
+            $http.delete('/pa165/api/airplanes/' + airplaneId).then(function success(response) {
+                $rootScope.successAlert = 'Airplane was successfully deleted.';
+                get();
+            }, function error(response) {
+                console.log("Error during deleting airplane!");
+                console.log(airplaneId);
+                switch (response.data.code) {
+                    case 'PersistenceException':
+                        $rootScope.errorAlert = 'Airplane has assigned flights. Cannot be deleted.';
+                        break;
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Airplane has assigned flights. Cannot be deleted.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot delete airplane! Reason given by the server: ' + response.data.message;
+                        break;
+                }
             });
         }
-
     }
 );
 
 managerControllers.controller('AirplaneDetailCtrl',
-    function ($scope, $routeParams, $http) {
+    function ($scope, $rootScope, $routeParams, $http) {
         var airplaneId = $routeParams.airplaneId;
         $http.get('/pa165/api/airplanes/' + airplaneId).then(function (response) {
             console.log(response.data);
-            var airplane = response.data;
-            $scope.airplane = airplane;
+            $scope.airplane = response.data;
+            $scope.airplaneConst = angular.copy($scope.airplane);
         });
+
+        $scope.updateAirplane = function (airplane) {
+            console.log(airplane);
+            var airplaneData = {
+                'id': airplane.id,
+                'name': airplane.name,
+                'type': airplane.type,
+                'capacity': airplane.capacity
+            };
+            $http({
+                method: 'POST',
+                url: '/pa165/api/airplanes/' + airplane.id + '/update/',
+                data: airplaneData
+            }).then(function success(response) {
+                console.log(response);
+                $rootScope.successAlert = 'Airplane was successfully updated.';
+                $scope.airplaneConst = angular.copy($scope.airplane);
+            }, function error(response) {
+                console.log(response);
+                switch (response.data.code) {
+                    case 'JpaSystemException':
+                        $rootScope.errorAlert = 'Capacity must be positive.';
+                        break;
+                    default:
+                        $rootScope.errorAlert = 'Cannot update airplane! Reason given by the server: ' + response.data.message;
+                        break;
+                }
+            });
+        }
     }
 );
 
@@ -135,12 +221,20 @@ managerControllers.controller('DestinationDetailCtrl',
 
         $http.get('/pa165/api/destinations/' + destinationId + "/incomingFlights").then(function (response) {
             console.log(response.data);
-            $scope.incomingFlights = response.data._embedded.flights;
+            if (Object.keys(response.data).length === 0) {
+                console.log("Its empty.")
+            } else {
+                $scope.incomingFlights = response.data._embedded.flights;
+            }
         });
 
         $http.get('/pa165/api/destinations/' + destinationId + "/outgoingFlights").then(function (response) {
             console.log(response.data);
-            $scope.outgoingFlights = response.data._embedded.flights;
+            if (Object.keys(response.data).length === 0) {
+                console.log("Its empty.")
+            } else {
+                $scope.outgoingFlights = response.data._embedded.flights;
+            }
         });
 
         $scope.saveTempDestination = function (destination) {
@@ -208,26 +302,14 @@ managerControllers.controller('DestinationCtrl',
 
         };
 
-
-        $scope.deleteDestination = function (destination) {
-            $http.delete('/pa165/api/destinations/' + destination).then(function success(response) {
+        $scope.deleteDestination = function (destinationId) {
+            $http.delete('/pa165/api/destinations/' + destinationId).then(function success(response) {
                 $rootScope.successAlert = 'Destination was successfully deleted.';
                 get();
             }, function error(response) {
                 console.log("Error during deleting destination!");
-                console.log(steward);
+                console.log(destinationId);
                 $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                switch(response.data.code) {
-                    case 'PersistenceException':
-                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                        break;
-                    case 'JpaSystemException':
-                        $rootScope.errorAlert = 'Destination has assigned flights. Cannot be deleted.';
-                        break;
-                    default:
-                        $rootScope.errorAlert = 'Cannot delete destination! Reason given by the server: '+ response.data.message;
-                        break;
-                }
             });
         };
     }
@@ -348,7 +430,7 @@ managerControllers.controller('FlightsCtrl',
             $location.path('/flight/' + flightId);
         };
 
-        $http.get('/pa165/api/destination').then(function (response) {
+        $http.get('/pa165/api/destinations').then(function (response) {
             $scope.destinations = response.data._embedded.destinations;
         });
 
@@ -474,7 +556,7 @@ managerControllers.controller('FlightDetailCtrl',
                 $scope.flightToUpdate.stewardIds.push(value.id);
             });
 
-            $http.get('/pa165/api/destination').then(function (response) {
+            $http.get('/pa165/api/destinations').then(function (response) {
                 $scope.destinations = response.data._embedded.destinations;
             });
 
@@ -710,3 +792,43 @@ airportManagerApp.directive('datetimepicker', [
         };
     }
 ]);
+
+airportManagerApp.factory('AuthService', function ($http, Session, USER_ROLES) {
+    var authService = {};
+
+    authService.getUser = function (credentials) {
+        console.log(credentials);
+        return $http.get("/pa165/api/user").then(function (res) {
+            if (res.data !== undefined) {
+                var user = res.data;
+                var role = user.admin ? USER_ROLES.admin : USER_ROLES.user;
+                Session.create(user.id, user.name, user.surname, role);
+                return user;
+            }
+
+        });
+    };
+
+    authService.isAuthenticated = function () {
+        return !!Session.userId;
+    };
+
+    authService.isAuthorized = function (authorizedRoles) {
+        if (!angular.isArray(authorizedRoles)) {
+            authorizedRoles = [authorizedRoles];
+        }
+        return (authService.isAuthenticated() &&
+            authorizedRoles.indexOf(Session.userRole) !== -1);
+    };
+
+    return authService;
+});
+
+airportManagerApp.service('Session', function () {
+    this.create = function (userId, username, userSurname, userRole) {
+        this.userId = userId;
+        this.username = username;
+        this.userSurname = userSurname;
+        this.userRole = userRole;
+    };
+});
